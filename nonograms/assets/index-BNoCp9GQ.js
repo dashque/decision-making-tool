@@ -258,7 +258,7 @@ class Footer extends BaseComponent {
     });
 
     logo.addAttributes({
-      src: "./logo-rsschool3.png",
+      src: "./public/logo-rsschool3.png",
       alt: "RSS Logo",
     });
     a.getNode().append(logo.getNode());
@@ -319,7 +319,7 @@ class Header extends BaseComponent {
     });
 
     logo.addAttributes({
-      src: "./favicon.ico",
+      src: "./public/favicon.ico",
       alt: "Logo Nonograms",
     });
 
@@ -442,4 +442,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-CPfuO14m.js.map
+//# sourceMappingURL=index-BNoCp9GQ.js.map
