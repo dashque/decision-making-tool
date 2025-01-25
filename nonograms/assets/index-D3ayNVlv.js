@@ -205,11 +205,11 @@ class BaseComponent {
   }
 }
 
-const footer = "_footer_1jr1u_1";
-const ghLink = "_ghLink_1jr1u_12";
-const rssLogoLink = "_rssLogoLink_1jr1u_19";
-const rssLogoImg = "_rssLogoImg_1jr1u_23";
-const year = "_year_1jr1u_27";
+const footer = "_footer_tenv5_1";
+const ghLink = "_ghLink_tenv5_12";
+const rssLogoLink = "_rssLogoLink_tenv5_19";
+const rssLogoImg = "_rssLogoImg_tenv5_23";
+const year = "_year_tenv5_27";
 const styles$6 = {
 	footer: footer,
 	ghLink: ghLink,
@@ -277,9 +277,9 @@ class Footer extends BaseComponent {
   }
 }
 
-const header = "_header_16qt7_1";
-const h1 = "_h1_16qt7_12";
-const logoLink = "_logoLink_16qt7_18";
+const header = "_header_6aa77_1";
+const h1 = "_h1_6aa77_12";
+const logoLink = "_logoLink_6aa77_18";
 const styles$5 = {
 	header: header,
 	h1: h1,
@@ -335,13 +335,13 @@ class Header extends BaseComponent {
   addTimer() {}
 }
 
-const gameControls = "_gameControls_2c8cm_1";
-const selectTemplate = "_selectTemplate_2c8cm_12";
-const randomBtn = "_randomBtn_2c8cm_13";
-const resetBtn = "_resetBtn_2c8cm_14";
-const saveBtn = "_saveBtn_2c8cm_15";
-const continueBtn = "_continueBtn_2c8cm_16";
-const solutionBtn = "_solutionBtn_2c8cm_17";
+const gameControls = "_gameControls_1nvty_1";
+const selectTemplate = "_selectTemplate_1nvty_12";
+const randomBtn = "_randomBtn_1nvty_13";
+const resetBtn = "_resetBtn_1nvty_14";
+const saveBtn = "_saveBtn_1nvty_15";
+const continueBtn = "_continueBtn_1nvty_16";
+const solutionBtn = "_solutionBtn_1nvty_17";
 const styles$4 = {
 	gameControls: gameControls,
 	selectTemplate: selectTemplate,
@@ -416,7 +416,7 @@ class GameControls extends BaseComponent {
   }
 }
 
-const cell = "_cell_x1w9z_1";
+const cell = "_cell_16s7f_1";
 const styles$3 = {
 	cell: cell
 };
@@ -428,10 +428,10 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameBoard = "_gameBoard_1c5ji_1";
-const small = "_small_1c5ji_8";
-const medium = "_medium_1c5ji_12";
-const large = "_large_1c5ji_16";
+const gameBoard = "_gameBoard_5qzfn_1";
+const small = "_small_5qzfn_8";
+const medium = "_medium_5qzfn_12";
+const large = "_large_5qzfn_16";
 const styles$2 = {
 	gameBoard: gameBoard,
 	small: small,
@@ -486,7 +486,7 @@ class GameBoard extends BaseComponent {
   }
 }
 
-const main = "_main_1jtif_1";
+const main = "_main_h2xbi_1";
 const styles$1 = {
 	main: main
 };
@@ -838,7 +838,7 @@ class Main extends BaseComponent {
   }
 }
 
-const wrapper = "_wrapper_kzhgx_1";
+const wrapper = "_wrapper_17fv9_1";
 const styles = {
 	wrapper: wrapper
 };
@@ -858,4 +858,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-CGsYzgDI.js.map
+//# sourceMappingURL=index-D3ayNVlv.js.map
