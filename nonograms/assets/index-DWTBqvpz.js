@@ -335,13 +335,13 @@ class Header extends BaseComponent {
   addTimer() {}
 }
 
-const gameControls = "_gameControls_gg8l7_1";
-const selectTemplate = "_selectTemplate_gg8l7_12";
-const randomBtn = "_randomBtn_gg8l7_13";
-const resetBtn = "_resetBtn_gg8l7_14";
-const saveBtn = "_saveBtn_gg8l7_15";
-const continueBtn = "_continueBtn_gg8l7_16";
-const solutionBtn = "_solutionBtn_gg8l7_17";
+const gameControls = "_gameControls_1azzg_1";
+const selectTemplate = "_selectTemplate_1azzg_12";
+const randomBtn = "_randomBtn_1azzg_13";
+const resetBtn = "_resetBtn_1azzg_14";
+const saveBtn = "_saveBtn_1azzg_15";
+const continueBtn = "_continueBtn_1azzg_16";
+const solutionBtn = "_solutionBtn_1azzg_17";
 const styles$4 = {
 	gameControls: gameControls,
 	selectTemplate: selectTemplate,
@@ -858,4 +858,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-CsIVoSLP.js.map
+//# sourceMappingURL=index-DWTBqvpz.js.map

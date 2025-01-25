@@ -258,36 +258,38 @@ summary {
 
 ._logoLink_1e6y5_18 {
   margin: 10px;
-}._gameControls_gg8l7_1 {
+}._gameControls_1azzg_1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-width: 50%;
-  width: 300px;
+  width: 350px;
   flex-wrap: wrap;
   justify-content: center;
   margin: 20px auto;
 }
 
-._selectTemplate_gg8l7_12,
-._randomBtn_gg8l7_13,
-._resetBtn_gg8l7_14,
-._saveBtn_gg8l7_15,
-._continueBtn_gg8l7_16,
-._solutionBtn_gg8l7_17 {
+._selectTemplate_1azzg_12,
+._randomBtn_1azzg_13,
+._resetBtn_1azzg_14,
+._saveBtn_1azzg_15,
+._continueBtn_1azzg_16,
+._solutionBtn_1azzg_17 {
   border: none;
   border-radius: 10px;
   padding: 5px 8px;
   margin: 5px;
   text-align: center;
   cursor: pointer;
+  max-width: 130px;
+  width: 100%;
 }
-._selectTemplate_gg8l7_12:hover,
-._randomBtn_gg8l7_13:hover,
-._resetBtn_gg8l7_14:hover,
-._saveBtn_gg8l7_15:hover,
-._continueBtn_gg8l7_16:hover,
-._solutionBtn_gg8l7_17:hover {
+._selectTemplate_1azzg_12:hover,
+._randomBtn_1azzg_13:hover,
+._resetBtn_1azzg_14:hover,
+._saveBtn_1azzg_15:hover,
+._continueBtn_1azzg_16:hover,
+._solutionBtn_1azzg_17:hover {
   background-color: rgb(254, 242, 242);
 }._cell_19mmn_1 {
   width: 40px;
