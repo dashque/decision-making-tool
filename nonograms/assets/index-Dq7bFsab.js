@@ -335,14 +335,14 @@ class Header extends BaseComponent {
   addTimer() {}
 }
 
-const gameControls = "_gameControls_ph4cu_1";
-const selectTemplate = "_selectTemplate_ph4cu_12";
-const randomBtn = "_randomBtn_ph4cu_13";
-const resetBtn = "_resetBtn_ph4cu_14";
-const saveBtn = "_saveBtn_ph4cu_15";
-const continueBtn = "_continueBtn_ph4cu_16";
-const solutionBtn = "_solutionBtn_ph4cu_17";
-const option = "_option_ph4cu_43";
+const gameControls = "_gameControls_we24o_1";
+const selectTemplate = "_selectTemplate_we24o_12";
+const randomBtn = "_randomBtn_we24o_13";
+const resetBtn = "_resetBtn_we24o_14";
+const saveBtn = "_saveBtn_we24o_15";
+const continueBtn = "_continueBtn_we24o_16";
+const solutionBtn = "_solutionBtn_we24o_17";
+const option = "_option_we24o_46";
 const styles$4 = {
 	gameControls: gameControls,
 	selectTemplate: selectTemplate,
@@ -449,11 +449,12 @@ class GameBoard extends BaseComponent {
    * @param {number} width
    * @param {number} height
    */
-  constructor(width, height) {
+  constructor(width) {
     super({ tag: "section", className: styles$2.gameBoard });
     this.width = width;
-    this.height = height;
     const size = this.getGameBoardSize(this.width);
+    //TODO удалить нахрен, передать из настройки  темплейта
+
     this.getNode().classList.add(styles$2[size]);
     this.addCells();
   }
@@ -469,7 +470,7 @@ class GameBoard extends BaseComponent {
   }
 
   calculateNumberOfCells() {
-    return this.width * this.height;
+    return this.width ** 2;
   }
 
   /**
@@ -477,6 +478,8 @@ class GameBoard extends BaseComponent {
    * @param {number} width
    * @returns {string}
    */
+
+  //TODO удалить нахрен, передать из настройки  темплейта
   getGameBoardSize(width) {
     const size = {
       5: "small",
@@ -488,9 +491,11 @@ class GameBoard extends BaseComponent {
   }
 }
 
-const main = "_main_h2xbi_1";
+const main = "_main_18kny_1";
+const invitation = "_invitation_18kny_11";
 const styles$1 = {
-	main: main
+	main: main,
+	invitation: invitation
 };
 
 /**
@@ -823,396 +828,408 @@ class TemplateSelector extends BaseComponent {
       text: "Select game",
     });
     this.config = config;
+    this.getNode();
     this.#addOptions();
   }
 
+  getTemplatesFromConfig() {
+    return [...this.config.easy, ...this.config.medium, ...this.config.hard];
+  }
+
   #addOptions() {
-    const templates = [
-      ...this.config.easy.templates,
-      ...this.config.medium.templates,
-      ...this.config.hard.templates,
-    ];
+    const templates = this.getTemplatesFromConfig();
     templates.forEach((template) => {
       const option = new BaseComponent({
         tag: "option",
         className: styles$4.option,
-        text: `${template.name}`,
+        text: `${template.name} (${template.difficulty})`,
       });
       option.addAttributes({
         value: template.name,
       });
-      console.log();
       option.getNode();
       this.append(option);
     });
   }
+
+  //TODO написать onChange? соединить с эмиттером? вынести в templateManager?
 }
 
 const levelConfig = {
-  easy: {
-    size: 5,
-    templates: [
-      {
-        name: "Dog", //++
-        verticalHints: [[1], [1, 3], [3], [1, 1], [1, 1]],
-        horizontalHints: [[1], [3], [2], [5], [1]],
-        preview: "./public/img/templates/easy/dog.png",
-      },
-      {
-        name: "Car", //++
-        verticalHints: [[], [3], [5], [5], [1, 1]],
-        horizontalHints: [[2], [4], [3], [4], [2]],
-        preview: "./public/img/templates/easy/car.png",
-      },
-      {
-        name: "Bat", //++
-        verticalHints: [[1, 1], [5], [5], [1, 1, 1], [1, 1]],
-        horizontalHints: [[4], [3], [3], [3], [4]],
-        preview: "./public/img/templates/easy/bat.png",
-      },
-      {
-        name: "Cross", //++
-        verticalHints: [[3], [2, 2], [1, 1], [2, 2], [3]],
-        horizontalHints: [[3], [2, 2], [1, 1], [2, 2], [3]],
-        preview: "./public/img/templates/easy/cross.png",
-      },
-      {
-        name: "Snowflake", //++
-        verticalHints: [[1, 1, 1], [3], [2, 2], [3], [1, 1, 1]],
-        horizontalHints: [[1, 1, 1], [3], [2, 2], [3], [1, 1, 1]],
-        preview: "./public/img/templates/easy/snowflake.png",
-      },
-    ],
-  },
-  medium: {
-    size: 10,
-    templates: [
-      {
-        name: "Snail", //++
-        verticalHints: [
-          [4],
-          [2, 3],
-          [4, 3],
-          [1, 3, 2],
-          [5, 2],
-          [4, 2],
-          [7, 1],
-          [6, 1],
-          [9],
-          [9],
-        ],
-        horizontalHints: [
-          [6, 1],
-          [2, 6],
-          [10],
-          [1, 8],
-          [2, 2, 4],
-          [3, 5],
-          [6, 2],
-          [3, 2],
-          [1, 2],
-          [2],
-        ],
-        preview: "./public/img/templates/medium/snail.png",
-      },
-      {
-        name: "House", //+
-        verticalHints: [
-          [2],
-          [4],
-          [6],
-          [8],
-          [10],
-          [4, 4],
-          [4, 4],
-          [10],
-          [10],
-          [10],
-        ],
-        horizontalHints: [
-          [6],
-          [7],
-          [8],
-          [9],
-          [5, 3],
-          [5, 3],
-          [9],
-          [8],
-          [7],
-          [6],
-        ],
-        preview: "./public/img/templates/medium/house.png",
-      },
-      {
-        name: "Valentine", //+
-        verticalHints: [
-          [3, 1, 2],
-          [2, 1, 1],
-          [2, 1, 1],
-          [2, 1],
-          [3, 2],
-          [4, 3],
-          [1, 2, 4],
-          [1, 5, 1],
-          [1, 5, 1],
-          [7, 1],
-        ],
-        horizontalHints: [
-          [6, 1, 1],
-          [7, 2],
-          [1, 2, 1, 1],
-          [5],
-          [4],
-          [1, 3],
-          [4],
-          [2, 2, 1],
-          [1, 4, 1],
-          [7, 1],
-        ],
-        preview: "./public/img/templates/medium/valentine.png",
-      },
-      {
-        name: "?", //+
-        verticalHints: [[6], [2, 2], [2, 2], [2], [3], [4], [2], [], [2], [2]],
-        horizontalHints: [
-          [],
-          [2],
-          [3],
-          [1],
-          [1, 2, 2],
-          [1, 2, 2],
-          [1, 2],
-          [6],
-          [4],
-          [],
-        ],
-        preview: "./public/img/templates/medium/question.png",
-      },
-      {
-        name: "TV", //+
-        verticalHints: [
-          [1, 1],
-          [1, 1],
-          [10],
-          [1, 2, 2],
-          [3, 1],
-          [1, 1, 1],
-          [3, 1],
-          [4, 2],
-          [10],
-          [1, 1],
-        ],
-        horizontalHints: [
-          [7],
-          [1, 1, 4],
-          [1, 7],
-          [3, 2],
-          [1, 1],
-          [1, 1],
-          [2, 1],
-          [1, 1, 1],
-          [2, 3],
-          [7],
-        ],
-        preview: "./public/img/templates/medium/tv.png",
-      },
-    ],
-  },
-  hard: {
-    size: 15,
-    templates: [
-      {
-        name: "Peaks", //+
-        verticalHints: [
-          [1],
-          [3],
-          [5],
-          [7],
-          [9],
-          [11],
-          [13],
-          [13],
-          [15],
-          [15],
-          [15],
-          [6, 1, 6],
-          [4, 1, 4],
-          [3],
-          [5],
-        ],
-        horizontalHints: [
-          [4],
-          [7],
-          [8],
-          [9],
-          [10],
-          [10, 1],
-          [10, 2],
-          [15],
-          [10, 2],
-          [10, 1],
-          [10],
-          [9],
-          [8],
-          [7],
-          [4],
-        ],
-        preview: "./public/img/templates/hard/peaks.png",
-      },
-      {
-        name: "Castle", //+
-        verticalHints: [
-          [1],
-          [2],
-          [3],
-          [2, 2, 1, 2, 2],
-          [5, 1, 5],
-          [1, 1, 1, 1, 1],
-          [1, 1, 1, 1, 1, 1, 1],
-          [1, 1, 7, 1, 1],
-          [1, 1],
-          [1, 1, 1, 1],
-          [1, 3, 1, 3, 1],
-          [1, 1, 3, 1, 1],
-          [1, 1, 3, 1, 1],
-          [1, 3, 1],
-          [15],
-        ],
-        horizontalHints: [
-          [12],
-          [2, 1],
-          [1, 2, 1, 1],
-          [2, 4, 1],
-          [5, 1, 1],
-          [1, 1],
-          [8, 4],
-          [2, 1, 5],
-          [1, 1, 4],
-          [1, 1],
-          [5, 1, 1],
-          [2, 4, 1],
-          [1, 2, 1, 1],
-          [2, 1],
-          [12],
-        ],
-        preview: "./public/img/templates/hard/castle.png",
-      },
-      {
-        name: "Buld", //+
-        verticalHints: [
-          [15],
-          [2, 2, 2, 2],
-          [1, 2, 1, 2, 1],
-          [3, 1, 3],
-          [3, 3],
-          [3, 3],
-          [3, 3],
-          [4, 4],
-          [4, 4],
-          [1, 3, 5],
-          [6, 6],
-          [5, 5],
-          [6, 6],
-          [6, 6],
-          [7, 7],
-        ],
-        horizontalHints: [
-          [15],
-          [2, 6, 5],
-          [1, 13],
-          [3, 8],
-          [2, 6],
-          [1, 1, 3],
-          [1, 1],
-          [1],
-          [1, 1],
-          [1, 1, 1, 3],
-          [2, 1, 6],
-          [3, 8],
-          [1, 13],
-          [2, 12],
-          [15],
-        ],
-        preview: "./public/img/templates/hard/house.png",
-      },
-      {
-        name: "Candle", //+
-        verticalHints: [
-          [1, 1, 6, 3],
-          [3, 2, 3, 2],
-          [3, 1, 5, 1],
-          [4, 4, 1],
-          [5, 5, 1],
-          [5, 5, 1],
-          [3, 3, 2],
-          [3, 1, 2, 3],
-          [3, 1, 7],
-          [3, 7],
-          [3, 3, 3],
-          [3, 2, 1, 2],
-          [2, 2, 3],
-          [1, 5],
-          [15],
-        ],
-        horizontalHints: [
-          [12, 2],
-          [12, 1],
-          [13, 1],
-          [3, 1],
-          [1, 1, 2, 2, 1],
-          [2, 1],
-          [6, 1],
-          [1, 4, 1],
-          [13, 1],
-          [13, 1],
-          [2, 3, 3, 2],
-          [2, 1, 2],
-          [1, 4, 3],
-          [2, 9],
-          [15],
-        ],
-        preview: "./public/img/templates/hard/candle.png",
-      },
-      {
-        name: "Flowers", //+
-        verticalHints: [
-          [2, 1, 10],
-          [1, 1, 5, 1, 1],
-          [3, 6, 1],
-          [1, 1, 6, 2],
-          [2, 1, 1, 3, 1],
-          [6, 2, 1, 1, 1],
-          [6, 1, 6],
-          [5, 5],
-          [5, 1, 5],
-          [5, 1, 5],
-          [4, 1, 4],
-          [3, 1, 3],
-          [3, 1, 3],
-          [4, 1, 4],
-          [5, 5],
-        ],
-        horizontalHints: [
-          [15],
-          [1, 1, 11],
-          [1, 10],
-          [2, 8, 2],
-          [1, 5, 1],
-          [1, 1, 3],
-          [4],
-          [7],
-          [6, 2],
-          [5, 1, 1, 1],
-          [2, 1, 5, 2, 1],
-          [1, 1, 5, 2],
-          [3, 11],
-          [1, 1, 9],
-          [2, 1, 10],
-        ],
-        preview: "./public/img/templates/hard/flowers.png",
-      },
-    ],
-  },
+  easy: [
+    {
+      difficulty: "easy",
+      size: 5,
+      name: "Dog", //++
+      verticalHints: [[1], [1, 3], [3], [1, 1], [1, 1]],
+      horizontalHints: [[1], [3], [2], [5], [1]],
+      preview: "./public/img/templates/easy/dog.png",
+    },
+    {
+      difficulty: "easy",
+      size: 5,
+      name: "Car", //++
+      verticalHints: [[], [3], [5], [5], [1, 1]],
+      horizontalHints: [[2], [4], [3], [4], [2]],
+      preview: "./public/img/templates/easy/car.png",
+    },
+    {
+      difficulty: "easy",
+      size: 5,
+      name: "Bat", //++
+      verticalHints: [[1, 1], [5], [5], [1, 1, 1], [1, 1]],
+      horizontalHints: [[4], [3], [3], [3], [4]],
+      preview: "./public/img/templates/easy/bat.png",
+    },
+    {
+      difficulty: "easy",
+      size: 5,
+      name: "Cross", //++
+      verticalHints: [[3], [2, 2], [1, 1], [2, 2], [3]],
+      horizontalHints: [[3], [2, 2], [1, 1], [2, 2], [3]],
+      preview: "./public/img/templates/easy/cross.png",
+    },
+    {
+      difficulty: "easy",
+      size: 5,
+      name: "Snowflake", //++
+      verticalHints: [[1, 1, 1], [3], [2, 2], [3], [1, 1, 1]],
+      horizontalHints: [[1, 1, 1], [3], [2, 2], [3], [1, 1, 1]],
+      preview: "./public/img/templates/easy/snowflake.png",
+    },
+  ],
+  medium: [
+    {
+      difficulty: "medium",
+      size: 10,
+      name: "Snail", //++
+      verticalHints: [
+        [4],
+        [2, 3],
+        [4, 3],
+        [1, 3, 2],
+        [5, 2],
+        [4, 2],
+        [7, 1],
+        [6, 1],
+        [9],
+        [9],
+      ],
+      horizontalHints: [
+        [6, 1],
+        [2, 6],
+        [10],
+        [1, 8],
+        [2, 2, 4],
+        [3, 5],
+        [6, 2],
+        [3, 2],
+        [1, 2],
+        [2],
+      ],
+      preview: "./public/img/templates/medium/snail.png",
+    },
+    {
+      difficulty: "medium",
+      size: 10,
+      name: "House", //+
+      verticalHints: [
+        [2],
+        [4],
+        [6],
+        [8],
+        [10],
+        [4, 4],
+        [4, 4],
+        [10],
+        [10],
+        [10],
+      ],
+      horizontalHints: [[6], [7], [8], [9], [5, 3], [5, 3], [9], [8], [7], [6]],
+      preview: "./public/img/templates/medium/house.png",
+    },
+    {
+      difficulty: "medium",
+      size: 10,
+      name: "Valentine", //+
+      verticalHints: [
+        [3, 1, 2],
+        [2, 1, 1],
+        [2, 1, 1],
+        [2, 1],
+        [3, 2],
+        [4, 3],
+        [1, 2, 4],
+        [1, 5, 1],
+        [1, 5, 1],
+        [7, 1],
+      ],
+      horizontalHints: [
+        [6, 1, 1],
+        [7, 2],
+        [1, 2, 1, 1],
+        [5],
+        [4],
+        [1, 3],
+        [4],
+        [2, 2, 1],
+        [1, 4, 1],
+        [7, 1],
+      ],
+      preview: "./public/img/templates/medium/valentine.png",
+    },
+    {
+      difficulty: "medium",
+      size: 10,
+      name: "?", //+
+      verticalHints: [[6], [2, 2], [2, 2], [2], [3], [4], [2], [], [2], [2]],
+      horizontalHints: [
+        [],
+        [2],
+        [3],
+        [1],
+        [1, 2, 2],
+        [1, 2, 2],
+        [1, 2],
+        [6],
+        [4],
+        [],
+      ],
+      preview: "./public/img/templates/medium/question.png",
+    },
+    {
+      difficulty: "medium",
+      size: 10,
+      name: "TV", //+
+      verticalHints: [
+        [1, 1],
+        [1, 1],
+        [10],
+        [1, 2, 2],
+        [3, 1],
+        [1, 1, 1],
+        [3, 1],
+        [4, 2],
+        [10],
+        [1, 1],
+      ],
+      horizontalHints: [
+        [7],
+        [1, 1, 4],
+        [1, 7],
+        [3, 2],
+        [1, 1],
+        [1, 1],
+        [2, 1],
+        [1, 1, 1],
+        [2, 3],
+        [7],
+      ],
+      preview: "./public/img/templates/medium/tv.png",
+    },
+  ],
+  hard: [
+    {
+      difficulty: "hard",
+      size: 15,
+      name: "Peaks", //+
+      verticalHints: [
+        [1],
+        [3],
+        [5],
+        [7],
+        [9],
+        [11],
+        [13],
+        [13],
+        [15],
+        [15],
+        [15],
+        [6, 1, 6],
+        [4, 1, 4],
+        [3],
+        [5],
+      ],
+      horizontalHints: [
+        [4],
+        [7],
+        [8],
+        [9],
+        [10],
+        [10, 1],
+        [10, 2],
+        [15],
+        [10, 2],
+        [10, 1],
+        [10],
+        [9],
+        [8],
+        [7],
+        [4],
+      ],
+      preview: "./public/img/templates/hard/peaks.png",
+    },
+    {
+      difficulty: "hard",
+      size: 15,
+      name: "Castle", //+
+      verticalHints: [
+        [1],
+        [2],
+        [3],
+        [2, 2, 1, 2, 2],
+        [5, 1, 5],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 7, 1, 1],
+        [1, 1],
+        [1, 1, 1, 1],
+        [1, 3, 1, 3, 1],
+        [1, 1, 3, 1, 1],
+        [1, 1, 3, 1, 1],
+        [1, 3, 1],
+        [15],
+      ],
+      horizontalHints: [
+        [12],
+        [2, 1],
+        [1, 2, 1, 1],
+        [2, 4, 1],
+        [5, 1, 1],
+        [1, 1],
+        [8, 4],
+        [2, 1, 5],
+        [1, 1, 4],
+        [1, 1],
+        [5, 1, 1],
+        [2, 4, 1],
+        [1, 2, 1, 1],
+        [2, 1],
+        [12],
+      ],
+      preview: "./public/img/templates/hard/castle.png",
+    },
+    {
+      difficulty: "hard",
+      size: 15,
+      name: "Buld", //+
+      verticalHints: [
+        [15],
+        [2, 2, 2, 2],
+        [1, 2, 1, 2, 1],
+        [3, 1, 3],
+        [3, 3],
+        [3, 3],
+        [3, 3],
+        [4, 4],
+        [4, 4],
+        [1, 3, 5],
+        [6, 6],
+        [5, 5],
+        [6, 6],
+        [6, 6],
+        [7, 7],
+      ],
+      horizontalHints: [
+        [15],
+        [2, 6, 5],
+        [1, 13],
+        [3, 8],
+        [2, 6],
+        [1, 1, 3],
+        [1, 1],
+        [1],
+        [1, 1],
+        [1, 1, 1, 3],
+        [2, 1, 6],
+        [3, 8],
+        [1, 13],
+        [2, 12],
+        [15],
+      ],
+      preview: "./public/img/templates/hard/house.png",
+    },
+    {
+      difficulty: "hard",
+      size: 15,
+      name: "Candle", //+
+      verticalHints: [
+        [1, 1, 6, 3],
+        [3, 2, 3, 2],
+        [3, 1, 5, 1],
+        [4, 4, 1],
+        [5, 5, 1],
+        [5, 5, 1],
+        [3, 3, 2],
+        [3, 1, 2, 3],
+        [3, 1, 7],
+        [3, 7],
+        [3, 3, 3],
+        [3, 2, 1, 2],
+        [2, 2, 3],
+        [1, 5],
+        [15],
+      ],
+      horizontalHints: [
+        [12, 2],
+        [12, 1],
+        [13, 1],
+        [3, 1],
+        [1, 1, 2, 2, 1],
+        [2, 1],
+        [6, 1],
+        [1, 4, 1],
+        [13, 1],
+        [13, 1],
+        [2, 3, 3, 2],
+        [2, 1, 2],
+        [1, 4, 3],
+        [2, 9],
+        [15],
+      ],
+      preview: "./public/img/templates/hard/candle.png",
+    },
+    {
+      difficulty: "hard",
+      size: 15,
+      name: "Flowers", //+
+      verticalHints: [
+        [2, 1, 10],
+        [1, 1, 5, 1, 1],
+        [3, 6, 1],
+        [1, 1, 6, 2],
+        [2, 1, 1, 3, 1],
+        [6, 2, 1, 1, 1],
+        [6, 1, 6],
+        [5, 5],
+        [5, 1, 5],
+        [5, 1, 5],
+        [4, 1, 4],
+        [3, 1, 3],
+        [3, 1, 3],
+        [4, 1, 4],
+        [5, 5],
+      ],
+      horizontalHints: [
+        [15],
+        [1, 1, 11],
+        [1, 10],
+        [2, 8, 2],
+        [1, 5, 1],
+        [1, 1, 3],
+        [4],
+        [7],
+        [6, 2],
+        [5, 1, 1, 1],
+        [2, 1, 5, 2, 1],
+        [1, 1, 5, 2],
+        [3, 11],
+        [1, 1, 9],
+        [2, 1, 10],
+      ],
+      preview: "./public/img/templates/hard/flowers.png",
+    },
+  ],
 };
 
 class Main extends BaseComponent {
@@ -1225,9 +1242,18 @@ class Main extends BaseComponent {
     super({ tag: "main", className: styles$1.main });
     this.controlsManager = new ControlsManager(stateMachine);
     this.getNode();
+    this.addInvitation();
     this.addTemplateSelector();
     this.addControls();
     this.addGameBoard();
+  }
+  addInvitation() {
+    const h2 = new BaseComponent({
+      tag: "h2",
+      className: styles$1.invitation,
+      text: "Hi! Do you wanna choose a game? ",
+    });
+    this.getNode().append(h2.getNode());
   }
 
   addTemplateSelector() {
@@ -1266,4 +1292,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-DzJ5dLsb.js.map
+//# sourceMappingURL=index-Dq7bFsab.js.map
