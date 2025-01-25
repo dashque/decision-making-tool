@@ -211,48 +211,70 @@ Add the correct display in Chrome and Safari.
 summary {
 	display: list-item;
 }
-._ghLink_1a1a5_1 {
+._footer_zs3ew_1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #a37c7c;
+  max-width: 1200px;
+  width: 100%;
+  min-height: 80px;
+  padding: 20px;
+}
+
+._ghLink_zs3ew_12 {
   color: #eacfcf;
   text-decoration: none;
   font-weight: 600;
 }
 
-._rssLogoLink_1a1a5_7 {
+._rssLogoLink_zs3ew_18 {
   text-decoration: none;
 }
 
-._rssLogoImg_1a1a5_11 {
+._rssLogoImg_zs3ew_22 {
   width: 60px;
 }
 
-._year_1a1a5_15 {
+._year_zs3ew_26 {
   font-weight: 600;
   color: #eacfcf;
-}._h1_1h1xr_1 {
+}._header_1e6y5_1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #a37c7c;
+  max-width: 1200px;
+  width: 100%;
+  min-height: 80px;
+  padding: 20px;
+}
+
+._h1_1e6y5_12 {
   font-size: 20px;
   color: #eacfcf;
   margin: 10px;
 }
 
-._logoLink_1h1xr_7 {
+._logoLink_1e6y5_18 {
   margin: 10px;
-}._gameControls_1hltk_1 {
+}._gameControls_gg8l7_1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 60%;
+  max-width: 50%;
+  width: 300px;
   flex-wrap: wrap;
-  gap: 10px;
   justify-content: center;
   margin: 20px auto;
 }
 
-._selectTemplate_1hltk_12,
-._randomBtn_1hltk_13,
-._resetBtn_1hltk_14,
-._saveBtn_1hltk_15,
-._continueBtn_1hltk_16,
-._solutionBtn_1hltk_17 {
+._selectTemplate_gg8l7_12,
+._randomBtn_gg8l7_13,
+._resetBtn_gg8l7_14,
+._saveBtn_gg8l7_15,
+._continueBtn_gg8l7_16,
+._solutionBtn_gg8l7_17 {
   border: none;
   border-radius: 10px;
   padding: 5px 8px;
@@ -260,14 +282,14 @@ summary {
   text-align: center;
   cursor: pointer;
 }
-._selectTemplate_1hltk_12:hover,
-._randomBtn_1hltk_13:hover,
-._resetBtn_1hltk_14:hover,
-._saveBtn_1hltk_15:hover,
-._continueBtn_1hltk_16:hover,
-._solutionBtn_1hltk_17:hover {
-  background-color: rgba(255, 255, 255, 0.9764705882);
-}._cell_1xr73_1 {
+._selectTemplate_gg8l7_12:hover,
+._randomBtn_gg8l7_13:hover,
+._resetBtn_gg8l7_14:hover,
+._saveBtn_gg8l7_15:hover,
+._continueBtn_gg8l7_16:hover,
+._solutionBtn_gg8l7_17:hover {
+  background-color: rgb(254, 242, 242);
+}._cell_19mmn_1 {
   width: 40px;
   height: 40px;
   background-color: white;
@@ -275,33 +297,38 @@ summary {
   cursor: pointer;
   border: none;
 }
-._cell_1xr73_1:active {
-  background-color: rgba(255, 255, 255, 0.9764705882);
+._cell_19mmn_1:active {
+  background-color: rgb(254, 242, 242);
 }
-._cell_1xr73_1:hover {
-  background-color: rgba(255, 255, 255, 0.9764705882);
-}._gameBoard_afxrc_1 {
+._cell_19mmn_1:hover {
+  background-color: rgb(254, 242, 242);
+}._gameBoard_1c5ji_1 {
   display: grid;
   align-items: center;
   gap: 1px;
+  margin: 30px auto;
 }
 
-._small_afxrc_7 {
+._small_1c5ji_8 {
   grid-template-columns: repeat(5, 40px);
 }
 
-._medium_afxrc_11 {
+._medium_1c5ji_12 {
   grid-template-columns: repeat(10, 40px);
 }
 
-._large_afxrc_15 {
+._large_1c5ji_16 {
   grid-template-columns: repeat(15, 40px);
-}._gameBoard_eft6l_1 {
-  display: grid;
+}._main_1yqw5_1 {
+  display: flex;
   align-items: center;
-  gap: 5px;
-  margin: 30px auto;
-}._wrapper_1t3y0_1 {
+  flex-direction: column;
+  background-color: rgba(240, 183, 183, 0.7058823529);
+  max-width: 1200px;
+  flex: 1;
+  width: 100%;
+  padding: 20px;
+}._wrapper_kzhgx_1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -311,39 +338,6 @@ summary {
   width: 100%;
   min-height: 100vh;
   margin: 0 auto;
-}
-
-._header_1t3y0_13 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #a37c7c;
-  max-width: 1200px;
-  width: 100%;
-  min-height: 80px;
-  padding: 20px;
-}
-
-._main_1t3y0_24 {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-color: rgba(240, 183, 183, 0.7058823529);
-  max-width: 1200px;
-  flex: 1;
-  width: 100%;
-  padding: 20px;
-}
-
-._footer_1t3y0_35 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #a37c7c;
-  max-width: 1200px;
-  width: 100%;
-  min-height: 80px;
-  padding: 20px;
 }
 html {
   font-family: "Quicksand", serif;

@@ -205,11 +205,13 @@ class BaseComponent {
   }
 }
 
-const ghLink = "_ghLink_1a1a5_1";
-const rssLogoLink = "_rssLogoLink_1a1a5_7";
-const rssLogoImg = "_rssLogoImg_1a1a5_11";
-const year = "_year_1a1a5_15";
+const footer = "_footer_zs3ew_1";
+const ghLink = "_ghLink_zs3ew_12";
+const rssLogoLink = "_rssLogoLink_zs3ew_18";
+const rssLogoImg = "_rssLogoImg_zs3ew_22";
+const year = "_year_zs3ew_26";
 const styles$6 = {
+	footer: footer,
 	ghLink: ghLink,
 	rssLogoLink: rssLogoLink,
 	rssLogoImg: rssLogoImg,
@@ -222,8 +224,8 @@ class Footer extends BaseComponent {
    * @param {string} tag
    * @param {string} className
    */
-  constructor(tag, className) {
-    super({ tag, className });
+  constructor() {
+    super({ tag: "footer", className: styles$6.footer });
     this.getNode();
     this.addGithubLink();
     this.addRSSLogo();
@@ -275,9 +277,11 @@ class Footer extends BaseComponent {
   }
 }
 
-const h1 = "_h1_1h1xr_1";
-const logoLink = "_logoLink_1h1xr_7";
+const header = "_header_1e6y5_1";
+const h1 = "_h1_1e6y5_12";
+const logoLink = "_logoLink_1e6y5_18";
 const styles$5 = {
+	header: header,
 	h1: h1,
 	logoLink: logoLink
 };
@@ -288,8 +292,8 @@ class Header extends BaseComponent {
    * @param {string} tag
    * @param {string} className
    */
-  constructor(tag, className) {
-    super({ tag, className });
+  constructor() {
+    super({ tag: "header", className: styles$5.header });
     this.getNode();
     this.addLogo();
     this.addH1();
@@ -331,13 +335,13 @@ class Header extends BaseComponent {
   addTimer() {}
 }
 
-const gameControls = "_gameControls_1hltk_1";
-const selectTemplate = "_selectTemplate_1hltk_12";
-const randomBtn = "_randomBtn_1hltk_13";
-const resetBtn = "_resetBtn_1hltk_14";
-const saveBtn = "_saveBtn_1hltk_15";
-const continueBtn = "_continueBtn_1hltk_16";
-const solutionBtn = "_solutionBtn_1hltk_17";
+const gameControls = "_gameControls_gg8l7_1";
+const selectTemplate = "_selectTemplate_gg8l7_12";
+const randomBtn = "_randomBtn_gg8l7_13";
+const resetBtn = "_resetBtn_gg8l7_14";
+const saveBtn = "_saveBtn_gg8l7_15";
+const continueBtn = "_continueBtn_gg8l7_16";
+const solutionBtn = "_solutionBtn_gg8l7_17";
 const styles$4 = {
 	gameControls: gameControls,
 	selectTemplate: selectTemplate,
@@ -353,21 +357,15 @@ class GameControls extends BaseComponent {
    *
    * @param {import("../../core/StateMachine").StateDef} stateMachine
    */
-  constructor(stateMachine) {
+  constructor(controlsManager) {
     super({ tag: "div", className: styles$4.gameControls });
-    this.stateMachine = stateMachine;
+    this.controlsManager = controlsManager;
     this.getNode();
     this.#addButtons();
-    this.#addEvents();
+    this.setControlsManager();
   }
 
   #addButtons() {
-    this.selectTemplate = new BaseComponent({
-      tag: "select",
-      className: styles$4.selectTemplate,
-      text: "Select game",
-    });
-
     this.randomGameButton = new BaseComponent({
       tag: "button",
       className: styles$4.randomBtn,
@@ -399,7 +397,6 @@ class GameControls extends BaseComponent {
     });
 
     this.appendChildren([
-      this.selectTemplate,
       this.randomGameButton,
       this.resetGameButton,
       this.saveGameButton,
@@ -408,42 +405,18 @@ class GameControls extends BaseComponent {
     ]);
   }
 
-  #addEvents() {
-    //TODO добавить обработку выбора темплейта
-    this.randomGameButton.addListener("click", () => this.#handleRandomGame());
-    this.resetGameButton.addListener("click", () => this.#handleResetGame());
-    this.saveGameButton.addListener("click", () => this.#handleSaveGame());
-    this.continueGameButton.addListener("click", () =>
-      this.#handleContinueGame(),
-    );
-    this.solutionButton.addListener("click", () => this.#handleSolution());
-  }
-  #handleRandomGame() {
-    this.stateMachine.transition(this.stateMachine.value, "startGame");
-  }
-
-  #handleResetGame() {
-    this.stateMachine.transition(this.stateMachine.value, "reset");
-  }
-  #handleSaveGame() {
-    this.stateMachine.transition(this.stateMachine.value, "saveGame");
-  }
-  #handleContinueGame() {
-    if (this.stateMachine.value === "playing") {
-      this.stateMachine.transition(this.stateMachine.value, "paused");
-    } else if (this.stateMachine.value === "saving") {
-      this.stateMachine.transition(this.stateMachine.value, "continue");
-    }
-  }
-
-  #handleSolution() {
-    if (this.stateMachine.value === "playing") {
-      this.stateMachine.transition(this.stateMachine.value, "solution");
-    }
+  setControlsManager() {
+    this.controlsManager.setupButtonsListeners({
+      randomGameButton: this.randomGameButton,
+      resetGameButton: this.resetGameButton,
+      saveGameButton: this.saveGameButton,
+      continueGameButton: this.continueGameButton,
+      solutionButton: this.solutionButton,
+    });
   }
 }
 
-const cell = "_cell_1xr73_1";
+const cell = "_cell_19mmn_1";
 const styles$3 = {
 	cell: cell
 };
@@ -455,12 +428,12 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameBoard$1 = "_gameBoard_afxrc_1";
-const small = "_small_afxrc_7";
-const medium = "_medium_afxrc_11";
-const large = "_large_afxrc_15";
+const gameBoard = "_gameBoard_1c5ji_1";
+const small = "_small_1c5ji_8";
+const medium = "_medium_1c5ji_12";
+const large = "_large_1c5ji_16";
 const styles$2 = {
-	gameBoard: gameBoard$1,
+	gameBoard: gameBoard,
 	small: small,
 	medium: medium,
 	large: large
@@ -474,8 +447,8 @@ class GameBoard extends BaseComponent {
    * @param {number} width
    * @param {number} height
    */
-  constructor(tag, className, width, height) {
-    super({ tag, className });
+  constructor(width, height) {
+    super({ tag: "section", className: styles$2.gameBoard });
     this.width = width;
     this.height = height;
     const size = this.getGameBoardSize(this.width);
@@ -513,10 +486,70 @@ class GameBoard extends BaseComponent {
   }
 }
 
-const gameBoard = "_gameBoard_eft6l_1";
+const main = "_main_1yqw5_1";
 const styles$1 = {
-	gameBoard: gameBoard
+	main: main
 };
+
+/**
+ * creates state machine for changing states and managing actions of the game
+ * @param {StateMachineDef} stateMachineDef
+ * @returns {Object}
+ */
+function createMachine(stateMachineDef) {
+  const machine = {
+    value: stateMachineDef.initialState,
+    data: null,
+    /**
+     * does transition to another state
+     * @param {Object} currentState
+     * @param {Event} event
+     * @returns new state and data
+     */
+    transition(event, data = null) {
+      const currentState = this.value;
+      const currentStateDef = stateMachineDef[currentState];
+      const destinationTransition = currentStateDef.transitions[event];
+
+      if (!destinationTransition) {
+        console.error(`Invalid transition: ${event} from ${currentState}`);
+        return;
+      }
+      const destinationState = destinationTransition.target;
+      const destinationStateDef = stateMachineDef[destinationState];
+
+      if (destinationTransition.action) {
+        destinationTransition.action(data);
+      }
+      if (currentStateDef.actions.onExit) {
+        currentStateDef.actions.onExit(data);
+      }
+      if (destinationStateDef.actions.onEnter) {
+        destinationStateDef.actions.onEnter(data);
+      }
+
+      this.value = destinationState;
+      this.data = data;
+
+      console.log(
+        `Transitioned to state: "${destinationState}" with data:`,
+        data,
+      );
+
+      return this.value;
+    },
+
+    get state() {
+      return this.value;
+    },
+
+    getStateData() {
+      return this.data;
+    },
+  };
+
+  return machine;
+}
 
 /**
  * @typedef {Object} StateDef
@@ -530,201 +563,254 @@ const styles$1 = {
  */
 
 const stateMachine = createMachine({
-  initialState: "initializing",
-  initializing: {
+  initialState: "stateInitializing",
+  stateInitializing: {
     actions: {
-      onEnter() {
-        console.log("initializing: onEnter");
+      onEnter(data) {
+        console.log("stateInitializing: onEnter");
       },
-      onExit() {
-        console.log("initializing: onExit");
+      onExit(data) {
+        console.log("stateInitializing: onExit");
       },
     },
     transitions: {
       startGame: {
-        target: "waitingForInput",
+        target: "stateWaitingForInput",
         action() {
-          console.log("trans action for STARTGAME in waitingForInput state");
+          console.log(
+            "trans action for STARTGAME in stateWaitingForInput state",
+          );
         },
       },
     },
   },
-  waitingForInput: {
+  stateWaitingForInput: {
     actions: {
-      onEnter() {
-        console.log("waitingForInput: onEnter");
+      onEnter(data) {
+        console.log("stateWaitingForInput: onEnter");
       },
-      onExit() {
-        console.log("waitingForInput: onExit");
+      onExit(data) {
+        console.log("stateWaitingForInput: onExit");
       },
     },
     transitions: {
       firstClick: {
-        target: "playing",
+        target: "statePlaying",
         action() {
-          console.log("trans action for FIRSTCLICK in playing state");
+          console.log("trans action for FIRSTCLICK in statePlaying state");
         },
       },
     },
   },
-  playing: {
+  statePlaying: {
     actions: {
-      onEnter() {
-        console.log("playing: onEnter");
+      onEnter(data) {
+        console.log("statePlaying: onEnter");
       },
-      onExit() {
-        console.log("playing: onExit");
+      onExit(data) {
+        console.log("statePlaying: onExit");
       },
     },
     transitions: {
       win: {
-        target: "gameOver",
+        target: "stateGameOver",
         action() {
-          console.log("trans action for WIN in gameOver state");
+          console.log("trans action for WIN in stateGameOver state");
         },
       },
       reset: {
-        target: "initializing",
+        target: "stateInitializing",
         action() {
-          console.log("trans action for RESET in initializing state");
+          console.log("trans action for RESET in stateInitializing state");
         },
       },
       saveGame: {
-        target: "saving",
+        target: "stateSaving",
         action() {
-          console.log("trans action for SAVEGAME in saving state");
+          console.log("trans action for SAVEGAME in stateSaving state");
         },
       },
       solution: {
-        target: "playing",
+        target: "statePlaying",
         action() {
-          console.log("trans action for SOLUTION in playing state");
+          console.log("trans action for SOLUTION in statePlaying state");
         },
       },
     },
   },
-  saving: {
+  stateSaving: {
     actions: {
-      onEnter() {
-        console.log("saving: onEnter");
+      onEnter(data) {
+        console.log("stateSaving: onEnter");
       },
-      onExit() {
-        console.log("saving: onExit");
+      onExit(data) {
+        console.log("stateSaving: onExit");
       },
     },
     transitions: {
       continue: {
-        target: "playing",
+        target: "statePlaying",
         action() {
-          console.log("trans action for CONTINUE in playing state");
+          console.log("trans action for CONTINUE in statePlaying state");
         },
       },
     },
   },
-  gameOver: {
+  stateGameOver: {
     actions: {
-      onEnter() {
-        console.log("gameOver: onEnter");
+      onEnter(data) {
+        console.log("stateGameOver: onEnter");
       },
-      onExit() {
-        console.log("gameOver: onExit");
+      onExit(data) {
+        console.log("stateGameOver: onExit");
       },
     },
     transitions: {
       restart: {
-        target: "initializing",
+        target: "stateInitializing",
         action() {
-          console.log("trans action for RESTART in initializing state");
+          console.log("trans action for RESTART in stateInitializing state");
         },
       },
       chooseTemplate: {
-        target: "choosingTemplate",
+        target: "stateChoosingTemplate",
         action() {
           console.log(
-            "trans action for CHOOSETEMPLATE in choosingTemplate state",
+            "trans action for CHOOSETEMPLATE in stateChoosingTemplate state",
           );
         },
       },
     },
   },
-  choosingTemplate: {
+  stateChoosingTemplate: {
     actions: {
-      onEnter() {
-        console.log("choosingTemplate: onEnter");
+      onEnter(data) {
+        console.log("stateChoosingTemplate: onEnter");
       },
-      onExit() {
-        console.log("choosingTemplate: onExit");
+      onExit(data) {
+        console.log("stateChoosingTemplate: onExit");
       },
     },
     transitions: {
       initializeNewTemplate: {
-        target: "initializing",
+        target: "stateInitializing",
         action() {
           console.log(
-            "trans action for INITIALIZENEWTEMPLATE in initializing state",
+            "trans action for INITIALIZENEWTEMPLATE in stateInitializing state",
           );
         },
       },
     },
   },
-  paused: {
+  statePaused: {
     actions: {
-      onEnter() {
-        console.log("paused: onEnter");
+      onEnter(data) {
+        console.log("statePaused: onEnter");
       },
-      onExit() {
-        console.log("paused: onExit");
+      onExit(data) {
+        console.log("statePaused: onExit");
       },
     },
     transitions: {
       resume: {
-        target: "playing",
+        target: "statePlaying",
         action() {
-          console.log("trans action for RESUME in playing state");
+          console.log("trans action for RESUME in statePlaying state");
         },
       },
     },
   },
 });
 
-/**
- * @typedef {Object.<string, StateDef>} StateMachineDef
- */
+class EventEmitter {
+  #listeners = {};
 
-/**
- * creates state machine for changing states and managing actions of the game
- * @param {StateMachineDef} stateMachineDef
- * @returns {Object}
- */
-function createMachine(stateMachineDef) {
-  const machine = {
-    value: stateMachineDef.initialState,
-    /**
-     *
-     * @param {Object} currentState
-     * @param {Event} event
-     * @returns
-     */
-    transition(currentState, event) {
-      const currentStateDef = stateMachineDef[currentState];
-      const destinationTransition = currentStateDef.transitions[event];
-      if (!destinationTransition) {
-        console.error(`Invalid transition: ${event} from ${currentState}`);
-        return;
-      }
-      const destinationState = destinationTransition.target;
-      const destinationStateDef = stateMachineDef[destinationState];
+  #getCallBacks(eventName) {
+    return this.#listeners[eventName] ?? [];
+  }
+  #setCallBacks(eventName, arr) {
+    arr.length === 0
+      ? delete this.#listeners[eventName]
+      : (this.#listeners[eventName] = arr);
+  }
 
-      destinationTransition.action();
-      currentStateDef.actions.onExit();
-      destinationStateDef.actions.onEnter();
+  subscribe(eventName, cb) {
+    const subs = this.#getCallBacks(eventName);
+    subs.push(cb);
 
-      machine.value = destinationState;
+    this.#setCallBacks(eventName, subs);
+    return () => this.unsubscribe(eventName, cb);
+  }
 
-      return machine.value;
-    },
-  };
-  return machine;
+  unsubscribe(eventName, cb) {
+    const subs = this.#getCallBacks(eventName).filter((elem) => elem !== cb);
+
+    this.#setCallBacks(eventName, subs);
+  }
+
+  dispatch(eventName, data) {
+    this.#getCallBacks(eventName).forEach((cb) => cb(data));
+  }
+}
+
+class ControlsManager {
+  constructor(stateMachine) {
+    this.stateMachine = stateMachine;
+    this.eventEmitter = new EventEmitter();
+    this.setupListeners();
+  }
+
+  setupListeners() {
+    this.eventEmitter.subscribe("randomGame", () => this.handleRandomGame());
+    this.eventEmitter.subscribe("resetGame", () => this.handleResetGame());
+    this.eventEmitter.subscribe("saveGame", () => this.handleSaveGame());
+    this.eventEmitter.subscribe("continueGame", () =>
+      this.handleContinueGame(),
+    );
+    this.eventEmitter.subscribe("solution", () => this.handleSolution());
+  }
+
+  setupButtonsListeners(buttons) {
+    buttons.randomGameButton.addListener("click", () =>
+      this.eventEmitter.dispatch("randomGame"),
+    );
+    buttons.resetGameButton.addListener("click", () =>
+      this.eventEmitter.dispatch("resetGame"),
+    );
+    buttons.saveGameButton.addListener("click", () =>
+      this.eventEmitter.dispatch("saveGame"),
+    );
+    buttons.continueGameButton.addListener("click", () =>
+      this.eventEmitter.dispatch("continueGame"),
+    );
+    buttons.solutionButton.addListener("click", () =>
+      this.eventEmitter.dispatch("solution"),
+    );
+  }
+
+  handleRandomGame() {
+    this.stateMachine.transition("startGame");
+  }
+
+  handleResetGame() {
+    this.stateMachine.transition("reset");
+  }
+  handleSaveGame() {
+    this.stateMachine.transition("saveGame");
+  }
+  handleContinueGame() {
+    if (this.stateMachine.value === "statePlaying") {
+      this.stateMachine.transition("statePaused");
+    } else if (this.stateMachine.value === "stateSaving") {
+      this.stateMachine.transition("continue");
+    }
+  }
+
+  handleSolution() {
+    if (this.stateMachine.value === "statePlaying") {
+      this.stateMachine.transition("solution");
+    }
+  }
 }
 
 class Main extends BaseComponent {
@@ -733,41 +819,36 @@ class Main extends BaseComponent {
    * @param {string} tag
    * @param {string} className
    */
-  constructor(tag, className) {
-    super({ tag, className });
+  constructor() {
+    super({ tag: "main", className: styles$1.main });
+    this.controlsManager = new ControlsManager(stateMachine);
     this.getNode();
     this.addControls();
     this.addGameBoard();
   }
 
   addControls() {
-    const controls = new GameControls(stateMachine);
+    const controls = new GameControls(this.controlsManager);
     this.getNode().append(controls.getNode());
   }
 
   addGameBoard() {
-    const gameBoard = new GameBoard("div", styles$1.gameBoard, 5, 5);
+    const gameBoard = new GameBoard(5, 5);
     this.getNode().append(gameBoard.getNode());
   }
 }
 
-const wrapper = "_wrapper_1t3y0_1";
-const header = "_header_1t3y0_13";
-const main = "_main_1t3y0_24";
-const footer = "_footer_1t3y0_35";
+const wrapper = "_wrapper_kzhgx_1";
 const styles = {
-	wrapper: wrapper,
-	header: header,
-	main: main,
-	footer: footer
+	wrapper: wrapper
 };
 
 class Wrapper extends BaseComponent {
   constructor() {
     super({ tag: "div", className: styles.wrapper });
-    const header = new Header("header", styles.header);
-    const main = new Main("main", styles.main);
-    const footer = new Footer("footer", styles.footer);
+    const header = new Header();
+    const main = new Main();
+    const footer = new Footer();
     this.appendChildren([header, main, footer]);
   }
   init() {
@@ -777,4 +858,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-C3mzb-jk.js.map
+//# sourceMappingURL=index-CsIVoSLP.js.map
