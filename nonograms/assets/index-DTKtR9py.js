@@ -205,11 +205,11 @@ class BaseComponent {
   }
 }
 
-const footer = "_footer_tenv5_1";
-const ghLink = "_ghLink_tenv5_12";
-const rssLogoLink = "_rssLogoLink_tenv5_19";
-const rssLogoImg = "_rssLogoImg_tenv5_23";
-const year = "_year_tenv5_27";
+const footer = "_footer_pvxxr_1";
+const ghLink = "_ghLink_pvxxr_11";
+const rssLogoLink = "_rssLogoLink_pvxxr_19";
+const rssLogoImg = "_rssLogoImg_pvxxr_24";
+const year = "_year_pvxxr_28";
 const styles$6 = {
 	footer: footer,
 	ghLink: ghLink,
@@ -277,9 +277,9 @@ class Footer extends BaseComponent {
   }
 }
 
-const header = "_header_6aa77_1";
-const h1 = "_h1_6aa77_12";
-const logoLink = "_logoLink_6aa77_18";
+const header = "_header_32rj3_1";
+const h1 = "_h1_32rj3_11";
+const logoLink = "_logoLink_32rj3_17";
 const styles$5 = {
 	header: header,
 	h1: h1,
@@ -335,14 +335,14 @@ class Header extends BaseComponent {
   addTimer() {}
 }
 
-const gameControls = "_gameControls_we24o_1";
-const selectTemplate = "_selectTemplate_we24o_12";
-const randomBtn = "_randomBtn_we24o_13";
-const resetBtn = "_resetBtn_we24o_14";
-const saveBtn = "_saveBtn_we24o_15";
-const continueBtn = "_continueBtn_we24o_16";
-const solutionBtn = "_solutionBtn_we24o_17";
-const option = "_option_we24o_46";
+const gameControls = "_gameControls_1go9r_1";
+const selectTemplate = "_selectTemplate_1go9r_14";
+const randomBtn = "_randomBtn_1go9r_15";
+const resetBtn = "_resetBtn_1go9r_16";
+const saveBtn = "_saveBtn_1go9r_17";
+const continueBtn = "_continueBtn_1go9r_18";
+const solutionBtn = "_solutionBtn_1go9r_19";
+const option = "_option_1go9r_48";
 const styles$4 = {
 	gameControls: gameControls,
 	selectTemplate: selectTemplate,
@@ -418,7 +418,7 @@ class GameControls extends BaseComponent {
   }
 }
 
-const cell = "_cell_16s7f_1";
+const cell = "_cell_r06ye_1";
 const styles$3 = {
 	cell: cell
 };
@@ -430,15 +430,15 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameBoard = "_gameBoard_5qzfn_1";
-const small = "_small_5qzfn_8";
-const medium = "_medium_5qzfn_12";
-const large = "_large_5qzfn_16";
+const gameBoard = "_gameBoard_1f8nj_1";
+const easy = "_easy_1f8nj_9";
+const medium = "_medium_1f8nj_14";
+const hard = "_hard_1f8nj_19";
 const styles$2 = {
 	gameBoard: gameBoard,
-	small: small,
+	easy: easy,
 	medium: medium,
-	large: large
+	hard: hard
 };
 
 class GameBoard extends BaseComponent {
@@ -449,20 +449,20 @@ class GameBoard extends BaseComponent {
    * @param {number} width
    * @param {number} height
    */
-  constructor(width) {
+  constructor(templateManager) {
     super({ tag: "section", className: styles$2.gameBoard });
-    this.width = width;
-    const size = this.getGameBoardSize(this.width);
-    //TODO удалить нахрен, передать из настройки  темплейта
+    this.templateManager = templateManager;
+    this.updateGameBoard();
+    this.templateManager.onTemplateChange(() => this.updateGameBoard());
 
-    this.getNode().classList.add(styles$2[size]);
-    this.addCells();
+    console.log(this.getChildren());
   }
 
   addCells() {
     const cells = Array.from({ length: this.calculateNumberOfCells() }).map(
       () => {
         const cell = new Cell();
+        this.append(cell);
         return cell.getNode();
       },
     );
@@ -473,26 +473,27 @@ class GameBoard extends BaseComponent {
     return this.width ** 2;
   }
 
-  /**
-   *
-   * @param {number} width
-   * @returns {string}
-   */
+  updateGameBoard() {
+    this.destroyChildren();
+    this.getNode().classList.remove(styles$2.easy, styles$2.medium, styles$2.hard);
 
-  //TODO удалить нахрен, передать из настройки  темплейта
-  getGameBoardSize(width) {
-    const size = {
-      5: "small",
-      10: "medium",
-      15: "hard",
-    };
-
-    return size[width];
+    const template = this.templateManager.getSelectedTemplate();
+    if (template) {
+      this.width = template.size;
+      this.getNode().classList.add(styles$2[template.difficulty]);
+      this.addCells();
+      // TODO добавить обновление подсказок
+    } else {
+      this.destroyChildren();
+      this.width = 5;
+      this.getNode().classList.add(styles$2.easy);
+      this.addCells();
+    }
   }
 }
 
-const main = "_main_18kny_1";
-const invitation = "_invitation_18kny_11";
+const main = "_main_17785_1";
+const invitation = "_invitation_17785_12";
 const styles$1 = {
 	main: main,
 	invitation: invitation
@@ -821,15 +822,17 @@ class ControlsManager {
 }
 
 class TemplateSelector extends BaseComponent {
-  constructor(config) {
+  constructor(config, manager) {
     super({
       tag: "select",
       className: styles$4.selectTemplate,
       text: "Select game",
     });
+    this.manager = manager;
     this.config = config;
     this.getNode();
     this.#addOptions();
+    this.#addEventListeners();
   }
 
   getTemplatesFromConfig() {
@@ -852,7 +855,12 @@ class TemplateSelector extends BaseComponent {
     });
   }
 
-  //TODO написать onChange? соединить с эмиттером? вынести в templateManager?
+  #addEventListeners() {
+    this.addListener("change", (event) => {
+      const selectedTemplate = event.target.value;
+      this.manager.setTemplate(selectedTemplate);
+    });
+  }
 }
 
 const levelConfig = {
@@ -1232,6 +1240,36 @@ const levelConfig = {
   ],
 };
 
+class TemplateManager {
+  constructor(config) {
+    this.eventEmitter = new EventEmitter();
+    this.config = config;
+    this.selectedTemplate = null;
+  }
+
+  getSelectedTemplate() {
+    return this.selectedTemplate;
+  }
+
+  setTemplate(templateName) {
+    this.selectedTemplate = this.getTemplate(templateName);
+    this.eventEmitter.dispatch("templateChanged", this.selectedTemplate);
+  }
+
+  getTemplate(templateName) {
+    const templates = [
+      ...this.config.easy,
+      ...this.config.medium,
+      ...this.config.hard,
+    ];
+    return templates.find((template) => template.name === templateName);
+  }
+
+  onTemplateChange(callback) {
+    return this.eventEmitter.subscribe("templateChanged", callback);
+  }
+}
+
 class Main extends BaseComponent {
   /**
    *
@@ -1241,6 +1279,7 @@ class Main extends BaseComponent {
   constructor() {
     super({ tag: "main", className: styles$1.main });
     this.controlsManager = new ControlsManager(stateMachine);
+    this.templateManager = new TemplateManager(levelConfig);
     this.getNode();
     this.addInvitation();
     this.addTemplateSelector();
@@ -1257,7 +1296,10 @@ class Main extends BaseComponent {
   }
 
   addTemplateSelector() {
-    const templateSelector = new TemplateSelector(levelConfig);
+    const templateSelector = new TemplateSelector(
+      levelConfig,
+      this.templateManager,
+    );
     this.getNode().append(templateSelector.getNode());
   }
 
@@ -1267,7 +1309,7 @@ class Main extends BaseComponent {
   }
 
   addGameBoard() {
-    const gameBoard = new GameBoard(5, 5);
+    const gameBoard = new GameBoard(this.templateManager);
     this.getNode().append(gameBoard.getNode());
   }
 }
@@ -1292,4 +1334,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-Dq7bFsab.js.map
+//# sourceMappingURL=index-DTKtR9py.js.map
