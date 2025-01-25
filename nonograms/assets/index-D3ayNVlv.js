@@ -858,4 +858,3 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-D3ayNVlv.js.map
