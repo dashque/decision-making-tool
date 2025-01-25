@@ -260,7 +260,7 @@ summary {
 
 ._logoLink_6aa77_18 {
   margin: 10px;
-}._gameControls_1nvty_1 {
+}._gameControls_ph4cu_1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -271,12 +271,12 @@ summary {
   margin: 20px auto;
 }
 
-._selectTemplate_1nvty_12,
-._randomBtn_1nvty_13,
-._resetBtn_1nvty_14,
-._saveBtn_1nvty_15,
-._continueBtn_1nvty_16,
-._solutionBtn_1nvty_17 {
+._selectTemplate_ph4cu_12,
+._randomBtn_ph4cu_13,
+._resetBtn_ph4cu_14,
+._saveBtn_ph4cu_15,
+._continueBtn_ph4cu_16,
+._solutionBtn_ph4cu_17 {
   cursor: pointer;
   margin: 5px;
   padding: 5px 8px;
@@ -287,14 +287,25 @@ summary {
   max-width: 130px;
   font-weight: 400;
 }
-._selectTemplate_1nvty_12:hover,
-._randomBtn_1nvty_13:hover,
-._resetBtn_1nvty_14:hover,
-._saveBtn_1nvty_15:hover,
-._continueBtn_1nvty_16:hover,
-._solutionBtn_1nvty_17:hover {
+._selectTemplate_ph4cu_12:hover,
+._randomBtn_ph4cu_13:hover,
+._resetBtn_ph4cu_14:hover,
+._saveBtn_ph4cu_15:hover,
+._continueBtn_ph4cu_16:hover,
+._solutionBtn_ph4cu_17:hover {
   color: #2e8e95;
   background-color: #fef2f2;
+}
+
+._selectTemplate_ph4cu_12 {
+  outline: none;
+  text-align: center;
+}
+
+._option_ph4cu_43 {
+  width: 100%;
+  max-width: 130px;
+  padding: 0;
 }._cell_16s7f_1 {
   cursor: pointer;
   width: 40px;
