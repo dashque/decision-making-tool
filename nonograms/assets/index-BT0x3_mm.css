@@ -330,7 +330,7 @@ summary {
 ._cell_r06ye_1:hover {
   color: #2e8e95;
   background-color: #fef2f2;
-}._gameBoard_drtco_1 {
+}._gameBoard_127lz_1 {
   display: grid;
   gap: 1px;
   align-items: center;
@@ -338,19 +338,19 @@ summary {
   padding: 10px;
 }
 
-._easy_drtco_9 {
+._easy_127lz_9 {
   grid-template-columns: repeat(5, minmax(35px, 1fr));
   grid-template-rows: repeat(5, minmax(35px, 1fr));
 }
 
-._medium_drtco_14 {
+._medium_127lz_14 {
   grid-template-columns: repeat(10, minmax(25px, 1fr));
   grid-template-rows: repeat(10, minmax(25px, 1fr));
 }
 
-._hard_drtco_19 {
-  grid-template-columns: repeat(15, minmax(10px, 1fr));
-  grid-template-rows: repeat(15, minmax(10px, 1fr));
+._hard_127lz_19 {
+  grid-template-columns: repeat(15, minmax(15px, 1fr));
+  grid-template-rows: repeat(15, minmax(15px, 1fr));
 }._main_17785_1 {
   display: flex;
   flex: 1;
