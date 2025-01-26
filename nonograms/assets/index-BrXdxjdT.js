@@ -430,11 +430,11 @@ class GameControls extends BaseComponent {
   }
 }
 
-const cell = "_cell_sdt03_1";
-const filled = "_filled_sdt03_10";
-const filledhover = "_filledhover_sdt03_13";
-const empty = "_empty_sdt03_17";
-const marked = "_marked_sdt03_21";
+const cell = "_cell_1ts1j_1";
+const filled = "_filled_1ts1j_10";
+const filledhover = "_filledhover_1ts1j_13";
+const empty = "_empty_1ts1j_17";
+const marked = "_marked_1ts1j_21";
 const styles$3 = {
 	cell: cell,
 	filled: filled,
@@ -473,15 +473,16 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameboardContainer = "_gameboardContainer_1d2ph_1";
-const gameBoard = "_gameBoard_1d2ph_8";
-const easy = "_easy_1d2ph_14";
-const medium = "_medium_1d2ph_19";
-const hard = "_hard_1d2ph_24";
-const horizontalGrid = "_horizontalGrid_1d2ph_29";
-const verticalGrid = "_verticalGrid_1d2ph_34";
-const gap = "_gap_1d2ph_40";
-const hint = "_hint_1d2ph_48";
+const gameboardContainer = "_gameboardContainer_27jhd_1";
+const gameBoard = "_gameBoard_27jhd_8";
+const easy = "_easy_27jhd_15";
+const medium = "_medium_27jhd_20";
+const hard = "_hard_27jhd_25";
+const horizontalGrid = "_horizontalGrid_27jhd_30";
+const verticalGrid = "_verticalGrid_27jhd_38";
+const gap = "_gap_27jhd_44";
+const hintHorizontal = "_hintHorizontal_27jhd_52";
+const hintVertical = "_hintVertical_27jhd_65";
 const styles$2 = {
 	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
@@ -491,7 +492,8 @@ const styles$2 = {
 	horizontalGrid: horizontalGrid,
 	verticalGrid: verticalGrid,
 	gap: gap,
-	hint: hint
+	hintHorizontal: hintHorizontal,
+	hintVertical: hintVertical
 };
 
 class GameBoard extends BaseComponent {
@@ -548,15 +550,23 @@ class GameBoard extends BaseComponent {
 
   addVerticalHints(hints) {
     const vertHints = hints.map((hint) => {
-      return new BaseComponent({
+      const hintComp = new BaseComponent({
         tag: "div",
-        className: styles$2.hint,
-        text: hint.join(" "),
+        className: styles$2.hintVertical,
       });
+      hint.map((el) => {
+        const hintEl = new BaseComponent({
+          tag: "span",
+          text: el,
+        });
+        hintComp.append(hintEl);
+      });
+      this.verticalGrid.append(hintComp);
+      return hintComp;
     });
     this.verticalGrid.appendChildren(vertHints);
-    return vertHints;
   }
+
   addVerticalGrid() {
     const verticalGrid = new BaseComponent({
       tag: "div",
@@ -569,11 +579,19 @@ class GameBoard extends BaseComponent {
 
   addHorizontalHints(hints) {
     const horizHints = hints.map((hint) => {
-      return new BaseComponent({
+      const hintComp = new BaseComponent({
         tag: "div",
-        className: styles$2.hint,
-        text: hint.join("\n "),
+        className: styles$2.hintHorizontal,
       });
+      hint.map((el) => {
+        const hintEl = new BaseComponent({
+          tag: "span",
+          text: el,
+        });
+        hintComp.append(hintEl);
+      });
+      this.horizontalGrid.append(hintComp);
+      return hintComp;
     });
     this.horizontalGrid.appendChildren(horizHints);
   }
@@ -1790,4 +1808,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-BriUDAoM.js.map
+//# sourceMappingURL=index-BrXdxjdT.js.map

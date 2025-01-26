@@ -315,76 +315,80 @@ summary {
   width: 100%;
   max-width: 130px;
   padding: 0;
-}._cell_sdt03_1 {
+}._cell_1ts1j_1 {
   cursor: pointer;
   width: 100%;
   height: 100%;
   border: 1px solid rgba(0, 0, 0, 0.178);
-  border-radius: 5px;
+  border-radius: 3px;
   background-color: white;
 }
 
-._filled_sdt03_10 {
+._filled_1ts1j_10 {
   background-color: rgba(0, 0, 0, 0.462745098);
 }
-._filledhover_sdt03_13 {
+._filledhover_1ts1j_13 {
   background-color: initial;
 }
 
-._empty_sdt03_17 {
+._empty_1ts1j_17 {
   background-color: white;
 }
 
-._marked_sdt03_21 {
+._marked_1ts1j_21 {
   background-color: white;
 }
-._marked_sdt03_21::after {
+._marked_1ts1j_21::after {
   content: "X";
   display: block;
   font-size: 16px;
   line-height: 1;
   color: black;
   text-align: center;
-}._gameboardContainer_1d2ph_1 {
+}._gameboardContainer_27jhd_1 {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
   margin: 0 auto;
 }
 
-._gameBoard_1d2ph_8 {
+._gameBoard_27jhd_8 {
   display: grid;
   align-items: center;
+  width: 100%;
   margin: 0 auto;
 }
 
-._easy_1d2ph_14 {
+._easy_27jhd_15 {
   grid-template-columns: repeat(5, minmax(35px, 1fr));
   grid-template-rows: repeat(5, minmax(35px, 1fr));
 }
 
-._medium_1d2ph_19 {
+._medium_27jhd_20 {
   grid-template-columns: repeat(10, minmax(25px, 1fr));
   grid-template-rows: repeat(10, minmax(25px, 1fr));
 }
 
-._hard_1d2ph_24 {
-  grid-template-columns: repeat(15, minmax(15px, 1fr));
-  grid-template-rows: repeat(15, minmax(15px, 1fr));
+._hard_27jhd_25 {
+  grid-template-columns: repeat(15, minmax(20px, 1fr));
+  grid-template-rows: repeat(15, minmax(20px, 1fr));
 }
 
-._horizontalGrid_1d2ph_29 {
+._horizontalGrid_27jhd_30 {
   display: flex;
+  align-items: flex-end;
   justify-content: center;
+  width: 100%;
+  height: fit-content;
 }
 
-._verticalGrid_1d2ph_34 {
+._verticalGrid_27jhd_38 {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-._gap_1d2ph_40 {
+._gap_27jhd_44 {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -392,10 +396,26 @@ summary {
   height: 100%;
 }
 
-._hint_1d2ph_48 {
+._hintHorizontal_27jhd_52 {
   display: flex;
+  flex-direction: column;
+  gap: 5px;
   align-items: center;
   justify-content: center;
+  padding: 5px 0;
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.178);
+  border-radius: 5px;
+  background-color: white;
+}
+
+._hintVertical_27jhd_65 {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
   width: 100%;
   height: 100%;
   border: 1px solid rgba(0, 0, 0, 0.178);
