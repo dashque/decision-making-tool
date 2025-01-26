@@ -205,11 +205,11 @@ class BaseComponent {
   }
 }
 
-const footer = "_footer_pvxxr_1";
-const ghLink = "_ghLink_pvxxr_11";
-const rssLogoLink = "_rssLogoLink_pvxxr_19";
-const rssLogoImg = "_rssLogoImg_pvxxr_24";
-const year = "_year_pvxxr_28";
+const footer = "_footer_tvmdt_1";
+const ghLink = "_ghLink_tvmdt_10";
+const rssLogoLink = "_rssLogoLink_tvmdt_18";
+const rssLogoImg = "_rssLogoImg_tvmdt_23";
+const year = "_year_tvmdt_27";
 const styles$6 = {
 	footer: footer,
 	ghLink: ghLink,
@@ -277,9 +277,9 @@ class Footer extends BaseComponent {
   }
 }
 
-const header = "_header_32rj3_1";
-const h1 = "_h1_32rj3_11";
-const logoLink = "_logoLink_32rj3_17";
+const header = "_header_1a46i_1";
+const h1 = "_h1_1a46i_10";
+const logoLink = "_logoLink_1a46i_16";
 const styles$5 = {
 	header: header,
 	h1: h1,
@@ -335,14 +335,14 @@ class Header extends BaseComponent {
   addTimer() {}
 }
 
-const gameControls = "_gameControls_1go9r_1";
-const selectTemplate = "_selectTemplate_1go9r_14";
-const randomBtn = "_randomBtn_1go9r_15";
-const resetBtn = "_resetBtn_1go9r_16";
-const saveBtn = "_saveBtn_1go9r_17";
-const continueBtn = "_continueBtn_1go9r_18";
-const solutionBtn = "_solutionBtn_1go9r_19";
-const option = "_option_1go9r_48";
+const gameControls = "_gameControls_m4c0a_1";
+const selectTemplate = "_selectTemplate_m4c0a_19";
+const randomBtn = "_randomBtn_m4c0a_20";
+const resetBtn = "_resetBtn_m4c0a_21";
+const saveBtn = "_saveBtn_m4c0a_22";
+const continueBtn = "_continueBtn_m4c0a_23";
+const solutionBtn = "_solutionBtn_m4c0a_24";
+const option = "_option_m4c0a_53";
 const styles$4 = {
 	gameControls: gameControls,
 	selectTemplate: selectTemplate,
@@ -430,10 +430,10 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameBoard = "_gameBoard_1f8nj_1";
-const easy = "_easy_1f8nj_9";
-const medium = "_medium_1f8nj_14";
-const hard = "_hard_1f8nj_19";
+const gameBoard = "_gameBoard_wnbrz_1";
+const easy = "_easy_wnbrz_9";
+const medium = "_medium_wnbrz_14";
+const hard = "_hard_wnbrz_19";
 const styles$2 = {
 	gameBoard: gameBoard,
 	easy: easy,
@@ -454,8 +454,6 @@ class GameBoard extends BaseComponent {
     this.templateManager = templateManager;
     this.updateGameBoard();
     this.templateManager.onTemplateChange(() => this.updateGameBoard());
-
-    console.log(this.getChildren());
   }
 
   addCells() {
@@ -466,7 +464,7 @@ class GameBoard extends BaseComponent {
         return cell.getNode();
       },
     );
-    this.getNode().append(...cells);
+    this.append(...cells);
   }
 
   calculateNumberOfCells() {
@@ -761,7 +759,7 @@ class EventEmitter {
   }
 }
 
-class ControlsManager {
+class ControlsController {
   constructor(stateMachine) {
     this.stateMachine = stateMachine;
     this.eventEmitter = new EventEmitter();
@@ -868,41 +866,76 @@ const levelConfig = {
     {
       difficulty: "easy",
       size: 5,
-      name: "Dog", //++
+      name: "Dog", //+
       verticalHints: [[1], [1, 3], [3], [1, 1], [1, 1]],
       horizontalHints: [[1], [3], [2], [5], [1]],
+      matrix: [
+        [0, 0, 0, 1, 0],
+        [1, 0, 1, 1, 1],
+        [0, 1, 1, 1, 0],
+        [0, 1, 0, 1, 0],
+        [0, 1, 0, 1, 0],
+      ],
       preview: "./public/img/templates/easy/dog.png",
     },
     {
       difficulty: "easy",
       size: 5,
-      name: "Car", //++
-      verticalHints: [[], [3], [5], [5], [1, 1]],
-      horizontalHints: [[2], [4], [3], [4], [2]],
-      preview: "./public/img/templates/easy/car.png",
+      name: "Heart", //+
+      verticalHints: [[1, 1], [5], [5], [3], [1]],
+      horizontalHints: [[2], [4], [4], [4], [2]],
+      matrix: [
+        [0, 1, 0, 1, 0],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [0, 1, 1, 1, 0],
+        [0, 0, 1, 0, 0],
+      ],
+      preview: "./public/img/templates/easy/heart.png",
     },
     {
       difficulty: "easy",
       size: 5,
-      name: "Bat", //++
+      name: "Bat", //+
       verticalHints: [[1, 1], [5], [5], [1, 1, 1], [1, 1]],
       horizontalHints: [[4], [3], [3], [3], [4]],
+      matrix: [
+        [0, 1, 0, 1, 0],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 1],
+      ],
       preview: "./public/img/templates/easy/bat.png",
     },
     {
       difficulty: "easy",
       size: 5,
-      name: "Cross", //++
-      verticalHints: [[3], [2, 2], [1, 1], [2, 2], [3]],
-      horizontalHints: [[3], [2, 2], [1, 1], [2, 2], [3]],
-      preview: "./public/img/templates/easy/cross.png",
+      name: "Cat", //+
+      verticalHints: [[1, 1], [3], [5], [4], [5]],
+      horizontalHints: [[3], [3], [5], [4], [3, 1]],
+      matrix: [
+        [0, 0, 1, 0, 1],
+        [0, 0, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 0],
+        [1, 1, 1, 1, 1],
+      ],
+      preview: "./public/img/templates/easy/cat.png",
     },
     {
       difficulty: "easy",
       size: 5,
-      name: "Snowflake", //++
+      name: "Snowflake", //+
       verticalHints: [[1, 1, 1], [3], [2, 2], [3], [1, 1, 1]],
       horizontalHints: [[1, 1, 1], [3], [2, 2], [3], [1, 1, 1]],
+      matrix: [
+        [1, 0, 1, 0, 1],
+        [0, 1, 1, 1, 0],
+        [1, 1, 0, 1, 1],
+        [0, 1, 1, 1, 0],
+        [1, 0, 1, 0, 1],
+      ],
       preview: "./public/img/templates/easy/snowflake.png",
     },
   ],
@@ -910,7 +943,7 @@ const levelConfig = {
     {
       difficulty: "medium",
       size: 10,
-      name: "Snail", //++
+      name: "Snail", //+
       verticalHints: [
         [4],
         [2, 3],
@@ -935,6 +968,18 @@ const levelConfig = {
         [1, 2],
         [2],
       ],
+      matrix: [
+        [0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+        [0, 1, 1, 0, 1, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 0, 1, 1, 1, 0, 0],
+        [1, 0, 1, 1, 1, 0, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 0, 1, 1, 0, 0],
+        [1, 1, 1, 1, 0, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 0, 1, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+      ],
       preview: "./public/img/templates/medium/snail.png",
     },
     {
@@ -954,56 +999,103 @@ const levelConfig = {
         [10],
       ],
       horizontalHints: [[6], [7], [8], [9], [5, 3], [5, 3], [9], [8], [7], [6]],
+      matrix: [
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 0, 0, 1, 1, 1, 1],
+        [1, 1, 1, 1, 0, 0, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      ],
       preview: "./public/img/templates/medium/house.png",
     },
     {
       difficulty: "medium",
       size: 10,
-      name: "Valentine", //+
+      name: "Playing dog",
       verticalHints: [
-        [3, 1, 2],
-        [2, 1, 1],
-        [2, 1, 1],
-        [2, 1],
-        [3, 2],
-        [4, 3],
-        [1, 2, 4],
-        [1, 5, 1],
-        [1, 5, 1],
-        [7, 1],
+        [2, 2],
+        [3],
+        [2, 4],
+        [6],
+        [2],
+        [5, 1],
+        [8, 1],
+        [1, 7],
+        [1, 3],
+        [2, 3],
       ],
       horizontalHints: [
-        [6, 1, 1],
-        [7, 2],
-        [1, 2, 1, 1],
-        [5],
-        [4],
+        [1, 2],
+        [1, 2, 2, 1],
+        [9],
+        [1, 5],
+        [4, 3, 1],
+        [1, 2, 5],
+        [2, 4],
         [1, 3],
-        [4],
-        [2, 2, 1],
-        [1, 4, 1],
-        [7, 1],
+        [1],
+        [2],
       ],
-      preview: "./public/img/templates/medium/valentine.png",
+      matrix: [
+        [1, 1, 0, 0, 1, 1, 0, 0, 0, 0],
+        [0, 0, 1, 1, 1, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 1, 1, 1, 1, 0, 0],
+        [0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+        [1, 0, 1, 1, 1, 1, 1, 1, 1, 0],
+        [0, 0, 1, 0, 0, 1, 1, 1, 0, 0],
+        [0, 1, 1, 0, 1, 1, 1, 0, 0, 0],
+      ],
+      preview: "./public/img/templates/medium/playing-dog.png",
     },
     {
       difficulty: "medium",
       size: 10,
-      name: "?", //+
-      verticalHints: [[6], [2, 2], [2, 2], [2], [3], [4], [2], [], [2], [2]],
-      horizontalHints: [
-        [],
-        [2],
-        [3],
-        [1],
-        [1, 2, 2],
-        [1, 2, 2],
-        [1, 2],
-        [6],
+      name: "Chilling cat", //+
+      verticalHints: [
+        [1, 1],
         [4],
-        [],
+        [1, 1],
+        [4],
+        [2, 2],
+        [3, 1],
+        [5],
+        [10],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
       ],
-      preview: "./public/img/templates/medium/question.png",
+      horizontalHints: [
+        [1],
+        [4, 3],
+        [1, 5],
+        [9],
+        [2, 1, 3],
+        [4],
+        [4],
+        [1, 3],
+        [1],
+        [3],
+      ],
+      matrix: [
+        [0, 1, 0, 0, 1, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+        [0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+        [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
+        [0, 0, 1, 1, 1, 0, 1, 0, 0, 0],
+        [0, 0, 1, 1, 1, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+        [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+      ],
+      preview: "./public/img/templates/medium/chilling-cat.png",
     },
     {
       difficulty: "medium",
@@ -1032,6 +1124,18 @@ const levelConfig = {
         [1, 1, 1],
         [2, 3],
         [7],
+      ],
+      metrix: [
+        [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 1, 1, 0, 0, 0, 0, 1, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 0, 0, 0, 0, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
       ],
       preview: "./public/img/templates/medium/tv.png",
     },
@@ -1075,6 +1179,23 @@ const levelConfig = {
         [7],
         [4],
       ],
+      matrix: [
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1],
+        [0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+      ],
       preview: "./public/img/templates/hard/peaks.png",
     },
     {
@@ -1114,6 +1235,23 @@ const levelConfig = {
         [1, 2, 1, 1],
         [2, 1],
         [12],
+      ],
+      matrix: [
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+        [1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1],
+        [1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+        [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1],
+        [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
+        [1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1],
+        [1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1],
+        [1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       ],
       preview: "./public/img/templates/hard/castle.png",
     },
@@ -1155,6 +1293,23 @@ const levelConfig = {
         [2, 12],
         [15],
       ],
+      matrix: [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1],
+        [1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+        [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+        [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+        [1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1],
+      ],
       preview: "./public/img/templates/hard/house.png",
     },
     {
@@ -1194,6 +1349,23 @@ const levelConfig = {
         [1, 4, 3],
         [2, 9],
         [15],
+      ],
+      matrix: [
+        [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1],
+        [1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1],
+        [1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1],
+        [1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1],
+        [1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1],
+        [0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       ],
       preview: "./public/img/templates/hard/candle.png",
     },
@@ -1235,12 +1407,29 @@ const levelConfig = {
         [1, 1, 9],
         [2, 1, 10],
       ],
+      matrix: [
+        [1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+        [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1],
+        [1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1],
+        [1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1],
+        [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+      ],
       preview: "./public/img/templates/hard/flowers.png",
     },
   ],
 };
 
-class TemplateManager {
+class TemplateController {
   constructor(config) {
     this.eventEmitter = new EventEmitter();
     this.config = config;
@@ -1278,8 +1467,8 @@ class Main extends BaseComponent {
    */
   constructor() {
     super({ tag: "main", className: styles$1.main });
-    this.controlsManager = new ControlsManager(stateMachine);
-    this.templateManager = new TemplateManager(levelConfig);
+    this.controlsManager = new ControlsController(stateMachine);
+    this.templateManager = new TemplateController(levelConfig);
     this.getNode();
     this.addInvitation();
     this.addTemplateSelector();
@@ -1292,7 +1481,7 @@ class Main extends BaseComponent {
       className: styles$1.invitation,
       text: "Hi! Do you wanna choose a game? ",
     });
-    this.getNode().append(h2.getNode());
+    this.append(h2);
   }
 
   addTemplateSelector() {
@@ -1300,17 +1489,17 @@ class Main extends BaseComponent {
       levelConfig,
       this.templateManager,
     );
-    this.getNode().append(templateSelector.getNode());
+    this.append(templateSelector);
   }
 
   addControls() {
     const controls = new GameControls(this.controlsManager);
-    this.getNode().append(controls.getNode());
+    this.append(controls);
   }
 
   addGameBoard() {
     const gameBoard = new GameBoard(this.templateManager);
-    this.getNode().append(gameBoard.getNode());
+    this.append(gameBoard);
   }
 }
 
@@ -1334,4 +1523,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-DTKtR9py.js.map
+//# sourceMappingURL=index-DTY9OhTm.js.map
