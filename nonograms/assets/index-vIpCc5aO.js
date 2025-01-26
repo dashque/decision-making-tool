@@ -242,7 +242,7 @@ class Footer extends BaseComponent {
       href: "https://github.com/zagorky",
       target: "_blank",
     });
-    this.getNode().append(a.getNode());
+    this.append(a);
   }
 
   addRSSLogo() {
@@ -263,8 +263,8 @@ class Footer extends BaseComponent {
       src: "./img/logo-rsschool3.png",
       alt: "RSS Logo",
     });
-    a.getNode().append(logo.getNode());
-    this.getNode().append(a.getNode());
+    a.append(logo);
+    this.append(a);
   }
 
   addYear() {
@@ -273,7 +273,7 @@ class Footer extends BaseComponent {
       className: styles$6.year,
       text: "2025",
     });
-    this.getNode().append(p.getNode());
+    this.append(p);
   }
 }
 
@@ -305,7 +305,7 @@ class Header extends BaseComponent {
       className: styles$5.h1,
       text: "Nonorgams",
     });
-    this.getNode().append(h1.getNode());
+    this.append(h1);
   }
 
   addLogo() {
@@ -327,8 +327,8 @@ class Header extends BaseComponent {
       alt: "Logo Nonograms",
     });
 
-    a.getNode().append(logo.getNode());
-    this.getNode().append(a.getNode());
+    a.append(logo);
+    this.append(a);
   }
 
   //TODO написать таймер
@@ -430,10 +430,10 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameBoard = "_gameBoard_127lz_1";
-const easy = "_easy_127lz_9";
-const medium = "_medium_127lz_14";
-const hard = "_hard_127lz_19";
+const gameBoard = "_gameBoard_1lf5e_1";
+const easy = "_easy_1lf5e_9";
+const medium = "_medium_1lf5e_14";
+const hard = "_hard_1lf5e_19";
 const styles$2 = {
 	gameBoard: gameBoard,
 	easy: easy,
@@ -1523,4 +1523,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-BlB-VqkP.js.map
+//# sourceMappingURL=index-vIpCc5aO.js.map
