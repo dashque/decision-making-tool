@@ -430,11 +430,11 @@ class GameControls extends BaseComponent {
   }
 }
 
-const cell = "_cell_4c3gc_1";
-const filled = "_filled_4c3gc_14";
-const filledhover = "_filledhover_4c3gc_17";
-const empty = "_empty_4c3gc_21";
-const marked = "_marked_4c3gc_25";
+const cell = "_cell_sdt03_1";
+const filled = "_filled_sdt03_10";
+const filledhover = "_filledhover_sdt03_13";
+const empty = "_empty_sdt03_17";
+const marked = "_marked_sdt03_21";
 const styles$3 = {
 	cell: cell,
 	filled: filled,
@@ -465,15 +465,7 @@ class Cell extends BaseComponent {
   }
 
   setBackground() {
-    if (this.checkContainClass(styles$3.filled)) {
-      this.removeClass(styles$3.marked);
-      this.removeClass(styles$3.filled);
-      this.addClass(styles$3.empty);
-    } else {
-      this.removeClass(styles$3.marked);
-      this.removeClass(styles$3.empty);
-      this.addClass(styles$3.filled);
-    }
+    this.toggleClass(styles$3.filled, styles$3.empty);
   }
 
   setMark() {
@@ -481,15 +473,25 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameBoard = "_gameBoard_127lz_1";
-const easy = "_easy_127lz_9";
-const medium = "_medium_127lz_14";
-const hard = "_hard_127lz_19";
+const gameboardContainer = "_gameboardContainer_1d2ph_1";
+const gameBoard = "_gameBoard_1d2ph_8";
+const easy = "_easy_1d2ph_14";
+const medium = "_medium_1d2ph_19";
+const hard = "_hard_1d2ph_24";
+const horizontalGrid = "_horizontalGrid_1d2ph_29";
+const verticalGrid = "_verticalGrid_1d2ph_34";
+const gap = "_gap_1d2ph_40";
+const hint = "_hint_1d2ph_48";
 const styles$2 = {
+	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
 	easy: easy,
 	medium: medium,
-	hard: hard
+	hard: hard,
+	horizontalGrid: horizontalGrid,
+	verticalGrid: verticalGrid,
+	gap: gap,
+	hint: hint
 };
 
 class GameBoard extends BaseComponent {
@@ -501,22 +503,88 @@ class GameBoard extends BaseComponent {
    * @param {number} height
    */
   constructor(templateManager, cellController) {
-    super({ tag: "section", className: styles$2.gameBoard });
+    super({ tag: "section", className: styles$2.gameboardContainer });
     this.templateManager = templateManager;
     this.cellController = cellController;
+
+    this.gap = this.addGap();
+    this.horizontalGrid = this.addHorizontalGrid();
+    this.verticalGrid = this.addVerticalGrid();
+    this.board = this.addBoard();
+
     this.updateGameBoard();
 
     this.templateManager.onTemplateChange(() => this.updateGameBoard());
   }
 
+  addBoard() {
+    const board = new BaseComponent({
+      tag: "div",
+      className: styles$2.gameBoard,
+    });
+    board.getNode();
+    this.append(board);
+    return board;
+  }
+  addGap() {
+    const gap = new BaseComponent({
+      tag: "div",
+      className: styles$2.gap,
+    });
+    gap.getNode();
+    this.append(gap);
+    return gap;
+  }
+
   addCells() {
-    for (let y = 0; y < this.width; y++) {
-      for (let x = 0; x < this.width; x++) {
+    for (let y = 0; y < this.width; y += 1) {
+      for (let x = 0; x < this.width; x += 1) {
         const cell = new Cell();
         this.addCellEventListeners(cell, x, y);
-        this.append(cell);
+        this.board.append(cell);
       }
     }
+  }
+
+  addVerticalHints(hints) {
+    const vertHints = hints.map((hint) => {
+      return new BaseComponent({
+        tag: "div",
+        className: styles$2.hint,
+        text: hint.join(" "),
+      });
+    });
+    this.verticalGrid.appendChildren(vertHints);
+    return vertHints;
+  }
+  addVerticalGrid() {
+    const verticalGrid = new BaseComponent({
+      tag: "div",
+      className: styles$2.verticalGrid,
+    });
+    verticalGrid.getNode();
+    this.append(verticalGrid);
+    return verticalGrid;
+  }
+
+  addHorizontalHints(hints) {
+    const horizHints = hints.map((hint) => {
+      return new BaseComponent({
+        tag: "div",
+        className: styles$2.hint,
+        text: hint.join("\n "),
+      });
+    });
+    this.horizontalGrid.appendChildren(horizHints);
+  }
+  addHorizontalGrid() {
+    const horizontalGrid = new BaseComponent({
+      tag: "div",
+      className: styles$2.horizontalGrid,
+    });
+    horizontalGrid.getNode();
+    this.append(horizontalGrid);
+    return horizontalGrid;
   }
 
   addCellEventListeners(cell, x, y) {
@@ -528,22 +596,29 @@ class GameBoard extends BaseComponent {
       this.cellController.onClick(cell.getNode(), x, y);
     });
   }
+
+  clearGameBoard() {
+    this.board.destroyChildren();
+    this.board.removeClass(styles$2.easy);
+    this.board.removeClass(styles$2.medium);
+    this.board.removeClass(styles$2.hard);
+    this.verticalGrid.destroyChildren();
+    this.horizontalGrid.destroyChildren();
+  }
   updateGameBoard() {
-    this.destroyChildren();
-    this.removeClass(styles$2.easy);
-    this.removeClass(styles$2.medium);
-    this.removeClass(styles$2.hard);
+    this.clearGameBoard();
 
     const template = this.templateManager.getSelectedTemplate();
     if (template) {
       this.width = template.size;
       this.cellController.setTemplate(template);
-      this.addClass(styles$2[template.difficulty]);
+      this.board.addClass(styles$2[template.difficulty]);
       this.addCells();
-      // TODO добавить обновление подсказок
+      this.addVerticalHints(template.verticalHints);
+      this.addHorizontalHints(template.horizontalHints);
     } else {
       this.width = 5;
-      this.addClass(styles$2.easy);
+      this.board.addClass(styles$2.easy);
       this.addCells();
     }
   }
@@ -1608,11 +1683,11 @@ class TemplateController {
   }
 
   getVerticalHints(template) {
-    template.verticalHints;
+    return template.verticalHints;
   }
 
   getHorizontalHints(template) {
-    template.horizontalHints;
+    return template.horizontalHints;
   }
 
   onTemplateChange(callback) {
@@ -1715,4 +1790,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-Be6uYE0l.js.map
+//# sourceMappingURL=index-BriUDAoM.js.map
