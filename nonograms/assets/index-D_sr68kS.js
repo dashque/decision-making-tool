@@ -430,10 +430,10 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameBoard = "_gameBoard_1lf5e_1";
-const easy = "_easy_1lf5e_9";
-const medium = "_medium_1lf5e_14";
-const hard = "_hard_1lf5e_19";
+const gameBoard = "_gameBoard_drtco_1";
+const easy = "_easy_drtco_9";
+const medium = "_medium_drtco_14";
+const hard = "_hard_drtco_19";
 const styles$2 = {
 	gameBoard: gameBoard,
 	easy: easy,
@@ -1523,4 +1523,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-vIpCc5aO.js.map
+//# sourceMappingURL=index-D_sr68kS.js.map
