@@ -345,36 +345,36 @@ summary {
   line-height: 1;
   color: black;
   text-align: center;
-}._gameboardContainer_27jhd_1 {
+}._gameboardContainer_1xun6_1 {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
   margin: 0 auto;
 }
 
-._gameBoard_27jhd_8 {
+._gameBoard_1xun6_8 {
   display: grid;
   align-items: center;
   width: 100%;
   margin: 0 auto;
 }
 
-._easy_27jhd_15 {
+._easy_1xun6_15 {
   grid-template-columns: repeat(5, minmax(35px, 1fr));
   grid-template-rows: repeat(5, minmax(35px, 1fr));
 }
 
-._medium_27jhd_20 {
+._medium_1xun6_20 {
   grid-template-columns: repeat(10, minmax(25px, 1fr));
   grid-template-rows: repeat(10, minmax(25px, 1fr));
 }
 
-._hard_27jhd_25 {
-  grid-template-columns: repeat(15, minmax(20px, 1fr));
-  grid-template-rows: repeat(15, minmax(20px, 1fr));
+._hard_1xun6_25 {
+  grid-template-columns: repeat(15, minmax(25px, 1fr));
+  grid-template-rows: repeat(15, minmax(25px, 1fr));
 }
 
-._horizontalGrid_27jhd_30 {
+._horizontalGrid_1xun6_30 {
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -382,13 +382,13 @@ summary {
   height: fit-content;
 }
 
-._verticalGrid_27jhd_38 {
+._verticalGrid_1xun6_38 {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-._gap_27jhd_44 {
+._gap_1xun6_44 {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -396,7 +396,7 @@ summary {
   height: 100%;
 }
 
-._hintHorizontal_27jhd_52 {
+._hintHorizontal_1xun6_52 {
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -409,7 +409,7 @@ summary {
   background-color: white;
 }
 
-._hintVertical_27jhd_65 {
+._hintVertical_1xun6_65 {
   display: flex;
   flex-direction: row;
   gap: 5px;

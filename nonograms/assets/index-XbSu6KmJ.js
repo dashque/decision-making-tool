@@ -371,15 +371,13 @@ class GameControls extends BaseComponent {
    *
    * @param {import("../../core/StateMachine").StateDef} stateMachine
    */
-  constructor(controlsManager) {
+  constructor() {
     super({ tag: "div", className: styles$4.gameControls });
-    this.controlsManager = controlsManager;
     this.getNode();
-    this.#addButtons();
-    this.setControlsManager();
+    this.addButtons();
   }
 
-  #addButtons() {
+  addButtons() {
     this.randomGameButton = new BaseComponent({
       tag: "button",
       className: styles$4.randomBtn,
@@ -419,14 +417,14 @@ class GameControls extends BaseComponent {
     ]);
   }
 
-  setControlsManager() {
-    this.controlsManager.setupButtonsListeners({
+  getControlButtons() {
+    return {
       randomGameButton: this.randomGameButton,
       resetGameButton: this.resetGameButton,
       saveGameButton: this.saveGameButton,
       continueGameButton: this.continueGameButton,
       solutionButton: this.solutionButton,
-    });
+    };
   }
 }
 
@@ -473,16 +471,16 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameboardContainer = "_gameboardContainer_27jhd_1";
-const gameBoard = "_gameBoard_27jhd_8";
-const easy = "_easy_27jhd_15";
-const medium = "_medium_27jhd_20";
-const hard = "_hard_27jhd_25";
-const horizontalGrid = "_horizontalGrid_27jhd_30";
-const verticalGrid = "_verticalGrid_27jhd_38";
-const gap = "_gap_27jhd_44";
-const hintHorizontal = "_hintHorizontal_27jhd_52";
-const hintVertical = "_hintVertical_27jhd_65";
+const gameboardContainer = "_gameboardContainer_1xun6_1";
+const gameBoard = "_gameBoard_1xun6_8";
+const easy = "_easy_1xun6_15";
+const medium = "_medium_1xun6_20";
+const hard = "_hard_1xun6_25";
+const horizontalGrid = "_horizontalGrid_1xun6_30";
+const verticalGrid = "_verticalGrid_1xun6_38";
+const gap = "_gap_1xun6_44";
+const hintHorizontal = "_hintHorizontal_1xun6_52";
+const hintVertical = "_hintVertical_1xun6_65";
 const styles$2 = {
 	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
@@ -649,64 +647,175 @@ const styles$1 = {
 	invitation: invitation
 };
 
-/** creates state machine for changing states and managing actions of the game
+function fisherYatesShuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+class EventEmitter {
+  #listeners = {};
+
+  #getCallBacks(eventName) {
+    return this.#listeners[eventName] ?? [];
+  }
+  #setCallBacks(eventName, arr) {
+    arr.length === 0
+      ? delete this.#listeners[eventName]
+      : (this.#listeners[eventName] = arr);
+  }
+
+  subscribe(eventName, cb) {
+    const subs = this.#getCallBacks(eventName);
+    subs.push(cb);
+
+    this.#setCallBacks(eventName, subs);
+    return () => this.unsubscribe(eventName, cb);
+  }
+
+  unsubscribe(eventName, cb) {
+    const subs = this.#getCallBacks(eventName).filter((elem) => elem !== cb);
+
+    this.#setCallBacks(eventName, subs);
+  }
+
+  dispatch(eventName, data) {
+    this.#getCallBacks(eventName).forEach((cb) => cb(data));
+  }
+}
+
+/**
+ * @typedef {Object} StateDefTransintion
+ * @property {string} target - target "state"
+ * @property {function (StateChangePayload):void} action - action effect for state transitioning
+ */
+
+/**
+ * @typedef {Object} StateDefActions
+ * @property {function (StateChangePayload):void} onEnter - action for enter the state
+ * @property {function (StateChangePayload):void} onExit - action for leaving the state
+ */
+
+/**
+ * @typedef {Object} StateDef
+ * @property {StateDefActions} actions - object of actions for the state
+ * @property {Object.<string,StateDefTransintion>} transitions - object of transitions for the state
+ */
+
+/**
+ * @typedef {Object} StateMachineDef
+ * @property {string} initialState
+ * @property {object} context
+ */
+
+/**
+ * @typedef {Object} StateChangePayload
+ * @property {string} prevState
+ * @property {string} state
+ * @property {string} trigger
+ * @property {object} data
+ * @property {object} context
+ * @property {function():object} [context.getContext]
+ * @property {function(object):void} [context.updateContext]
+ */
+
+/**
+ * @typedef {Object} StateMachine
+ * @property {string} state
+ * @property {function ():object} getContext
+ * @property {function (string, function(data: object): void):function (): void} subscribe
+ * @property {function (string, function(data: object): void):void} unsubscribe
+ */
+
+/**
+ * @description Creates state machine for changing states and managing actions
  * @param {StateMachineDef} stateMachineDef
- * @returns {Object}
+ * @returns {StateMachine}
  */
 function createMachine(stateMachineDef) {
+
+  if (!stateMachineDef.initialState) {
+    throw new Error("stateMachineDef requires `initialState` to be provided");
+  }
+
+  const emitter = new EventEmitter();
+
   const machine = {
     currentState: stateMachineDef.initialState,
     context: stateMachineDef.context ?? {},
     /**
-     * does transition to another state
-     * @param {Event} event
-     * @param {object=} data
-     * @returns new state
+     * @param {string} eventName
+     * @param {function(data: object): void} cb
+     * @return {(function(): void)}
      */
-    transition(event, data = undefined) {
+    subscribe(eventName, cb) {   //декорирование
+      return emitter.subscribe(eventName, cb);
+    },
+    /**
+     * @param {string} eventName
+     * @param {function(data: object): void} cb
+     * @return void
+     */
+    unsubscribe(eventName, cb) {
+      return emitter.unsubscribe(eventName, cb);
+    },
+    /**
+     * @param {string} event
+     * @param {object=} eventData
+     * @returns {string}
+     */
+    transition(event, eventData = undefined) {
+      /** @type {StateDef} */
       const currentStateDef = stateMachineDef[this.currentState];
       const destinationTransition = currentStateDef.transitions[event];
 
       if (!destinationTransition) {
-        console.error(
-          `Invalid transition: from "${this.currentState}" by "${event}"`,
-        );
+        console.error(`Invalid transition: from "${this.currentState}" by "${event}"`);
         return this.currentState;
       }
 
       const previousState = this.currentState;
       const newState = destinationTransition.target;
+      /** @type {StateDef} */
       const destinationStateDef = stateMachineDef[newState];
 
       this.currentState = newState;
-      this.context = { ...this.context, ...data };
+      let contextDidUpdate = false;
 
-      const stateChangePayload = () => ({
+      /** @return {StateChangePayload} */
+      const stateChangePayload = ()=>({
         prevState: previousState,
         state: this.currentState,
+        data: eventData,
         trigger: event,
         context: {
-          getContext: this.getContext,
-          updateContext: (data) =>
-            (this.context = { ...this.context, ...data }),
+          getContext:this.getContext,
+          /** @param {object} data */
+          updateContext: (data)=> {
+            this.context = {...this.context, ...data};
+            contextDidUpdate = true;
+          }
         },
       });
 
       if (destinationTransition.action) {
-        destinationTransition.action(stateChangePayload());
+        destinationTransition.action.call(this, stateChangePayload());
       }
 
       if (currentStateDef.actions.onExit) {
-        currentStateDef.actions.onExit(stateChangePayload());
+        currentStateDef.actions.onExit.call(this, stateChangePayload());
       }
       if (destinationStateDef.actions.onEnter) {
-        destinationStateDef.actions.onEnter(stateChangePayload());
+        destinationStateDef.actions.onEnter.call(this,stateChangePayload());
       }
 
-      console.log(
-        `Transitioned to state: "${this.currentState}" with context:`,
-        this.getContext(),
-      );
+      emitter.dispatch("stateChanged", stateChangePayload());
+      if (contextDidUpdate) {
+        contextDidUpdate = false;
+        emitter.dispatch("contextChanged", this.getContext());
+      }
 
       return this.currentState;
     },
@@ -716,12 +825,14 @@ function createMachine(stateMachineDef) {
     },
 
     getContext() {
-      return { ...this.context };
+      return {...this.context};
     },
   };
 
   machine.getContext = machine.getContext.bind(machine);
   machine.transition = machine.transition.bind(machine);
+  machine.subscribe = machine.subscribe.bind(machine);
+  machine.unsubscribe = machine.unsubscribe.bind(machine);
 
   return machine;
 }
@@ -751,32 +862,45 @@ const stateMachine = createMachine({
         prevState,
         state,
         trigger,
+        data: selectedTemplate,
         context: { getContext, updateContext },
       }) {
-        updateContext({ someData1: "stateInitializing.onExit" });
-        const selectedTemplate = getContext().template;
-
+        updateContext({ selectedTemplate: selectedTemplate });
         console.log(
           `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
           getContext(),
         );
-        updateContext({ template: selectedTemplate });
       },
     },
     transitions: {
-      startGame: {
+      getRandomGame: {
         target: "stateWaitingForInput",
-        action() {
+        action({
+          prevState,
+          state,
+          trigger,
+          data: templates,
+          context: { getContext, updateContext },
+        }) {
           console.log(
-            "trans action for STARTGAME in stateWaitingForInput state",
+            `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
+            getContext(),
           );
+          updateContext(fisherYatesShuffle(templates.float()));
         },
       },
+
       chooseTemplate: {
         target: "stateWaitingForInput",
-        action() {
+        action(props) {
+          const {
+            context: { getContext, updateContext },
+            data: selectedTemplate,
+          } = props;
+          updateContext({ selectedTemplate: selectedTemplate });
           console.log(
             "trans action for chooseTemplate in stateWaitingForInput state",
+            getContext(),
           );
         },
       },
@@ -814,9 +938,7 @@ const stateMachine = createMachine({
     transitions: {
       firstClick: {
         target: "statePlaying",
-        action() {
-          console.log("trans action for FIRSTCLICK in statePlaying state");
-        },
+        action() {},
       },
     },
   },
@@ -857,7 +979,7 @@ const stateMachine = createMachine({
         },
       },
       reset: {
-        target: "stateInitializing",
+        target: "stateWaitingForInput",
         action() {
           console.log("trans action for RESET in stateInitializing state");
         },
@@ -884,7 +1006,10 @@ const stateMachine = createMachine({
         trigger,
         context: { getContext, updateContext },
       }) {
-        console.log("stateSaving: onEnter");
+        console.log(
+          `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
+          getContext(),
+        );
       },
       onExit({
         prevState,
@@ -892,14 +1017,19 @@ const stateMachine = createMachine({
         trigger,
         context: { getContext, updateContext },
       }) {
-        console.log("stateSaving: onExit");
+        console.log(
+          `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
+          getContext(),
+        );
       },
     },
     transitions: {
       continue: {
-        target: "statePlaying",
+        target: "stateWaitingForInput",
         action() {
-          console.log("trans action for CONTINUE in statePlaying state");
+          console.log(
+            "trans action for CONTINUE in stateWaitingForInput state",
+          );
         },
       },
     },
@@ -912,7 +1042,10 @@ const stateMachine = createMachine({
         trigger,
         context: { getContext, updateContext },
       }) {
-        console.log("stateGameOver: onEnter");
+        console.log(
+          `stateGameOver.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
+          getContext(),
+        );
       },
       onExit({
         prevState,
@@ -920,27 +1053,45 @@ const stateMachine = createMachine({
         trigger,
         context: { getContext, updateContext },
       }) {
-        console.log("stateGameOver: onExit");
+        console.log(
+          `stateGameOver.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
+          getContext(),
+        );
       },
     },
     transitions: {
       restart: {
         target: "stateInitializing",
-        action() {
-          console.log("trans action for RESTART in stateInitializing state");
+        action({
+          prevState,
+          state,
+          trigger,
+          context: { getContext, updateContext },
+        }) {
+          console.log(
+            `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
+            getContext(),
+          );
         },
       },
       chooseTemplate: {
-        target: "stateChoosingTemplate",
-        action() {
+        target: "stateWaitingForInput",
+        action({
+          prevState,
+          state,
+          trigger,
+          context: { getContext, updateContext },
+        }) {
           console.log(
-            "trans action for CHOOSETEMPLATE in stateChoosingTemplate state",
+            `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
+            getContext(),
           );
         },
       },
     },
   },
   statePaused: {
+    // оно мне ваще надо?
     actions: {
       onEnter({
         prevState,
@@ -948,7 +1099,10 @@ const stateMachine = createMachine({
         trigger,
         context: { getContext, updateContext },
       }) {
-        console.log("statePaused: onEnter");
+        console.log(
+          `statePaused.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
+          getContext(),
+        );
       },
       onExit({
         prevState,
@@ -956,96 +1110,63 @@ const stateMachine = createMachine({
         trigger,
         context: { getContext, updateContext },
       }) {
-        console.log("statePaused: onExit");
+        console.log(
+          `statePaused.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
+          getContext(),
+        );
       },
     },
     transitions: {
       resume: {
-        target: "statePlaying",
+        target: "stateWaitingForInput",
         action() {
-          console.log("trans action for RESUME in statePlaying state");
+          console.log("trans action for RESUME in stateWaitingForInput state");
         },
       },
     },
   },
 });
 
-class EventEmitter {
-  #listeners = {};
-
-  #getCallBacks(eventName) {
-    return this.#listeners[eventName] ?? [];
-  }
-  #setCallBacks(eventName, arr) {
-    arr.length === 0
-      ? delete this.#listeners[eventName]
-      : (this.#listeners[eventName] = arr);
-  }
-
-  subscribe(eventName, cb) {
-    const subs = this.#getCallBacks(eventName);
-    subs.push(cb);
-
-    this.#setCallBacks(eventName, subs);
-    return () => this.unsubscribe(eventName, cb);
-  }
-
-  unsubscribe(eventName, cb) {
-    const subs = this.#getCallBacks(eventName).filter((elem) => elem !== cb);
-
-    this.#setCallBacks(eventName, subs);
-  }
-
-  dispatch(eventName, data) {
-    this.#getCallBacks(eventName).forEach((cb) => cb(data));
-  }
-}
-
-class ControlsController {
-  constructor(stateMachine) {
+class ControlButtonsController {
+  constructor(stateMachine, controlButtons) {
     this.stateMachine = stateMachine;
-    this.eventEmitter = new EventEmitter();
+    this.controlButtons = controlButtons;
+    this.buttons = controlButtons.getControlButtons();
     this.setupListeners();
   }
 
   setupListeners() {
-    this.eventEmitter.subscribe("randomGame", () => this.handleRandomGame());
-    this.eventEmitter.subscribe("resetGame", () => this.handleResetGame());
-    this.eventEmitter.subscribe("saveGame", () => this.handleSaveGame());
-    this.eventEmitter.subscribe("continueGame", () =>
-      this.handleContinueGame(),
+    this.stateMachine.subscribe(
+      "stateChanged",
+      ({ context: { getContext } }) => {
+        //написать что свзязано с этой кнопкой: дизаблить, записывать и тд (ui)
+        // console.log(
+        //   `stateChanged: from "${prevState}" => "${state}" by "${trigger}" with: ${data}`,
+        //   getContext(), //написать что свзязано с этой кнопкой: дизаблить, записывать и тд (ui)
+        // );
+        getContext();
+      },
     );
-    this.eventEmitter.subscribe("solution", () => this.handleSolution());
   }
 
   setupButtonsListeners(buttons) {
-    buttons.randomGameButton.addListener("click", () =>
-      this.eventEmitter.dispatch("randomGame"),
-    );
-    buttons.resetGameButton.addListener("click", () =>
-      this.eventEmitter.dispatch("resetGame"),
-    );
-    buttons.saveGameButton.addListener("click", () =>
-      this.eventEmitter.dispatch("saveGame"),
-    );
-    buttons.continueGameButton.addListener("click", () =>
-      this.eventEmitter.dispatch("continueGame"),
-    );
-    buttons.solutionButton.addListener("click", () =>
-      this.eventEmitter.dispatch("solution"),
-    );
+    buttons.randomGameButton.addListener("click", () => {
+      this.stateMachine.transition("getRandomGame");
+    });
+    buttons.resetGameButton.addListener("click", () => {
+      this.stateMachine.transition("reset");
+    });
+    buttons.saveGameButton.addListener("click", () => {
+      this.stateMachine.transition("saveGame");
+    });
+    buttons.continueGameButton.addListener("click", () => {
+      this.stateMachine.transition("continue", {});
+    });
+    buttons.solutionButton.addListener("click", () => {
+      this.stateMachine.transition("solution");
+    });
   }
 
-  handleRandomGame() {
-    this.stateMachine.transition("startGame");
-  }
-
-  handleResetGame() {
-    this.stateMachine.transition("reset");
-  }
-  handleSaveGame() {
-    this.stateMachine.transition("saveGame");
-  }
   handleContinueGame() {
     if (this.stateMachine.value === "statePlaying") {
       this.stateMachine.transition("statePaused");
@@ -1062,17 +1183,16 @@ class ControlsController {
 }
 
 class TemplateSelector extends BaseComponent {
-  constructor(config, manager) {
+  constructor(config) {
+    //TODO удалить мнагера
     super({
       tag: "select",
       className: styles$4.selectTemplate,
       text: "Select game",
     });
-    this.manager = manager;
     this.config = config;
     this.getNode();
     this.#addOptions();
-    this.#addEventListeners();
   }
 
   getTemplatesFromConfig() {
@@ -1090,16 +1210,13 @@ class TemplateSelector extends BaseComponent {
       option.addAttributes({
         value: template.name,
       });
-      option.getNode();
+      // option.getNode();
       this.append(option);
     });
   }
 
-  #addEventListeners() {
-    this.addListener("change", (event) => {
-      const selectedTemplate = event.target.value;
-      this.manager.setTemplate(selectedTemplate);
-    });
+  addEventListeners(callback) {
+    this.addListener("change", callback);
   }
 }
 
@@ -1672,11 +1789,20 @@ const levelConfig = {
 };
 
 class TemplateController {
-  constructor(config, stateMachine) {
-    this.eventEmitter = new EventEmitter();
+  constructor(config, stateMachine, selector) {
+    this.eventEmitter = new EventEmitter(); //TODO удалить?
     this.config = config;
+    this.selector = selector;
     this.selectedTemplate = null;
     this.stateMachine = stateMachine;
+    this.setEventListener();
+  }
+
+  setEventListener() {
+    this.selector.addEventListeners((event) => {
+      const selectedTemplate = event.target.value;
+      this.setTemplate(selectedTemplate);
+    });
   }
 
   getSelectedTemplate() {
@@ -1687,7 +1813,7 @@ class TemplateController {
     this.selectedTemplate = this.getTemplate(templateName);
     this.stateMachine.context.template = this.selectedTemplate;
 
-    this.stateMachine.transition("chooseTemplate");
+    this.stateMachine.transition("chooseTemplate", this.selectedTemplate);
     this.eventEmitter.dispatch("templateChanged", this.selectedTemplate);
   }
 
@@ -1751,40 +1877,46 @@ class Main extends BaseComponent {
    */
   constructor() {
     super({ tag: "main", className: styles$1.main });
-    this.controlsManager = new ControlsController(stateMachine);
-    this.templateManager = new TemplateController(levelConfig, stateMachine);
-    this.cellController = new CellController(levelConfig, stateMachine);
     this.getNode();
     this.addInvitation();
     this.addTemplateSelector();
     this.addControls();
+    this.controlsManager = new ControlButtonsController(
+      stateMachine,
+      this.controls,
+    );
+    this.templateManager = new TemplateController(
+      levelConfig,
+      stateMachine,
+      this.templateSelector,
+    );
+
+    this.cellController = new CellController(levelConfig, stateMachine);
+
     this.addGameBoard();
   }
   addInvitation() {
-    const h2 = new BaseComponent({
+    this.h2 = new BaseComponent({
       tag: "h2",
       className: styles$1.invitation,
       text: "Hi! Do you wanna choose a game? ",
     });
-    this.append(h2);
+    this.append(this.h2);
   }
 
   addTemplateSelector() {
-    const templateSelector = new TemplateSelector(
-      levelConfig,
-      this.templateManager,
-    );
-    this.append(templateSelector);
+    this.templateSelector = new TemplateSelector(levelConfig);
+    this.append(this.templateSelector);
   }
 
   addControls() {
-    const controls = new GameControls(this.controlsManager);
-    this.append(controls);
+    this.controls = new GameControls();
+    this.append(this.controls);
   }
 
   addGameBoard() {
-    const gameBoard = new GameBoard(this.templateManager, this.cellController);
-    this.append(gameBoard);
+    this.gameBoard = new GameBoard(this.templateManager, this.cellController);
+    this.append(this.gameBoard);
   }
 }
 
@@ -1808,4 +1940,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-BrXdxjdT.js.map
+//# sourceMappingURL=index-XbSu6KmJ.js.map
