@@ -289,9 +289,9 @@ class Footer extends BaseComponent {
   }
 }
 
-const header = "_header_1a46i_1";
-const h1 = "_h1_1a46i_10";
-const logoLink = "_logoLink_1a46i_16";
+const header = "_header_oisdd_1";
+const h1 = "_h1_oisdd_10";
+const logoLink = "_logoLink_oisdd_17";
 const styles$5 = {
 	header: header,
 	h1: h1,
@@ -347,14 +347,15 @@ class Header extends BaseComponent {
   addTimer() {}
 }
 
-const gameControls = "_gameControls_m4c0a_1";
-const selectTemplate = "_selectTemplate_m4c0a_19";
-const randomBtn = "_randomBtn_m4c0a_20";
-const resetBtn = "_resetBtn_m4c0a_21";
-const saveBtn = "_saveBtn_m4c0a_22";
-const continueBtn = "_continueBtn_m4c0a_23";
-const solutionBtn = "_solutionBtn_m4c0a_24";
-const option = "_option_m4c0a_53";
+const gameControls = "_gameControls_1ook5_1";
+const selectTemplate = "_selectTemplate_1ook5_19";
+const randomBtn = "_randomBtn_1ook5_20";
+const resetBtn = "_resetBtn_1ook5_21";
+const saveBtn = "_saveBtn_1ook5_22";
+const continueBtn = "_continueBtn_1ook5_23";
+const solutionBtn = "_solutionBtn_1ook5_24";
+const option = "_option_1ook5_54";
+const inactive = "_inactive_1ook5_60";
 const styles$4 = {
 	gameControls: gameControls,
 	selectTemplate: selectTemplate,
@@ -363,7 +364,8 @@ const styles$4 = {
 	saveBtn: saveBtn,
 	continueBtn: continueBtn,
 	solutionBtn: solutionBtn,
-	option: option
+	option: option,
+	inactive: inactive
 };
 
 class GameControls extends BaseComponent {
@@ -378,6 +380,12 @@ class GameControls extends BaseComponent {
   }
 
   addButtons() {
+    this.themeChanger = new BaseComponent({
+      tag: "button",
+      className: styles$4.randomBtn,
+      text: "Change theme",
+    });
+
     this.randomGameButton = new BaseComponent({
       tag: "button",
       className: styles$4.randomBtn,
@@ -409,6 +417,7 @@ class GameControls extends BaseComponent {
     });
 
     this.appendChildren([
+      this.themeChanger,
       this.randomGameButton,
       this.resetGameButton,
       this.saveGameButton,
@@ -417,8 +426,30 @@ class GameControls extends BaseComponent {
     ]);
   }
 
+  enable(button) {
+    button.getNode().disable = false;
+    button.addClass(styles$4.inactive);
+  }
+
+  disable(button) {
+    button.getNode().disable = true;
+    button.addClass(styles$4.inactive);
+  }
+
+  disableAll(buttons) {
+    for (const button of buttons) {
+      this.disable(button);
+    }
+  }
+
+  enableAll(buttons) {
+    for (const button of buttons) {
+      this.enable(button);
+    }
+  }
   getControlButtons() {
     return {
+      themeChanger: this.themeChanger,
       randomGameButton: this.randomGameButton,
       resetGameButton: this.resetGameButton,
       saveGameButton: this.saveGameButton,
@@ -428,11 +459,11 @@ class GameControls extends BaseComponent {
   }
 }
 
-const cell = "_cell_1ts1j_1";
-const filled = "_filled_1ts1j_10";
-const filledhover = "_filledhover_1ts1j_13";
-const empty = "_empty_1ts1j_17";
-const marked = "_marked_1ts1j_21";
+const cell = "_cell_18u39_1";
+const filled = "_filled_18u39_10";
+const filledhover = "_filledhover_18u39_13";
+const empty = "_empty_18u39_17";
+const marked = "_marked_18u39_21";
 const styles$3 = {
 	cell: cell,
 	filled: filled,
@@ -471,16 +502,16 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameboardContainer = "_gameboardContainer_1xun6_1";
-const gameBoard = "_gameBoard_1xun6_8";
-const easy = "_easy_1xun6_15";
-const medium = "_medium_1xun6_20";
-const hard = "_hard_1xun6_25";
-const horizontalGrid = "_horizontalGrid_1xun6_30";
-const verticalGrid = "_verticalGrid_1xun6_38";
-const gap = "_gap_1xun6_44";
-const hintHorizontal = "_hintHorizontal_1xun6_52";
-const hintVertical = "_hintVertical_1xun6_65";
+const gameboardContainer = "_gameboardContainer_1avg0_1";
+const gameBoard = "_gameBoard_1avg0_8";
+const easy = "_easy_1avg0_15";
+const medium = "_medium_1avg0_20";
+const hard = "_hard_1avg0_25";
+const horizontalGrid = "_horizontalGrid_1avg0_30";
+const verticalGrid = "_verticalGrid_1avg0_38";
+const gap = "_gap_1avg0_44";
+const hintHorizontal = "_hintHorizontal_1avg0_52";
+const hintVertical = "_hintVertical_1avg0_65";
 const styles$2 = {
 	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
@@ -502,10 +533,11 @@ class GameBoard extends BaseComponent {
    * @param {number} width
    * @param {number} height
    */
-  constructor(templateManager, cellController) {
+  constructor(templateManager, cellController, stateMachine) {
     super({ tag: "section", className: styles$2.gameboardContainer });
     this.templateManager = templateManager;
     this.cellController = cellController;
+    this.stateMachine = stateMachine;
 
     this.gap = this.addGap();
     this.horizontalGrid = this.addHorizontalGrid();
@@ -638,10 +670,18 @@ class GameBoard extends BaseComponent {
       this.addCells();
     }
   }
+
+  setTemplateFromMachine() {
+    this.stateMachine.subcribe("stageChanged", ({ context: { template } }) => {
+      if (template) {
+        this.updateGameBoard(template);
+      }
+    });
+  }
 }
 
-const main = "_main_17785_1";
-const invitation = "_invitation_17785_12";
+const main = "_main_pmta9_1";
+const invitation = "_invitation_pmta9_12";
 const styles$1 = {
 	main: main,
 	invitation: invitation
@@ -851,7 +891,7 @@ function createMachine(stateMachineDef) {
 const stateMachine = createMachine({
   initialState: "stateInitializing",
   context: {
-    template: null,
+    template: {},
   },
   stateInitializing: {
     actions: {
@@ -862,7 +902,7 @@ const stateMachine = createMachine({
         prevState,
         state,
         trigger,
-        data: selectedTemplate,
+        template: selectedTemplate,
         context: { getContext, updateContext },
       }) {
         updateContext({ selectedTemplate: selectedTemplate });
@@ -879,14 +919,17 @@ const stateMachine = createMachine({
           prevState,
           state,
           trigger,
-          data: templates,
+          data: config,
           context: { getContext, updateContext },
         }) {
+          const templates = [...config];
+          const randomTemplate = fisherYatesShuffle(templates);
           console.log(
             `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
             getContext(),
           );
-          updateContext(fisherYatesShuffle(templates.float()));
+          updateContext(randomTemplate);
+          console.log(`random game: ${randomTemplate}`);
         },
       },
 
@@ -895,7 +938,7 @@ const stateMachine = createMachine({
         action(props) {
           const {
             context: { getContext, updateContext },
-            data: selectedTemplate,
+            template: selectedTemplate,
           } = props;
           updateContext({ selectedTemplate: selectedTemplate });
           console.log(
@@ -912,9 +955,10 @@ const stateMachine = createMachine({
         prevState,
         state,
         trigger,
+        template: selectedTemplate,
         context: { getContext, updateContext },
       }) {
-        updateContext({ someData2: "stateWaitingForInput.onEnter" });
+        updateContext({ template: selectedTemplate });
         console.log(
           `stateWaitingForInput.onEnter: from "${prevState}" => "${state}" by "${trigger}"`,
           getContext(),
@@ -980,8 +1024,17 @@ const stateMachine = createMachine({
       },
       reset: {
         target: "stateWaitingForInput",
-        action() {
-          console.log("trans action for RESET in stateInitializing state");
+        action({
+          prevState,
+          state,
+          trigger,
+          context: { getContext, updateContext },
+        }) {
+          const currentTemplate = getContext().template;
+          updateContext({ template: currentTemplate, progress: null });
+          console.log(
+            `statePlaying: reset  from ${prevState}" => "${state}" by "${trigger} `,
+          );
         },
       },
       saveGame: {
@@ -1128,30 +1181,82 @@ const stateMachine = createMachine({
 });
 
 class ControlButtonsController {
-  constructor(stateMachine, controlButtons) {
+  constructor(stateMachine, controlButtons, config) {
     this.stateMachine = stateMachine;
     this.controlButtons = controlButtons;
+    this.config = config;
     this.buttons = controlButtons.getControlButtons();
     this.setupListeners();
+    this.setupButtonsListeners(this.buttons);
   }
 
   setupListeners() {
-    this.stateMachine.subscribe(
-      "stateChanged",
-      ({ context: { getContext } }) => {
-        //написать что свзязано с этой кнопкой: дизаблить, записывать и тд (ui)
-        // console.log(
-        //   `stateChanged: from "${prevState}" => "${state}" by "${trigger}" with: ${data}`,
-        //   getContext(), //написать что свзязано с этой кнопкой: дизаблить, записывать и тд (ui)
-        // );
-        getContext();
-      },
-    );
+    this.stateMachine.subscribe("stateChanged", () => {
+      this.updateButtonsState();
+    });
   }
 
+  updateButtonsState() {
+    const state = this.stateMachine.value;
+
+    this.controlButtons.disableAll([
+      this.buttons.randomGameButton,
+      this.buttons.resetGameButton,
+      this.buttons.saveGameButton,
+      this.buttons.continueGameButton,
+      this.buttons.solutionButton,
+    ]);
+
+    switch (state) {
+      case "stateInitializing":
+        this.controlButtons.disableAll([
+          this.buttons.resetGameButton,
+          this.buttons.saveGameButton,
+          this.buttons.continueGameButton,
+          this.buttons.solutionButton,
+        ]);
+        break;
+
+      case "stateWaitingForInput":
+        this.controlButtons.enable(this.buttons.randomGameButton);
+        break;
+
+      case "statePlaying":
+        this.controlButtons.enable(this.buttons.resetGameButton);
+        this.controlButtons.enable(this.buttons.saveGameButton);
+        this.controlButtons.enable(this.buttons.solutionButton);
+        this.controlButtons.enable(this.buttons.randomGameButton);
+        break;
+      case "stateSaving":
+        this.controlButtons.enable(this.buttons.resetGameButton);
+        this.controlButtons.enable(this.buttons.continueGameButton);
+        this.controlButtons.enable(this.buttons.saveGameButton);
+        this.controlButtons.enable(this.buttons.solutionButton);
+        this.controlButtons.enable(this.buttons.randomGameButton);
+        break;
+      case "stateGameOver":
+        this.controlButtons.disable(this.buttons.resetGameButton);
+        this.controlButtons.disable(this.buttons.continueGameButton);
+        this.controlButtons.disable(this.buttons.saveGameButton);
+        this.controlButtons.disable(this.buttons.solutionButton);
+        this.controlButtons.enable(this.buttons.randomGameButton);
+        break;
+      case "chooseTemplate":
+        this.controlButtons.enable(this.buttons.randomGameButton);
+        break;
+      default:
+        this.controlButtons.disableAll();
+        break;
+    }
+  }
   setupButtonsListeners(buttons) {
+    buttons.themeChanger.addListener("click", () => {
+      document.body.classList.toggle("darkTheme");
+    });
     buttons.randomGameButton.addListener("click", () => {
-      this.stateMachine.transition("getRandomGame");
+      this.stateMachine.transition("getRandomGame", {
+        data: [...this.config.easy, ...this.config.medium, ...this.config.hard],
+      });
     });
     buttons.resetGameButton.addListener("click", () => {
       this.stateMachine.transition("reset");
@@ -1167,24 +1272,23 @@ class ControlButtonsController {
     });
   }
 
-  handleContinueGame() {
-    if (this.stateMachine.value === "statePlaying") {
-      this.stateMachine.transition("statePaused");
-    } else if (this.stateMachine.value === "stateSaving") {
-      this.stateMachine.transition("continue");
-    }
-  }
+  // handleContinueGame() {
+  //   if (this.stateMachine.value === "statePlaying") {
+  //     this.stateMachine.transition("statePaused");
+  //   } else if (this.stateMachine.value === "stateSaving") {
+  //     this.stateMachine.transition("continue");
+  //   }
+  // }
 
-  handleSolution() {
-    if (this.stateMachine.value === "statePlaying") {
-      this.stateMachine.transition("solution");
-    }
-  }
+  // handleSolution() {
+  //   if (this.stateMachine.value === "statePlaying") {
+  //     this.stateMachine.transition("solution");
+  //   }
+  // }
 }
 
 class TemplateSelector extends BaseComponent {
   constructor(config) {
-    //TODO удалить мнагера
     super({
       tag: "select",
       className: styles$4.selectTemplate,
@@ -1210,7 +1314,6 @@ class TemplateSelector extends BaseComponent {
       option.addAttributes({
         value: template.name,
       });
-      // option.getNode();
       this.append(option);
     });
   }
@@ -1484,7 +1587,7 @@ const levelConfig = {
         [2, 3],
         [7],
       ],
-      metrix: [
+      matrix: [
         [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
         [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -1790,12 +1893,18 @@ const levelConfig = {
 
 class TemplateController {
   constructor(config, stateMachine, selector) {
-    this.eventEmitter = new EventEmitter(); //TODO удалить?
+    this.eventEmitter = new EventEmitter();
     this.config = config;
     this.selector = selector;
-    this.selectedTemplate = null;
+    this.selectedTemplate = this.getTemplate("Dog");
     this.stateMachine = stateMachine;
     this.setEventListener();
+  }
+
+  initTemplate() {
+    this.stateMachine.transition("contextChanged", {
+      template: this.selectedTemplate,
+    });
   }
 
   setEventListener() {
@@ -1803,6 +1912,24 @@ class TemplateController {
       const selectedTemplate = event.target.value;
       this.setTemplate(selectedTemplate);
     });
+  }
+
+  setTemplateToMachine() {
+    this.stateMachine.subscribe(
+      "stateChanged",
+      ({ context: { updateContext } }) => {
+        // this.controlButtons.disable(this.buttons.resetGameButton);
+        // this.controlButtons.disable(this.buttons.saveGameButton);
+        // this.controlButtons.disable(this.buttons.continueGameButton);
+
+        //написать что свзязано с этой кнопкой: дизаблить, записывать и тд (ui)
+        // console.log(
+        //   `stateChanged: from "${prevState}" => "${state}" by "${trigger}" with: ${data}`,
+        //   getContext(), //написать что свзязано с этой кнопкой: дизаблить, записывать и тд (ui)
+        // );
+        updateContext({ template: this.selectedTemplate });
+      },
+    );
   }
 
   getSelectedTemplate() {
@@ -1884,6 +2011,7 @@ class Main extends BaseComponent {
     this.controlsManager = new ControlButtonsController(
       stateMachine,
       this.controls,
+      levelConfig,
     );
     this.templateManager = new TemplateController(
       levelConfig,
@@ -1915,7 +2043,11 @@ class Main extends BaseComponent {
   }
 
   addGameBoard() {
-    this.gameBoard = new GameBoard(this.templateManager, this.cellController);
+    this.gameBoard = new GameBoard(
+      this.templateManager,
+      this.cellController,
+      stateMachine,
+    );
     this.append(this.gameBoard);
   }
 }
@@ -1940,4 +2072,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-XbSu6KmJ.js.map
+//# sourceMappingURL=index-D3bNEvXy.js.map
