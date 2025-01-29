@@ -217,12 +217,12 @@ class BaseComponent {
   }
 }
 
-const footer = "_footer_tvmdt_1";
-const ghLink = "_ghLink_tvmdt_10";
-const rssLogoLink = "_rssLogoLink_tvmdt_18";
-const rssLogoImg = "_rssLogoImg_tvmdt_23";
-const year = "_year_tvmdt_27";
-const styles$6 = {
+const footer = "_footer_at3v2_1";
+const ghLink = "_ghLink_at3v2_10";
+const rssLogoLink = "_rssLogoLink_at3v2_18";
+const rssLogoImg = "_rssLogoImg_at3v2_23";
+const year = "_year_at3v2_27";
+const styles$7 = {
 	footer: footer,
 	ghLink: ghLink,
 	rssLogoLink: rssLogoLink,
@@ -237,7 +237,7 @@ class Footer extends BaseComponent {
    * @param {string} className
    */
   constructor() {
-    super({ tag: "footer", className: styles$6.footer });
+    super({ tag: "footer", className: styles$7.footer });
     this.getNode();
     this.addGithubLink();
     this.addRSSLogo();
@@ -247,7 +247,7 @@ class Footer extends BaseComponent {
   addGithubLink() {
     const a = new BaseComponent({
       tag: "a",
-      className: styles$6.ghLink,
+      className: styles$7.ghLink,
       text: "GitHub",
     });
     a.addAttributes({
@@ -260,7 +260,7 @@ class Footer extends BaseComponent {
   addRSSLogo() {
     const a = new BaseComponent({
       tag: "a",
-      className: styles$6.rssLogoLink,
+      className: styles$7.rssLogoLink,
     });
     a.addAttributes({
       href: "https://rs.school/courses/javascript",
@@ -268,7 +268,7 @@ class Footer extends BaseComponent {
     });
     const logo = new BaseComponent({
       tag: "img",
-      className: styles$6.rssLogoImg,
+      className: styles$7.rssLogoImg,
     });
 
     logo.addAttributes({
@@ -282,17 +282,17 @@ class Footer extends BaseComponent {
   addYear() {
     const p = new BaseComponent({
       tag: "p",
-      className: styles$6.year,
+      className: styles$7.year,
       text: "2025",
     });
     this.append(p);
   }
 }
 
-const header = "_header_oisdd_1";
-const h1 = "_h1_oisdd_10";
-const logoLink = "_logoLink_oisdd_17";
-const styles$5 = {
+const header = "_header_1n07p_1";
+const h1 = "_h1_1n07p_10";
+const logoLink = "_logoLink_1n07p_18";
+const styles$6 = {
 	header: header,
 	h1: h1,
 	logoLink: logoLink
@@ -305,7 +305,7 @@ class Header extends BaseComponent {
    * @param {string} className
    */
   constructor() {
-    super({ tag: "header", className: styles$5.header });
+    super({ tag: "header", className: styles$6.header });
     this.getNode();
     this.addLogo();
     this.addH1();
@@ -314,7 +314,7 @@ class Header extends BaseComponent {
   addH1() {
     const h1 = new BaseComponent({
       tag: "h1",
-      className: styles$5.h1,
+      className: styles$6.h1,
       text: "Nonorgams",
     });
     this.append(h1);
@@ -323,7 +323,7 @@ class Header extends BaseComponent {
   addLogo() {
     const a = new BaseComponent({
       tag: "a",
-      className: styles$5.logoLink,
+      className: styles$6.logoLink,
     });
 
     a.addAttributes({
@@ -347,16 +347,16 @@ class Header extends BaseComponent {
   addTimer() {}
 }
 
-const gameControls = "_gameControls_1ook5_1";
-const selectTemplate = "_selectTemplate_1ook5_19";
-const randomBtn = "_randomBtn_1ook5_20";
-const resetBtn = "_resetBtn_1ook5_21";
-const saveBtn = "_saveBtn_1ook5_22";
-const continueBtn = "_continueBtn_1ook5_23";
-const solutionBtn = "_solutionBtn_1ook5_24";
-const option = "_option_1ook5_54";
-const inactive = "_inactive_1ook5_60";
-const styles$4 = {
+const gameControls = "_gameControls_1pzaw_1";
+const selectTemplate = "_selectTemplate_1pzaw_19";
+const randomBtn = "_randomBtn_1pzaw_20";
+const resetBtn = "_resetBtn_1pzaw_21";
+const saveBtn = "_saveBtn_1pzaw_22";
+const continueBtn = "_continueBtn_1pzaw_23";
+const solutionBtn = "_solutionBtn_1pzaw_24";
+const option = "_option_1pzaw_54";
+const inactive = "_inactive_1pzaw_60";
+const styles$5 = {
 	gameControls: gameControls,
 	selectTemplate: selectTemplate,
 	randomBtn: randomBtn,
@@ -374,7 +374,7 @@ class GameControls extends BaseComponent {
    * @param {import("../../core/StateMachine").StateDef} stateMachine
    */
   constructor() {
-    super({ tag: "div", className: styles$4.gameControls });
+    super({ tag: "div", className: styles$5.gameControls });
     this.getNode();
     this.addButtons();
   }
@@ -382,37 +382,37 @@ class GameControls extends BaseComponent {
   addButtons() {
     this.themeChanger = new BaseComponent({
       tag: "button",
-      className: styles$4.randomBtn,
+      className: styles$5.randomBtn,
       text: "Change theme",
     });
 
     this.randomGameButton = new BaseComponent({
       tag: "button",
-      className: styles$4.randomBtn,
+      className: styles$5.randomBtn,
       text: "Random game",
     });
 
     this.resetGameButton = new BaseComponent({
       tag: "button",
-      className: styles$4.resetBtn,
+      className: styles$5.resetBtn,
       text: "Reset game",
     });
 
     this.saveGameButton = new BaseComponent({
       tag: "button",
-      className: styles$4.saveBtn,
+      className: styles$5.saveBtn,
       text: "Save game",
     });
 
     this.continueGameButton = new BaseComponent({
       tag: "button",
-      className: styles$4.continueBtn,
+      className: styles$5.continueBtn,
       text: "Continue game",
     });
 
     this.solutionButton = new BaseComponent({
       tag: "button",
-      className: styles$4.solutionBtn,
+      className: styles$5.solutionBtn,
       text: "Solution",
     });
 
@@ -427,26 +427,23 @@ class GameControls extends BaseComponent {
   }
 
   enable(button) {
-    button.getNode().disable = false;
-    button.addClass(styles$4.inactive);
+    button.getNode().disabled = false;
+    button.removeClass(styles$5.inactive);
   }
 
   disable(button) {
-    button.getNode().disable = true;
-    button.addClass(styles$4.inactive);
+    button.getNode().disabled = true;
+    button.addClass(styles$5.inactive);
   }
 
   disableAll(buttons) {
-    for (const button of buttons) {
-      this.disable(button);
-    }
+    buttons.forEach((button) => this.disable(button));
   }
 
   enableAll(buttons) {
-    for (const button of buttons) {
-      this.enable(button);
-    }
+    buttons.forEach((button) => this.enable(button));
   }
+
   getControlButtons() {
     return {
       themeChanger: this.themeChanger,
@@ -464,7 +461,7 @@ const filled = "_filled_18u39_10";
 const filledhover = "_filledhover_18u39_13";
 const empty = "_empty_18u39_17";
 const marked = "_marked_18u39_21";
-const styles$3 = {
+const styles$4 = {
 	cell: cell,
 	filled: filled,
 	filledhover: filledhover,
@@ -474,7 +471,7 @@ const styles$3 = {
 
 class Cell extends BaseComponent {
   constructor() {
-    super({ tag: "button", className: styles$3.cell });
+    super({ tag: "button", className: styles$4.cell });
     this.getNode();
   }
 
@@ -482,37 +479,37 @@ class Cell extends BaseComponent {
     this.addListener("contextmenu", (event) => {
       event.preventDefault();
       this.setMark();
-      cb();
+      cb(event);
     });
   }
 
   onLeftClick(cb) {
-    this.addListener("click", () => {
-      cb();
+    this.addListener("click", (event) => {
+      cb(event);
       this.setBackground();
     });
   }
 
   setBackground() {
-    this.toggleClass(styles$3.filled, styles$3.empty);
+    this.toggleClass(styles$4.filled, styles$4.empty);
   }
 
   setMark() {
-    this.toggleClass(styles$3.marked, styles$3.empty);
+    this.toggleClass(styles$4.marked, styles$4.empty);
   }
 }
 
-const gameboardContainer = "_gameboardContainer_1avg0_1";
-const gameBoard = "_gameBoard_1avg0_8";
-const easy = "_easy_1avg0_15";
-const medium = "_medium_1avg0_20";
-const hard = "_hard_1avg0_25";
-const horizontalGrid = "_horizontalGrid_1avg0_30";
-const verticalGrid = "_verticalGrid_1avg0_38";
-const gap = "_gap_1avg0_44";
-const hintHorizontal = "_hintHorizontal_1avg0_52";
-const hintVertical = "_hintVertical_1avg0_65";
-const styles$2 = {
+const gameboardContainer = "_gameboardContainer_wfnwo_1";
+const gameBoard = "_gameBoard_wfnwo_8";
+const easy = "_easy_wfnwo_15";
+const medium = "_medium_wfnwo_20";
+const hard = "_hard_wfnwo_25";
+const horizontalGrid = "_horizontalGrid_wfnwo_30";
+const verticalGrid = "_verticalGrid_wfnwo_38";
+const gap = "_gap_wfnwo_44";
+const hintHorizontal = "_hintHorizontal_wfnwo_52";
+const hintVertical = "_hintVertical_wfnwo_65";
+const styles$3 = {
 	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
 	easy: easy,
@@ -533,26 +530,34 @@ class GameBoard extends BaseComponent {
    * @param {number} width
    * @param {number} height
    */
-  constructor(templateManager, cellController, stateMachine) {
-    super({ tag: "section", className: styles$2.gameboardContainer });
-    this.templateManager = templateManager;
+  constructor(templateConroller, cellController, stateMachine) {
+    super({ tag: "section", className: styles$3.gameboardContainer });
     this.cellController = cellController;
     this.stateMachine = stateMachine;
+    this.templateConroller = templateConroller;
 
     this.gap = this.addGap();
     this.horizontalGrid = this.addHorizontalGrid();
     this.verticalGrid = this.addVerticalGrid();
     this.board = this.addBoard();
 
-    this.updateGameBoard();
+    this.stateMachine.subscribe("stateChanged", ({ state }) => {
+      if (state === "stateGameOver") {
+        this.clearGameBoard();
+      }
+    });
 
-    this.templateManager.onTemplateChange(() => this.updateGameBoard());
+    this.updateGameBoard(this.stateMachine.getContext().template);
+
+    this.templateConroller.onTemplateChange((newTemplate) => {
+      this.updateGameBoard(newTemplate);
+    });
   }
 
   addBoard() {
     const board = new BaseComponent({
       tag: "div",
-      className: styles$2.gameBoard,
+      className: styles$3.gameBoard,
     });
     board.getNode();
     this.append(board);
@@ -561,7 +566,7 @@ class GameBoard extends BaseComponent {
   addGap() {
     const gap = new BaseComponent({
       tag: "div",
-      className: styles$2.gap,
+      className: styles$3.gap,
     });
     gap.getNode();
     this.append(gap);
@@ -569,20 +574,23 @@ class GameBoard extends BaseComponent {
   }
 
   addCells() {
+    const cells = [];
     for (let y = 0; y < this.width; y += 1) {
       for (let x = 0; x < this.width; x += 1) {
         const cell = new Cell();
         this.addCellEventListeners(cell, x, y);
         this.board.append(cell);
+        cells.push(cell);
       }
     }
+    this.cellController.setCells(cells);
   }
 
   addVerticalHints(hints) {
     const vertHints = hints.map((hint) => {
       const hintComp = new BaseComponent({
         tag: "div",
-        className: styles$2.hintVertical,
+        className: styles$3.hintVertical,
       });
       hint.map((el) => {
         const hintEl = new BaseComponent({
@@ -600,7 +608,7 @@ class GameBoard extends BaseComponent {
   addVerticalGrid() {
     const verticalGrid = new BaseComponent({
       tag: "div",
-      className: styles$2.verticalGrid,
+      className: styles$3.verticalGrid,
     });
     verticalGrid.getNode();
     this.append(verticalGrid);
@@ -611,7 +619,7 @@ class GameBoard extends BaseComponent {
     const horizHints = hints.map((hint) => {
       const hintComp = new BaseComponent({
         tag: "div",
-        className: styles$2.hintHorizontal,
+        className: styles$3.hintHorizontal,
       });
       hint.map((el) => {
         const hintEl = new BaseComponent({
@@ -628,7 +636,7 @@ class GameBoard extends BaseComponent {
   addHorizontalGrid() {
     const horizontalGrid = new BaseComponent({
       tag: "div",
-      className: styles$2.horizontalGrid,
+      className: styles$3.horizontalGrid,
     });
     horizontalGrid.getNode();
     this.append(horizontalGrid);
@@ -636,53 +644,38 @@ class GameBoard extends BaseComponent {
   }
 
   addCellEventListeners(cell, x, y) {
-    cell.onRightClick(() => {
-      this.cellController.onClick(cell.getNode(), x, y);
+    cell.onRightClick((event) => {
+      this.cellController.onClick(cell.getNode(), x, y, event);
     });
 
-    cell.onLeftClick(() => {
-      this.cellController.onClick(cell.getNode(), x, y);
+    cell.onLeftClick((event) => {
+      this.cellController.onClick(cell.getNode(), x, y, event);
     });
   }
 
   clearGameBoard() {
     this.board.destroyChildren();
-    this.board.removeClass(styles$2.easy);
-    this.board.removeClass(styles$2.medium);
-    this.board.removeClass(styles$2.hard);
+    this.board.removeClass(styles$3.easy);
+    this.board.removeClass(styles$3.medium);
+    this.board.removeClass(styles$3.hard);
     this.verticalGrid.destroyChildren();
     this.horizontalGrid.destroyChildren();
   }
-  updateGameBoard() {
+  updateGameBoard(selectedTemplate) {
     this.clearGameBoard();
 
-    const template = this.templateManager.getSelectedTemplate();
-    if (template) {
-      this.width = template.size;
-      this.cellController.setTemplate(template);
-      this.board.addClass(styles$2[template.difficulty]);
-      this.addCells();
-      this.addVerticalHints(template.verticalHints);
-      this.addHorizontalHints(template.horizontalHints);
-    } else {
-      this.width = 5;
-      this.board.addClass(styles$2.easy);
-      this.addCells();
-    }
-  }
-
-  setTemplateFromMachine() {
-    this.stateMachine.subcribe("stageChanged", ({ context: { template } }) => {
-      if (template) {
-        this.updateGameBoard(template);
-      }
-    });
+    this.width = selectedTemplate.size;
+    this.cellController.setTemplate(selectedTemplate);
+    this.board.addClass(styles$3[selectedTemplate.difficulty]);
+    this.addCells();
+    this.addVerticalHints(selectedTemplate.verticalHints);
+    this.addHorizontalHints(selectedTemplate.horizontalHints);
   }
 }
 
-const main = "_main_pmta9_1";
-const invitation = "_invitation_pmta9_12";
-const styles$1 = {
+const main = "_main_e0bqu_1";
+const invitation = "_invitation_e0bqu_11";
+const styles$2 = {
 	main: main,
 	invitation: invitation
 };
@@ -875,452 +868,6 @@ function createMachine(stateMachineDef) {
   machine.unsubscribe = machine.unsubscribe.bind(machine);
 
   return machine;
-}
-
-/**
- * @typedef {Object} StateDef
- * @property {Object} actions - object of actions for the state
- * @property {Object} transitions - object of transitions for the state
- * @property {Function} [actions.onEnter] - action for entering in the state
- * @property {Function} [actions.onExit] - action for leaving the state
- * @property {Object} [transitions.switch] - transition for the switch event
- * @property {Function} [transitions.switch.actions] - target state of transition
- * @property {string} [transitions.switch.target] - action while transiting
- */
-
-const stateMachine = createMachine({
-  initialState: "stateInitializing",
-  context: {
-    template: {},
-  },
-  stateInitializing: {
-    actions: {
-      onEnter() {
-        console.log("stateInitializing: onEnter");
-      },
-      onExit({
-        prevState,
-        state,
-        trigger,
-        template: selectedTemplate,
-        context: { getContext, updateContext },
-      }) {
-        updateContext({ selectedTemplate: selectedTemplate });
-        console.log(
-          `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
-          getContext(),
-        );
-      },
-    },
-    transitions: {
-      getRandomGame: {
-        target: "stateWaitingForInput",
-        action({
-          prevState,
-          state,
-          trigger,
-          data: config,
-          context: { getContext, updateContext },
-        }) {
-          const templates = [...config];
-          const randomTemplate = fisherYatesShuffle(templates);
-          console.log(
-            `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
-            getContext(),
-          );
-          updateContext(randomTemplate);
-          console.log(`random game: ${randomTemplate}`);
-        },
-      },
-
-      chooseTemplate: {
-        target: "stateWaitingForInput",
-        action(props) {
-          const {
-            context: { getContext, updateContext },
-            template: selectedTemplate,
-          } = props;
-          updateContext({ selectedTemplate: selectedTemplate });
-          console.log(
-            "trans action for chooseTemplate in stateWaitingForInput state",
-            getContext(),
-          );
-        },
-      },
-    },
-  },
-  stateWaitingForInput: {
-    actions: {
-      onEnter({
-        prevState,
-        state,
-        trigger,
-        template: selectedTemplate,
-        context: { getContext, updateContext },
-      }) {
-        updateContext({ template: selectedTemplate });
-        console.log(
-          `stateWaitingForInput.onEnter: from "${prevState}" => "${state}" by "${trigger}"`,
-          getContext(),
-        );
-      },
-      onExit({
-        prevState,
-        state,
-        trigger,
-        context: { getContext, updateContext },
-      }) {
-        console.log(
-          `stateWaitingForInput: onExit  from "${prevState}" => "${state}" by "${trigger}"`,
-          getContext(),
-        );
-        const selectedTemplate = getContext().template;
-
-        updateContext({ template: selectedTemplate });
-      },
-    },
-    transitions: {
-      firstClick: {
-        target: "statePlaying",
-        action() {},
-      },
-    },
-  },
-  statePlaying: {
-    actions: {
-      onEnter({
-        prevState,
-        state,
-        trigger,
-        context: { getContext, updateContext },
-      }) {
-        const selectedTemplate = getContext().template;
-
-        console.log(
-          `StatePlaying: onEnter from ${prevState}" => "${state}" by "${trigger}`,
-        );
-        updateContext({ template: selectedTemplate });
-      },
-      onExit({
-        prevState,
-        state,
-        trigger,
-        context: { getContext, updateContext },
-      }) {
-        const selectedTemplate = getContext().template;
-
-        console.log(
-          `statePlaying: onExit  from ${prevState}" => "${state}" by "${trigger} `,
-        );
-        updateContext({ template: selectedTemplate });
-      },
-    },
-    transitions: {
-      win: {
-        target: "stateGameOver",
-        action() {
-          console.log("trans action for WIN in stateGameOver state");
-        },
-      },
-      reset: {
-        target: "stateWaitingForInput",
-        action({
-          prevState,
-          state,
-          trigger,
-          context: { getContext, updateContext },
-        }) {
-          const currentTemplate = getContext().template;
-          updateContext({ template: currentTemplate, progress: null });
-          console.log(
-            `statePlaying: reset  from ${prevState}" => "${state}" by "${trigger} `,
-          );
-        },
-      },
-      saveGame: {
-        target: "stateSaving",
-        action() {
-          console.log("trans action for SAVEGAME in stateSaving state");
-        },
-      },
-      solution: {
-        target: "statePlaying",
-        action() {
-          console.log("trans action for SOLUTION in statePlaying state");
-        },
-      },
-    },
-  },
-  stateSaving: {
-    actions: {
-      onEnter({
-        prevState,
-        state,
-        trigger,
-        context: { getContext, updateContext },
-      }) {
-        console.log(
-          `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
-          getContext(),
-        );
-      },
-      onExit({
-        prevState,
-        state,
-        trigger,
-        context: { getContext, updateContext },
-      }) {
-        console.log(
-          `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
-          getContext(),
-        );
-      },
-    },
-    transitions: {
-      continue: {
-        target: "stateWaitingForInput",
-        action() {
-          console.log(
-            "trans action for CONTINUE in stateWaitingForInput state",
-          );
-        },
-      },
-    },
-  },
-  stateGameOver: {
-    actions: {
-      onEnter({
-        prevState,
-        state,
-        trigger,
-        context: { getContext, updateContext },
-      }) {
-        console.log(
-          `stateGameOver.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
-          getContext(),
-        );
-      },
-      onExit({
-        prevState,
-        state,
-        trigger,
-        context: { getContext, updateContext },
-      }) {
-        console.log(
-          `stateGameOver.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
-          getContext(),
-        );
-      },
-    },
-    transitions: {
-      restart: {
-        target: "stateInitializing",
-        action({
-          prevState,
-          state,
-          trigger,
-          context: { getContext, updateContext },
-        }) {
-          console.log(
-            `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
-            getContext(),
-          );
-        },
-      },
-      chooseTemplate: {
-        target: "stateWaitingForInput",
-        action({
-          prevState,
-          state,
-          trigger,
-          context: { getContext, updateContext },
-        }) {
-          console.log(
-            `stateInitializing.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
-            getContext(),
-          );
-        },
-      },
-    },
-  },
-  statePaused: {
-    // оно мне ваще надо?
-    actions: {
-      onEnter({
-        prevState,
-        state,
-        trigger,
-        context: { getContext, updateContext },
-      }) {
-        console.log(
-          `statePaused.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
-          getContext(),
-        );
-      },
-      onExit({
-        prevState,
-        state,
-        trigger,
-        context: { getContext, updateContext },
-      }) {
-        console.log(
-          `statePaused.onExit: from "${prevState}" => "${state}" by "${trigger}"`,
-          getContext(),
-        );
-      },
-    },
-    transitions: {
-      resume: {
-        target: "stateWaitingForInput",
-        action() {
-          console.log("trans action for RESUME in stateWaitingForInput state");
-        },
-      },
-    },
-  },
-});
-
-class ControlButtonsController {
-  constructor(stateMachine, controlButtons, config) {
-    this.stateMachine = stateMachine;
-    this.controlButtons = controlButtons;
-    this.config = config;
-    this.buttons = controlButtons.getControlButtons();
-    this.setupListeners();
-    this.setupButtonsListeners(this.buttons);
-  }
-
-  setupListeners() {
-    this.stateMachine.subscribe("stateChanged", () => {
-      this.updateButtonsState();
-    });
-  }
-
-  updateButtonsState() {
-    const state = this.stateMachine.value;
-
-    this.controlButtons.disableAll([
-      this.buttons.randomGameButton,
-      this.buttons.resetGameButton,
-      this.buttons.saveGameButton,
-      this.buttons.continueGameButton,
-      this.buttons.solutionButton,
-    ]);
-
-    switch (state) {
-      case "stateInitializing":
-        this.controlButtons.disableAll([
-          this.buttons.resetGameButton,
-          this.buttons.saveGameButton,
-          this.buttons.continueGameButton,
-          this.buttons.solutionButton,
-        ]);
-        break;
-
-      case "stateWaitingForInput":
-        this.controlButtons.enable(this.buttons.randomGameButton);
-        break;
-
-      case "statePlaying":
-        this.controlButtons.enable(this.buttons.resetGameButton);
-        this.controlButtons.enable(this.buttons.saveGameButton);
-        this.controlButtons.enable(this.buttons.solutionButton);
-        this.controlButtons.enable(this.buttons.randomGameButton);
-        break;
-      case "stateSaving":
-        this.controlButtons.enable(this.buttons.resetGameButton);
-        this.controlButtons.enable(this.buttons.continueGameButton);
-        this.controlButtons.enable(this.buttons.saveGameButton);
-        this.controlButtons.enable(this.buttons.solutionButton);
-        this.controlButtons.enable(this.buttons.randomGameButton);
-        break;
-      case "stateGameOver":
-        this.controlButtons.disable(this.buttons.resetGameButton);
-        this.controlButtons.disable(this.buttons.continueGameButton);
-        this.controlButtons.disable(this.buttons.saveGameButton);
-        this.controlButtons.disable(this.buttons.solutionButton);
-        this.controlButtons.enable(this.buttons.randomGameButton);
-        break;
-      case "chooseTemplate":
-        this.controlButtons.enable(this.buttons.randomGameButton);
-        break;
-      default:
-        this.controlButtons.disableAll();
-        break;
-    }
-  }
-  setupButtonsListeners(buttons) {
-    buttons.themeChanger.addListener("click", () => {
-      document.body.classList.toggle("darkTheme");
-    });
-    buttons.randomGameButton.addListener("click", () => {
-      this.stateMachine.transition("getRandomGame", {
-        data: [...this.config.easy, ...this.config.medium, ...this.config.hard],
-      });
-    });
-    buttons.resetGameButton.addListener("click", () => {
-      this.stateMachine.transition("reset");
-    });
-    buttons.saveGameButton.addListener("click", () => {
-      this.stateMachine.transition("saveGame");
-    });
-    buttons.continueGameButton.addListener("click", () => {
-      this.stateMachine.transition("continue", {});
-    });
-    buttons.solutionButton.addListener("click", () => {
-      this.stateMachine.transition("solution");
-    });
-  }
-
-  // handleContinueGame() {
-  //   if (this.stateMachine.value === "statePlaying") {
-  //     this.stateMachine.transition("statePaused");
-  //   } else if (this.stateMachine.value === "stateSaving") {
-  //     this.stateMachine.transition("continue");
-  //   }
-  // }
-
-  // handleSolution() {
-  //   if (this.stateMachine.value === "statePlaying") {
-  //     this.stateMachine.transition("solution");
-  //   }
-  // }
-}
-
-class TemplateSelector extends BaseComponent {
-  constructor(config) {
-    super({
-      tag: "select",
-      className: styles$4.selectTemplate,
-      text: "Select game",
-    });
-    this.config = config;
-    this.getNode();
-    this.#addOptions();
-  }
-
-  getTemplatesFromConfig() {
-    return [...this.config.easy, ...this.config.medium, ...this.config.hard];
-  }
-
-  #addOptions() {
-    const templates = this.getTemplatesFromConfig();
-    templates.forEach((template) => {
-      const option = new BaseComponent({
-        tag: "option",
-        className: styles$4.option,
-        text: `${template.name} (${template.difficulty})`,
-      });
-      option.addAttributes({
-        value: template.name,
-      });
-      this.append(option);
-    });
-  }
-
-  addEventListeners(callback) {
-    this.addListener("change", callback);
-  }
 }
 
 const levelConfig = {
@@ -1891,45 +1438,416 @@ const levelConfig = {
   ],
 };
 
+/**
+ * @typedef {Object} StateDef
+ * @property {Object} actions - object of actions for the state
+ * @property {Object} transitions - object of transitions for the state
+ * @property {Function} [actions.onEnter] - action for entering in the state
+ * @property {Function} [actions.onExit] - action for leaving the state
+ * @property {Object} [transitions.switch] - transition for the switch event
+ * @property {Function} [transitions.switch.actions] - target state of transition
+ * @property {string} [transitions.switch.target] - action while transiting
+ */
+
+const stateMachine = createMachine({
+  initialState: "stateInitializing",
+  context: {
+    template: levelConfig.easy.find((template) => template.name === "Dog"),
+    progress: null,
+    time: null,
+    score: 0,
+    history: [],
+    id: "Reviewer 1",
+    matrixState: [],
+  },
+  stateInitializing: {
+    actions: {
+      onEnter({ context: { getContext } }) {
+        console.log(`Enter: Initializing`, getContext());
+      },
+      onExit({ context: { getContext, updateContext } }) {
+        updateContext({
+          progress: null,
+          time: 0,
+        });
+        console.log(`Exit: Initializing`, getContext());
+      },
+    },
+    transitions: {
+      getRandomGame: {
+        target: "stateWaitingForInput",
+        action({ data, context: { updateContext } }) {
+          const randomTemplate = fisherYatesShuffle(data.data.template)[0];
+          updateContext({ template: randomTemplate });
+          console.log(`random game: ${randomTemplate}`);
+        },
+      },
+      chooseTemplate: {
+        target: "statePlaying",
+        action({ data, context: { updateContext } }) {
+          updateContext({ template: data.template });
+          console.log("Select template");
+        },
+      },
+      //TODO remove it?
+      correctClick: {
+        target: "statePlaying",
+        action({ data, context: { getContext, updateContext } }) {
+          console.log(`Correct click at [${data.x}, ${data.y}]`);
+          const { score } = getContext();
+          updateContext({ score: score + 1 });
+        },
+      },
+      //TODO remove it?
+      incorrectClick: {
+        target: "statePlaying",
+        action({ data, context: { getContext, updateContext } }) {
+          console.log(`Incorrect click at [${data.x}, ${data.y}]`);
+          const { score } = getContext();
+          updateContext({ score: score - 1 });
+        },
+      },
+    },
+  },
+  stateWaitingForInput: {
+    actions: {
+      onEnter({ context: { getContext } }) {
+        console.log(`Enter: Waiting for input`, getContext());
+      },
+      onExit({ context: { getContext } }) {
+        console.log(` Exit:: Waiting for input`, getContext());
+      },
+    },
+    transitions: {
+      correctClick: {
+        target: "statePlaying",
+        action({ data, context: { getContext, updateContext } }) {
+          console.log(`Correct click at [${data.x}, ${data.y}]`);
+          const { score } = getContext();
+          updateContext({ score: score + 1 });
+        },
+      },
+      incorrectClick: {
+        target: "statePlaying",
+        action({ data, context: { getContext, updateContext } }) {
+          console.log(`Incorrect click at [${data.x}, ${data.y}]`);
+          const { score } = getContext();
+          updateContext({ score: score - 1 });
+        },
+      },
+      chooseTemplate: {
+        target: "statePlaying",
+        action({ data, context: { getContext, updateContext } }) {
+          updateContext({ template: data.template });
+          console.log("Select template", getContext());
+        },
+      },
+    },
+    getRandomGame: {
+      target: "stateWaitingForInput",
+      action({ data, context: { updateContext } }) {
+        const randomTemplate = fisherYatesShuffle(data.data.template)[0];
+        updateContext({ template: randomTemplate });
+        console.log(`random game: ${randomTemplate}`);
+      },
+    },
+  },
+  statePlaying: {
+    // TODO template становится undefined при первом клике на клетку, если убрать проверки, что то не то апдейчу
+    actions: {
+      onEnter({ prevState, trigger, data, context: { getContext } }) {
+        console.log(`Enter: Playing ${prevState} by ${trigger}`, getContext());
+      },
+      onExit({ data, context: { getContext, updateContext } }) {
+        console.log(`Exit: Playing`, getContext());
+      },
+    },
+    transitions: {
+      getRandomGame: {
+        target: "stateWaitingForInput",
+        action({ data, context: { updateContext } }) {
+          const randomTemplate = fisherYatesShuffle(data.data.template)[0];
+          updateContext({ template: randomTemplate });
+          console.log(`random game: ${randomTemplate}`);
+        },
+      },
+      chooseTemplate: {
+        target: "statePlaying",
+        action({ data, context: { getContext, updateContext } }) {
+          updateContext({ template: data.template });
+          console.log("Select template", getContext());
+        },
+      },
+      correctClick: {
+        target: "statePlaying",
+        action({ data, context: { getContext, updateContext } }) {
+          console.log(`Correct click at [${data.x}, ${data.y}]`);
+          const { score } = getContext();
+          updateContext({ score: score + 1 });
+        },
+      },
+      incorrectClick: {
+        target: "statePlaying",
+        action({ data, context: { getContext, updateContext } }) {
+          console.log(`Incorrect click at [${data.x}, ${data.y}]`);
+          const { score } = getContext();
+          updateContext({ score: score - 1 });
+        },
+      },
+      win: {
+        target: "stateGameOver",
+        action({ context: { getContext } }) {
+          console.log("Win", getContext());
+        },
+      },
+      reset: {
+        target: "stateWaitingForInput",
+        action({ context: { getContext, updateContext } }) {
+          updateContext({ progress: null });
+          console.log(`Reset`, getContext());
+        },
+      },
+      saveGame: {
+        target: "stateSaving",
+        action({ context: { getContext } }) {
+          console.log("Save", getContext());
+        },
+      },
+      solution: {
+        target: "stateWaitingForInput",
+        action({ context: { getContext } }) {
+          console.log("Solution", getContext());
+        },
+      },
+    },
+  },
+  stateSaving: {
+    actions: {
+      onEnter({ context: { getContext } }) {
+        console.log(`Enter: Save`, getContext());
+      },
+    },
+    transitions: {
+      getRandomGame: {
+        target: "stateWaitingForInput",
+        action({ data, context: { updateContext } }) {
+          const randomTemplate = fisherYatesShuffle(data.data.template)[0];
+          updateContext({ template: randomTemplate });
+          console.log(`random game: ${randomTemplate}`);
+        },
+      },
+      continue: {
+        target: "stateWaitingForInput",
+        action({ context: { getContext } }) {
+          console.log("Continue", getContext());
+        },
+      },
+    },
+  },
+  stateGameOver: {
+    actions: {
+      onEnter({ context: { getContext, updateContext } }) {
+        updateContext({ score: 0 });
+        console.log(`Enter: Game over`, getContext());
+      },
+    },
+    transitions: {
+      restart: {
+        target: "stateInitializing",
+      },
+      chooseTemplate: {
+        target: "statePlaying",
+        action({ data, context: { getContext, updateContext } }) {
+          updateContext({ template: data.template });
+          console.log("Select template", getContext());
+        },
+      },
+      getRandomGame: {
+        target: "stateWaitingForInput",
+        action({ data, context: { updateContext } }) {
+          const randomTemplate = fisherYatesShuffle(data.data.template)[0];
+          updateContext({ template: randomTemplate });
+          console.log(`random game: ${randomTemplate}`);
+        },
+      },
+    },
+  },
+});
+
+class ControlButtonsController {
+  constructor(stateMachine, controlButtons, config) {
+    this.stateMachine = stateMachine;
+    this.controlButtons = controlButtons;
+    this.config = config;
+    this.buttons = controlButtons.getControlButtons();
+    this.setupListeners();
+    this.setupButtonsListeners(this.buttons);
+  }
+
+  setupListeners() {
+    this.stateMachine.subscribe("stateChanged", () => {
+      this.updateButtonsState();
+    });
+  }
+
+  updateButtonsState() {
+    const state = this.stateMachine.state;
+
+    this.controlButtons.disableAll([
+      this.buttons.randomGameButton,
+      this.buttons.resetGameButton,
+      this.buttons.saveGameButton,
+      this.buttons.continueGameButton,
+      this.buttons.solutionButton,
+    ]);
+
+    switch (state) {
+      case "stateInitializing":
+        this.controlButtons.disableAll([
+          this.buttons.resetGameButton,
+          this.buttons.saveGameButton,
+          this.buttons.continueGameButton,
+          this.buttons.solutionButton,
+        ]);
+        break;
+
+      case "stateWaitingForInput":
+        this.controlButtons.enable(this.buttons.randomGameButton);
+        break;
+
+      case "statePlaying":
+        this.controlButtons.enable(this.buttons.resetGameButton);
+        this.controlButtons.enable(this.buttons.saveGameButton);
+        this.controlButtons.enable(this.buttons.solutionButton);
+        this.controlButtons.enable(this.buttons.randomGameButton);
+        break;
+      case "stateSaving":
+        this.controlButtons.enable(this.buttons.resetGameButton);
+        this.controlButtons.enable(this.buttons.continueGameButton);
+        this.controlButtons.enable(this.buttons.saveGameButton);
+        this.controlButtons.enable(this.buttons.solutionButton);
+        this.controlButtons.enable(this.buttons.randomGameButton);
+        break;
+      case "stateGameOver":
+        this.controlButtons.disable(this.buttons.resetGameButton);
+        this.controlButtons.disable(this.buttons.continueGameButton);
+        this.controlButtons.disable(this.buttons.saveGameButton);
+        this.controlButtons.disable(this.buttons.solutionButton);
+        this.controlButtons.enable(this.buttons.randomGameButton);
+        break;
+      case "chooseTemplate":
+        this.controlButtons.enable(this.buttons.randomGameButton);
+        break;
+      default:
+        this.controlButtons.disableAll([
+          this.buttons.randomGameButton,
+          this.buttons.resetGameButton,
+          this.buttons.saveGameButton,
+          this.buttons.continueGameButton,
+          this.buttons.solutionButton,
+        ]);
+        break;
+    }
+  }
+  setupButtonsListeners(buttons) {
+    buttons.themeChanger.addListener("click", () => {
+      document.body.classList.toggle("darkTheme");
+    });
+    buttons.randomGameButton.addListener("click", () => {
+      this.stateMachine.transition("getRandomGame", {
+        data: [...this.config.easy, ...this.config.medium, ...this.config.hard],
+      });
+    });
+    buttons.resetGameButton.addListener("click", () => {
+      this.stateMachine.transition("reset");
+    });
+    buttons.saveGameButton.addListener("click", () => {
+      this.stateMachine.transition("saveGame");
+    });
+    buttons.continueGameButton.addListener("click", () => {
+      this.stateMachine.transition("continue", {});
+    });
+    buttons.solutionButton.addListener("click", () => {
+      this.stateMachine.transition("solution");
+    });
+  }
+
+  // handleContinueGame() {
+  //   if (this.stateMachine.value === "statePlaying") {
+  //     this.stateMachine.transition("statePaused");
+  //   } else if (this.stateMachine.value === "stateSaving") {
+  //     this.stateMachine.transition("continue");
+  //   }
+  // }
+
+  // handleSolution() {
+  //   if (this.stateMachine.value === "statePlaying") {
+  //     this.stateMachine.transition("solution");
+  //   }
+  // }
+}
+
+class TemplateSelector extends BaseComponent {
+  constructor(config) {
+    super({
+      tag: "select",
+      className: styles$5.selectTemplate,
+      text: "Select game",
+    });
+    this.config = config;
+    this.getNode();
+    this.#addOptions();
+  }
+
+  getTemplatesFromConfig() {
+    return [...this.config.easy, ...this.config.medium, ...this.config.hard];
+  }
+
+  #addOptions() {
+    const templates = this.getTemplatesFromConfig();
+    templates.forEach((template) => {
+      const option = new BaseComponent({
+        tag: "option",
+        className: styles$5.option,
+        text: `${template.name} (${template.difficulty})`,
+      });
+      option.addAttributes({
+        value: template.name,
+      });
+      this.append(option);
+    });
+  }
+
+  addEventListeners(event, callback) {
+    this.addListener("change", callback);
+  }
+}
+
 class TemplateController {
   constructor(config, stateMachine, selector) {
-    this.eventEmitter = new EventEmitter();
     this.config = config;
     this.selector = selector;
-    this.selectedTemplate = this.getTemplate("Dog");
     this.stateMachine = stateMachine;
+
+    this.selectedTemplate = this.stateMachine.getContext().template;
+    this.stateMachine.transition("chooseTemplate", {
+      template: this.selectedTemplate,
+    });
+
     this.setEventListener();
   }
 
   initTemplate() {
-    this.stateMachine.transition("contextChanged", {
+    this.stateMachine.transition("chooseTemplate", {
       template: this.selectedTemplate,
     });
   }
 
   setEventListener() {
-    this.selector.addEventListeners((event) => {
-      const selectedTemplate = event.target.value;
-      this.setTemplate(selectedTemplate);
+    this.selector.addEventListeners("change", (event) => {
+      const chosenTemplate = event.target.value;
+      this.setTemplate(chosenTemplate);
     });
-  }
-
-  setTemplateToMachine() {
-    this.stateMachine.subscribe(
-      "stateChanged",
-      ({ context: { updateContext } }) => {
-        // this.controlButtons.disable(this.buttons.resetGameButton);
-        // this.controlButtons.disable(this.buttons.saveGameButton);
-        // this.controlButtons.disable(this.buttons.continueGameButton);
-
-        //написать что свзязано с этой кнопкой: дизаблить, записывать и тд (ui)
-        // console.log(
-        //   `stateChanged: from "${prevState}" => "${state}" by "${trigger}" with: ${data}`,
-        //   getContext(), //написать что свзязано с этой кнопкой: дизаблить, записывать и тд (ui)
-        // );
-        updateContext({ template: this.selectedTemplate });
-      },
-    );
   }
 
   getSelectedTemplate() {
@@ -1937,11 +1855,16 @@ class TemplateController {
   }
 
   setTemplate(templateName) {
-    this.selectedTemplate = this.getTemplate(templateName);
-    this.stateMachine.context.template = this.selectedTemplate;
+    const newTemplate = this.getTemplate(templateName);
 
-    this.stateMachine.transition("chooseTemplate", this.selectedTemplate);
-    this.eventEmitter.dispatch("templateChanged", this.selectedTemplate);
+    if (newTemplate) {
+      this.stateMachine.transition("chooseTemplate", {
+        template: newTemplate,
+      });
+      if (this.onTemplateChangeCallback) {
+        this.onTemplateChangeCallback(newTemplate);
+      }
+    }
   }
 
   getTemplate(templateName) {
@@ -1962,17 +1885,24 @@ class TemplateController {
   }
 
   onTemplateChange(callback) {
-    return this.eventEmitter.subscribe("templateChanged", callback);
+    this.onTemplateChangeCallback = callback;
   }
 }
 
 class CellController {
   constructor(config, stateMachine) {
-    this.eventEmitter = new EventEmitter();
     this.stateMachine = stateMachine;
     this.config = config;
-    this.selectedTemplate = null;
     this.matrix = [];
+    this.selectedCells = [];
+    this.cells = [];
+    this.stateMachine.subscribe("stateChanged", () => {
+      this.selectedTemplate = this.stateMachine.getContext().template;
+    });
+  }
+
+  setCells(cells) {
+    this.cells = cells;
   }
 
   setTemplate(template) {
@@ -1980,19 +1910,116 @@ class CellController {
     this.matrix = template.matrix;
   }
 
-  onClick(cell, x, y) {
-    if (this.stateMachine.state !== "statePlaying") {
-      this.eventEmitter.dispatch("firstClick");
-      this.stateMachine.transition("firstClick");
+  onClick(cell, x, y, event) {
+    if (event.button !== 0) {
+      return;
     }
 
     const isCorrect = this.matrix[y][x] === 1;
 
-    if (isCorrect) {
-      this.eventEmitter.dispatch("correctClick", { x, y });
+    const existingIndex = this.selectedCells.findIndex(
+      (selected) => selected.x === x && selected.y === y,
+    );
+
+    if (existingIndex !== -1) {
+      this.selectedCells.splice(existingIndex, 1);
     } else {
-      this.eventEmitter.dispatch("incorrectClick", { x, y });
+      this.selectedCells.push({ x, y, isCorrect });
     }
+
+    const allCellsCorrect =
+      this.selectedCells.filter((cell) => cell.isCorrect).length ===
+        this.getCorrectCellsCount() && !this.hasIncorrectSelections();
+
+    if (allCellsCorrect) {
+      this.stateMachine.transition("win");
+    } else if (isCorrect) {
+      this.stateMachine.transition("correctClick", { x, y });
+    } else {
+      this.stateMachine.transition("incorrectClick", { x, y });
+    }
+  }
+
+  hasIncorrectSelections() {
+    return this.selectedCells.some((cell) => !cell.isCorrect);
+  }
+  getCorrectCellsCount() {
+    let correctCellsCount = 0;
+    for (let y = 0; y < this.matrix.length; y += 1) {
+      for (let x = 0; x < this.matrix[y].length; x += 1) {
+        if (this.matrix[y][x] === 1) {
+          correctCellsCount += 1;
+        }
+      }
+    }
+    return correctCellsCount;
+  }
+  reset() {
+    this.selectedCells = [];
+  }
+}
+
+const dialog = "_dialog_3vspu_1";
+const popupContainer = "_popupContainer_3vspu_19";
+const popupButton = "_popupButton_3vspu_26";
+const styles$1 = {
+	dialog: dialog,
+	popupContainer: popupContainer,
+	popupButton: popupButton
+};
+
+class Modal extends BaseComponent {
+  constructor({ onClose, text }) {
+    super({ tag: "dialog", className: styles$1.dialog });
+    this.onClose = onClose;
+    this.text = text;
+
+    this.addPopupContainer();
+    this.addListeners();
+  }
+
+  addPopupContainer() {
+    const popupContainer = new BaseComponent({
+      tag: "div",
+      className: styles$1.popupContainer,
+    });
+
+    const text = this.addText(this.text);
+    const closeButton = this.addCloseButton();
+
+    popupContainer.appendChildren([text, closeButton]);
+    this.append(popupContainer);
+  }
+
+  addCloseButton() {
+    const popupButton = new BaseComponent({
+      tag: "button",
+      className: styles$1.popupButton,
+    });
+
+    popupButton.addListener("click", () => {
+      this.closeModal();
+    });
+
+    return popupButton;
+  }
+
+  addListeners() {
+    this.addListener("click", (event) => {
+      if (event.target === this.getNode()) {
+        this.closeModal();
+      }
+    });
+  }
+
+  closeModal() {
+    this.getNode().close();
+    this.onClose?.();
+    this.getNode().remove();
+  }
+  addText(text) {
+    const p = new BaseComponent({ tag: "p", text: text });
+    return p;
   }
 }
 
@@ -2003,17 +2030,22 @@ class Main extends BaseComponent {
    * @param {string} className
    */
   constructor() {
-    super({ tag: "main", className: styles$1.main });
+    super({ tag: "main", className: styles$2.main });
+
     this.getNode();
+    this.subscribeToState();
+
     this.addInvitation();
     this.addTemplateSelector();
     this.addControls();
-    this.controlsManager = new ControlButtonsController(
+
+    this.controlButtonsController = new ControlButtonsController(
       stateMachine,
       this.controls,
       levelConfig,
     );
-    this.templateManager = new TemplateController(
+
+    this.templateController = new TemplateController(
       levelConfig,
       stateMachine,
       this.templateSelector,
@@ -2026,7 +2058,7 @@ class Main extends BaseComponent {
   addInvitation() {
     this.h2 = new BaseComponent({
       tag: "h2",
-      className: styles$1.invitation,
+      className: styles$2.invitation,
       text: "Hi! Do you wanna choose a game? ",
     });
     this.append(this.h2);
@@ -2044,11 +2076,28 @@ class Main extends BaseComponent {
 
   addGameBoard() {
     this.gameBoard = new GameBoard(
-      this.templateManager,
+      this.templateController,
       this.cellController,
       stateMachine,
     );
     this.append(this.gameBoard);
+  }
+
+  addModal() {
+    this.modal = new Modal({
+      text: `That's a WIN! Congrats!`,
+      onClose: () => this.modal.getNode().close(),
+    });
+    document.body.appendChild(this.modal.getNode());
+    this.modal.getNode().showModal();
+  }
+
+  subscribeToState() {
+    stateMachine.subscribe("stateChanged", ({ state }) => {
+      if (state === "stateGameOver") {
+        this.addModal();
+      }
+    });
   }
 }
 
@@ -2072,4 +2121,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-D3bNEvXy.js.map
+//# sourceMappingURL=index-DPUm0OLU.js.map
