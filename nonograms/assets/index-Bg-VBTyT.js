@@ -1837,12 +1837,6 @@ class TemplateController {
     this.setEventListener();
   }
 
-  initTemplate() {
-    this.stateMachine.transition("chooseTemplate", {
-      template: this.selectedTemplate,
-    });
-  }
-
   setEventListener() {
     this.selector.addEventListeners("change", (event) => {
       const chosenTemplate = event.target.value;
@@ -1959,9 +1953,9 @@ class CellController {
   }
 }
 
-const dialog = "_dialog_3vspu_1";
-const popupContainer = "_popupContainer_3vspu_19";
-const popupButton = "_popupButton_3vspu_26";
+const dialog = "_dialog_ca2ze_1";
+const popupContainer = "_popupContainer_ca2ze_15";
+const popupButton = "_popupButton_ca2ze_22";
 const styles$1 = {
 	dialog: dialog,
 	popupContainer: popupContainer,
@@ -2121,4 +2115,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-DnG-nOfo.js.map
+//# sourceMappingURL=index-Bg-VBTyT.js.map

@@ -449,11 +449,7 @@ summary {
   color: #2e8e95;
   text-align: center;
   font-weight: 900;
-}._dialog_3vspu_1 {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+}._dialog_ca2ze_1 {
   width: 100%;
   max-width: 400px;
   background: white;
@@ -463,21 +459,33 @@ summary {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   z-index: 1000;
 }
-._dialog_3vspu_1::backdrop {
+._dialog_ca2ze_1::backdrop {
   background: rgba(0, 0, 0, 0.5);
 }
 
-._popupContainer_3vspu_19 {
+._popupContainer_ca2ze_15 {
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 10px;
 }
 
-._popupButton_3vspu_26 {
+._popupButton_ca2ze_22 {
+  cursor: pointer;
+  margin: 5px;
+  padding: 5px 8px;
+  border: none;
   border-radius: 10px;
+  background-color: rgba(255, 252, 252, 0.5607843137);
+  text-align: center;
+  width: 100px;
+  background-color: antiquewhite;
 }
-._popupButton_3vspu_26::after {
+._popupButton_ca2ze_22:hover {
+  color: #2e8e95;
+  background-color: rgba(254, 242, 242, 0.7882352941);
+}
+._popupButton_ca2ze_22::after {
   content: "X";
 }._wrapper_17fv9_1 {
   display: flex;
