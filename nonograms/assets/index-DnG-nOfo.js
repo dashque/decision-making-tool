@@ -543,7 +543,7 @@ class GameBoard extends BaseComponent {
 
     this.stateMachine.subscribe("stateChanged", ({ state }) => {
       if (state === "stateGameOver") {
-        this.clearGameBoard();
+        this.updateGameBoard(this.stateMachine.getContext().template);
       }
     });
 
@@ -2121,4 +2121,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-DPUm0OLU.js.map
+//# sourceMappingURL=index-DnG-nOfo.js.map
