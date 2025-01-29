@@ -1526,9 +1526,8 @@ const stateMachine = createMachine({
       getRandomGame: {
         target: "stateWaitingForInput",
         action({ data, context: { updateContext } }) {
-          const randomTemplate = fisherYatesShuffle(data.data.template)[0];
-          updateContext({ template: randomTemplate });
-          console.log(`random game: ${randomTemplate}`);
+          updateContext({ template: data.template });
+          console.log(`random game: ${data.template.name}`);
         },
       },
       chooseTemplate: {
@@ -1565,13 +1564,19 @@ const stateMachine = createMachine({
           console.log("Select template", getContext());
         },
       },
+      getRandomGame: {
+        target: "stateWaitingForInput",
+        action({ data, context: { updateContext } }) {
+          updateContext({ template: data.template });
+          console.log(`random game: ${data.template.name}`);
+        },
+      },
     },
     getRandomGame: {
       target: "stateWaitingForInput",
       action({ data, context: { updateContext } }) {
-        const randomTemplate = fisherYatesShuffle(data.data.template)[0];
-        updateContext({ template: randomTemplate });
-        console.log(`random game: ${randomTemplate}`);
+        updateContext({ template: data.template });
+        console.log(`random game: ${data.template.name}`);
       },
     },
   },
@@ -1588,9 +1593,8 @@ const stateMachine = createMachine({
       getRandomGame: {
         target: "stateWaitingForInput",
         action({ data, context: { updateContext } }) {
-          const randomTemplate = fisherYatesShuffle(data.data.template)[0];
-          updateContext({ template: randomTemplate });
-          console.log(`random game: ${randomTemplate}`);
+          updateContext({ template: data.template });
+          console.log(`random game: ${data.template.name}`);
         },
       },
       chooseTemplate: {
@@ -1640,9 +1644,9 @@ const stateMachine = createMachine({
     transitions: {
       getRandomGame: {
         target: "stateWaitingForInput",
-        action({ data, context: { getContext, updateContext } }) {
-          updateContext({ data: data.template });
-          console.log(`random game:`, getContext());
+        action({ data, context: { updateContext } }) {
+          updateContext({ template: data.template });
+          console.log(`random game: ${data.template.name}`);
         },
       },
       continue: {
@@ -1664,6 +1668,10 @@ const stateMachine = createMachine({
       restart: {
         target: "stateInitializing",
       },
+      cellClick: {
+        target: "statePlaying",
+        action: cellClickAction,
+      },
       chooseTemplate: {
         target: "statePlaying",
         action({ data, context: { getContext, updateContext } }) {
@@ -1674,9 +1682,8 @@ const stateMachine = createMachine({
       getRandomGame: {
         target: "stateWaitingForInput",
         action({ data, context: { updateContext } }) {
-          const randomTemplate = fisherYatesShuffle(data.data.template)[0];
-          updateContext({ template: randomTemplate });
-          console.log(`random game: ${randomTemplate}`);
+          updateContext({ template: data.template });
+          console.log(`random game: ${data.template.name}`);
         },
       },
     },
@@ -1762,47 +1769,37 @@ class ControlButtonsController {
     buttons.themeChanger.addListener("click", () => {
       document.body.classList.toggle("darkTheme");
     });
-    buttons.randomGameButton.addListener(
-      "click",
-      ({ context: { updateContext } }) => {
-        const randomTemplate = fisherYatesShuffle([
-          ...this.config.easy,
-          ...this.config.medium,
-          ...this.config.hard,
-        ])[0];
-        updateContext({ template: randomTemplate });
-        this.stateMachine.transition("getRandomGame", {
-          data: randomTemplate,
-        });
-      },
-    );
+
+    buttons.randomGameButton.addListener("click", () => {
+      const randomTemplates = fisherYatesShuffle([
+        ...this.config.easy,
+        ...this.config.medium,
+        ...this.config.hard,
+      ])[0];
+
+      this.stateMachine.getContext().template;
+
+      this.stateMachine.transition("getRandomGame", {
+        template: randomTemplates,
+      });
+    });
+
     buttons.resetGameButton.addListener("click", () => {
       this.stateMachine.transition("reset");
     });
+
     buttons.saveGameButton.addListener("click", () => {
       this.stateMachine.transition("saveGame");
     });
+
     buttons.continueGameButton.addListener("click", () => {
       this.stateMachine.transition("continue", {});
     });
+
     buttons.solutionButton.addListener("click", () => {
       this.stateMachine.transition("solution");
     });
   }
-
-  // handleContinueGame() {
-  //   if (this.stateMachine.value === "statePlaying") {
-  //     this.stateMachine.transition("statePaused");
-  //   } else if (this.stateMachine.value === "stateSaving") {
-  //     this.stateMachine.transition("continue");
-  //   }
-  // }
-
-  // handleSolution() {
-  //   if (this.stateMachine.value === "statePlaying") {
-  //     this.stateMachine.transition("solution");
-  //   }
-  // }
 }
 
 class TemplateSelector extends BaseComponent {
@@ -2080,4 +2077,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-DFaSy3fq.js.map
+//# sourceMappingURL=index-Kgl0D1SM.js.map
