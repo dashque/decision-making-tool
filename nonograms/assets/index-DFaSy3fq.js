@@ -541,8 +541,12 @@ class GameBoard extends BaseComponent {
     this.verticalGrid = this.addVerticalGrid();
     this.board = this.addBoard();
 
-    this.stateMachine.subscribe("stateChanged", ({ state }) => {
-      if (state === "stateGameOver") {
+    this.stateMachine.subscribe("stateChanged", ({ trigger, state }) => {
+      if (
+        state === "stateGameOver" ||
+        trigger === "reset" ||
+        trigger === "getRandomGame"
+      ) {
         this.updateGameBoard(this.stateMachine.getContext().template);
       }
     });
@@ -574,16 +578,13 @@ class GameBoard extends BaseComponent {
   }
 
   addCells() {
-    const cells = [];
     for (let y = 0; y < this.width; y += 1) {
       for (let x = 0; x < this.width; x += 1) {
         const cell = new Cell();
         this.addCellEventListeners(cell, x, y);
         this.board.append(cell);
-        cells.push(cell);
       }
     }
-    this.cellController.setCells(cells);
   }
 
   addVerticalHints(hints) {
@@ -645,11 +646,11 @@ class GameBoard extends BaseComponent {
 
   addCellEventListeners(cell, x, y) {
     cell.onRightClick((event) => {
-      this.cellController.onClick(cell.getNode(), x, y, event);
+      this.cellController.onClick(x, y, event);
     });
 
     cell.onLeftClick((event) => {
-      this.cellController.onClick(cell.getNode(), x, y, event);
+      this.cellController.onClick(x, y, event);
     });
   }
 
@@ -665,7 +666,6 @@ class GameBoard extends BaseComponent {
     this.clearGameBoard();
 
     this.width = selectedTemplate.size;
-    this.cellController.setTemplate(selectedTemplate);
     this.board.addClass(styles$3[selectedTemplate.difficulty]);
     this.addCells();
     this.addVerticalHints(selectedTemplate.verticalHints);
@@ -1438,6 +1438,54 @@ const levelConfig = {
   ],
 };
 
+const getCorrectCellsCount = (matrix) => {
+  let correctCellsCount = 0;
+  for (let y = 0; y < matrix.length; y += 1) {
+    for (let x = 0; x < matrix[y].length; x += 1) {
+      if (matrix[y][x] === 1) {
+        correctCellsCount += 1;
+      }
+    }
+  }
+  return correctCellsCount;
+};
+
+const hasIncorrectSelections = (selectedCells) => {
+  return selectedCells.some((cell) => !cell.isCorrect);
+};
+
+const getExistingIndex = (selectedCells, x, y) =>
+  selectedCells.findIndex((selected) => selected.x === x && selected.y === y);
+
+const checkIfIsWin = (matrix, selectedCells) => {
+  return (
+    selectedCells.filter((cell) => cell.isCorrect).length ===
+      getCorrectCellsCount(matrix) && !hasIncorrectSelections(selectedCells)
+  );
+};
+
+function cellClickAction({ data: { x, y }, context: { getContext } }) {
+  const {
+    template: { matrix },
+    selectedCells,
+  } = getContext();
+  const isCorrect = matrix[y][x] === 1;
+
+  console.log(`click at [${x}, ${y}], isCorrect: ${isCorrect}`);
+
+  const existingIndex = getExistingIndex(selectedCells, x, y);
+
+  if (existingIndex !== -1) {
+    selectedCells.splice(existingIndex, 1);
+  } else {
+    selectedCells.push({ x, y, isCorrect });
+  }
+
+  if (checkIfIsWin(matrix, selectedCells)) {
+    this.transition("win");
+  }
+}
+
 /**
  * @typedef {Object} StateDef
  * @property {Object} actions - object of actions for the state
@@ -1458,6 +1506,7 @@ const stateMachine = createMachine({
     score: 0,
     history: [],
     id: "Reviewer 1",
+    selectedCells: [],
     matrixState: [],
   },
   stateInitializing: {
@@ -1489,23 +1538,9 @@ const stateMachine = createMachine({
           console.log("Select template");
         },
       },
-      //TODO remove it?
-      correctClick: {
+      cellClick: {
         target: "statePlaying",
-        action({ data, context: { getContext, updateContext } }) {
-          console.log(`Correct click at [${data.x}, ${data.y}]`);
-          const { score } = getContext();
-          updateContext({ score: score + 1 });
-        },
-      },
-      //TODO remove it?
-      incorrectClick: {
-        target: "statePlaying",
-        action({ data, context: { getContext, updateContext } }) {
-          console.log(`Incorrect click at [${data.x}, ${data.y}]`);
-          const { score } = getContext();
-          updateContext({ score: score - 1 });
-        },
+        action: cellClickAction,
       },
     },
   },
@@ -1519,21 +1554,9 @@ const stateMachine = createMachine({
       },
     },
     transitions: {
-      correctClick: {
+      cellClick: {
         target: "statePlaying",
-        action({ data, context: { getContext, updateContext } }) {
-          console.log(`Correct click at [${data.x}, ${data.y}]`);
-          const { score } = getContext();
-          updateContext({ score: score + 1 });
-        },
-      },
-      incorrectClick: {
-        target: "statePlaying",
-        action({ data, context: { getContext, updateContext } }) {
-          console.log(`Incorrect click at [${data.x}, ${data.y}]`);
-          const { score } = getContext();
-          updateContext({ score: score - 1 });
-        },
+        action: cellClickAction,
       },
       chooseTemplate: {
         target: "statePlaying",
@@ -1553,12 +1576,11 @@ const stateMachine = createMachine({
     },
   },
   statePlaying: {
-    // TODO template становится undefined при первом клике на клетку, если убрать проверки, что то не то апдейчу
     actions: {
-      onEnter({ prevState, trigger, data, context: { getContext } }) {
+      onEnter({ prevState, trigger, context: { getContext } }) {
         console.log(`Enter: Playing ${prevState} by ${trigger}`, getContext());
       },
-      onExit({ data, context: { getContext, updateContext } }) {
+      onExit({ context: { getContext } }) {
         console.log(`Exit: Playing`, getContext());
       },
     },
@@ -1578,21 +1600,9 @@ const stateMachine = createMachine({
           console.log("Select template", getContext());
         },
       },
-      correctClick: {
+      cellClick: {
         target: "statePlaying",
-        action({ data, context: { getContext, updateContext } }) {
-          console.log(`Correct click at [${data.x}, ${data.y}]`);
-          const { score } = getContext();
-          updateContext({ score: score + 1 });
-        },
-      },
-      incorrectClick: {
-        target: "statePlaying",
-        action({ data, context: { getContext, updateContext } }) {
-          console.log(`Incorrect click at [${data.x}, ${data.y}]`);
-          const { score } = getContext();
-          updateContext({ score: score - 1 });
-        },
+        action: cellClickAction,
       },
       win: {
         target: "stateGameOver",
@@ -1601,9 +1611,9 @@ const stateMachine = createMachine({
         },
       },
       reset: {
-        target: "stateWaitingForInput",
+        target: "statePlaying",
         action({ context: { getContext, updateContext } }) {
-          updateContext({ progress: null });
+          updateContext({ score: 0, progress: null });
           console.log(`Reset`, getContext());
         },
       },
@@ -1630,10 +1640,9 @@ const stateMachine = createMachine({
     transitions: {
       getRandomGame: {
         target: "stateWaitingForInput",
-        action({ data, context: { updateContext } }) {
-          const randomTemplate = fisherYatesShuffle(data.data.template)[0];
-          updateContext({ template: randomTemplate });
-          console.log(`random game: ${randomTemplate}`);
+        action({ data, context: { getContext, updateContext } }) {
+          updateContext({ data: data.template });
+          console.log(`random game:`, getContext());
         },
       },
       continue: {
@@ -1753,11 +1762,20 @@ class ControlButtonsController {
     buttons.themeChanger.addListener("click", () => {
       document.body.classList.toggle("darkTheme");
     });
-    buttons.randomGameButton.addListener("click", () => {
-      this.stateMachine.transition("getRandomGame", {
-        data: [...this.config.easy, ...this.config.medium, ...this.config.hard],
-      });
-    });
+    buttons.randomGameButton.addListener(
+      "click",
+      ({ context: { updateContext } }) => {
+        const randomTemplate = fisherYatesShuffle([
+          ...this.config.easy,
+          ...this.config.medium,
+          ...this.config.hard,
+        ])[0];
+        updateContext({ template: randomTemplate });
+        this.stateMachine.transition("getRandomGame", {
+          data: randomTemplate,
+        });
+      },
+    );
     buttons.resetGameButton.addListener("click", () => {
       this.stateMachine.transition("reset");
     });
@@ -1884,78 +1902,21 @@ class TemplateController {
 }
 
 class CellController {
-  constructor(config, stateMachine) {
+  constructor(stateMachine) {
     this.stateMachine = stateMachine;
-    this.config = config;
-    this.matrix = [];
-    this.selectedCells = [];
-    this.cells = [];
-    this.stateMachine.subscribe("stateChanged", () => {
-      this.selectedTemplate = this.stateMachine.getContext().template;
-    });
   }
 
-  setCells(cells) {
-    this.cells = cells;
-  }
-
-  setTemplate(template) {
-    this.selectedTemplate = template;
-    this.matrix = template.matrix;
-  }
-
-  onClick(cell, x, y, event) {
+  onClick(x, y, event) {
     if (event.button !== 0) {
       return;
     }
-
-    const isCorrect = this.matrix[y][x] === 1;
-
-    const existingIndex = this.selectedCells.findIndex(
-      (selected) => selected.x === x && selected.y === y,
-    );
-
-    if (existingIndex !== -1) {
-      this.selectedCells.splice(existingIndex, 1);
-    } else {
-      this.selectedCells.push({ x, y, isCorrect });
-    }
-
-    const allCellsCorrect =
-      this.selectedCells.filter((cell) => cell.isCorrect).length ===
-        this.getCorrectCellsCount() && !this.hasIncorrectSelections();
-
-    if (allCellsCorrect) {
-      this.stateMachine.transition("win");
-    } else if (isCorrect) {
-      this.stateMachine.transition("correctClick", { x, y });
-    } else {
-      this.stateMachine.transition("incorrectClick", { x, y });
-    }
-  }
-
-  hasIncorrectSelections() {
-    return this.selectedCells.some((cell) => !cell.isCorrect);
-  }
-  getCorrectCellsCount() {
-    let correctCellsCount = 0;
-    for (let y = 0; y < this.matrix.length; y += 1) {
-      for (let x = 0; x < this.matrix[y].length; x += 1) {
-        if (this.matrix[y][x] === 1) {
-          correctCellsCount += 1;
-        }
-      }
-    }
-    return correctCellsCount;
-  }
-  reset() {
-    this.selectedCells = [];
+    this.stateMachine.transition("cellClick", { x, y });
   }
 }
 
-const dialog = "_dialog_ca2ze_1";
-const popupContainer = "_popupContainer_ca2ze_15";
-const popupButton = "_popupButton_ca2ze_22";
+const dialog = "_dialog_1gdtu_1";
+const popupContainer = "_popupContainer_1gdtu_15";
+const popupButton = "_popupButton_1gdtu_22";
 const styles$1 = {
 	dialog: dialog,
 	popupContainer: popupContainer,
@@ -2045,7 +2006,7 @@ class Main extends BaseComponent {
       this.templateSelector,
     );
 
-    this.cellController = new CellController(levelConfig, stateMachine);
+    this.cellController = new CellController(stateMachine);
 
     this.addGameBoard();
   }
@@ -2078,12 +2039,16 @@ class Main extends BaseComponent {
   }
 
   addModal() {
+    // TODO костыль :/
+    if (this.modal) {
+      this.modal.destroy();
+    }
     this.modal = new Modal({
       text: `That's a WIN! Congrats!`,
       onClose: () => this.modal.getNode().close(),
     });
     document.body.appendChild(this.modal.getNode());
-    this.modal.getNode().showModal();
+    return this.modal.getNode().showModal();
   }
 
   subscribeToState() {
@@ -2115,4 +2080,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-Bg-VBTyT.js.map
+//# sourceMappingURL=index-DFaSy3fq.js.map

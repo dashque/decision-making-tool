@@ -449,7 +449,7 @@ summary {
   color: #2e8e95;
   text-align: center;
   font-weight: 900;
-}._dialog_ca2ze_1 {
+}._dialog_1gdtu_1 {
   width: 100%;
   max-width: 400px;
   background: white;
@@ -459,18 +459,18 @@ summary {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   z-index: 1000;
 }
-._dialog_ca2ze_1::backdrop {
+._dialog_1gdtu_1::backdrop {
   background: rgba(0, 0, 0, 0.5);
 }
 
-._popupContainer_ca2ze_15 {
+._popupContainer_1gdtu_15 {
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 10px;
 }
 
-._popupButton_ca2ze_22 {
+._popupButton_1gdtu_22 {
   cursor: pointer;
   margin: 5px;
   padding: 5px 8px;
@@ -479,13 +479,13 @@ summary {
   background-color: rgba(255, 252, 252, 0.5607843137);
   text-align: center;
   width: 100px;
-  background-color: antiquewhite;
+  background-color: rgba(250, 215, 236, 0.585);
 }
-._popupButton_ca2ze_22:hover {
+._popupButton_1gdtu_22:hover {
   color: #2e8e95;
   background-color: rgba(254, 242, 242, 0.7882352941);
 }
-._popupButton_ca2ze_22::after {
+._popupButton_1gdtu_22::after {
   content: "X";
 }._wrapper_17fv9_1 {
   display: flex;
