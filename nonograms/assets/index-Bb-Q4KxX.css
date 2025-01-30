@@ -367,7 +367,7 @@ summary {
   line-height: 1;
   color: black;
   text-align: center;
-}._gameboardContainer_1ewyr_1 {
+}._gameboardContainer_1r0oo_1 {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
@@ -376,29 +376,29 @@ summary {
   font-size: 12px;
 }
 
-._gameBoard_1ewyr_10 {
+._gameBoard_1r0oo_10 {
   display: grid;
   align-items: center;
   width: 100%;
   margin: 0 auto;
 }
 
-._easy_1ewyr_17 {
+._easy_1r0oo_17 {
   grid-template-columns: repeat(5, minmax(30px, 1fr));
   grid-template-rows: repeat(5, minmax(30px, 1fr));
 }
 
-._medium_1ewyr_22 {
+._medium_1r0oo_22 {
   grid-template-columns: repeat(10, minmax(24px, 1fr));
   grid-template-rows: repeat(10, minmax(21px, 1fr));
 }
 
-._hard_1ewyr_27 {
+._hard_1r0oo_27 {
   grid-template-columns: repeat(15, minmax(21px, 1fr));
   grid-template-rows: repeat(15, minmax(19px, 1fr));
 }
 
-._horizontalGrid_1ewyr_32 {
+._horizontalGrid_1r0oo_32 {
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -407,14 +407,14 @@ summary {
   height: fit-content;
 }
 
-._verticalGrid_1ewyr_41 {
+._verticalGrid_1r0oo_41 {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: flex-end;
 }
 
-._gap_1ewyr_48 {
+._gap_1r0oo_48 {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -422,10 +422,9 @@ summary {
   height: 100%;
 }
 
-._hintHorizontal_1ewyr_56 {
+._hintHorizontal_1r0oo_56 {
   display: flex;
   flex-direction: column;
-  gap: 5px;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -435,7 +434,7 @@ summary {
   background-color: rgba(46, 142, 149, 0.3882352941);
 }
 
-._hintVertical_1ewyr_69 {
+._hintVertical_1r0oo_68 {
   display: flex;
   flex-direction: row;
   gap: 7px;

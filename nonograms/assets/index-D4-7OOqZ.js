@@ -495,7 +495,11 @@ class Cell extends BaseComponent {
     this.removeClass(styles$4.marked);
   }
   setBackground() {
-    this.toggleClass(styles$4.filled, styles$4.empty);
+    if (this.checkContainClass(styles$4.marked)) {
+      this.toggleClass(styles$4.filled, styles$4.marked);
+    } else {
+      this.toggleClass(styles$4.filled, styles$4.empty);
+    }
   }
 
   setMark() {
@@ -511,16 +515,16 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameboardContainer = "_gameboardContainer_1ewyr_1";
-const gameBoard = "_gameBoard_1ewyr_10";
-const easy = "_easy_1ewyr_17";
-const medium = "_medium_1ewyr_22";
-const hard = "_hard_1ewyr_27";
-const horizontalGrid = "_horizontalGrid_1ewyr_32";
-const verticalGrid = "_verticalGrid_1ewyr_41";
-const gap = "_gap_1ewyr_48";
-const hintHorizontal = "_hintHorizontal_1ewyr_56";
-const hintVertical = "_hintVertical_1ewyr_69";
+const gameboardContainer = "_gameboardContainer_1r0oo_1";
+const gameBoard = "_gameBoard_1r0oo_10";
+const easy = "_easy_1r0oo_17";
+const medium = "_medium_1r0oo_22";
+const hard = "_hard_1r0oo_27";
+const horizontalGrid = "_horizontalGrid_1r0oo_32";
+const verticalGrid = "_verticalGrid_1r0oo_41";
+const gap = "_gap_1r0oo_48";
+const hintHorizontal = "_hintHorizontal_1r0oo_56";
+const hintVertical = "_hintVertical_1r0oo_68";
 const styles$3 = {
 	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
@@ -1485,8 +1489,6 @@ function cellClickAction({
   } = getContext();
   const isCorrect = matrix[y][x] === 1;
 
-  // console.log(`click at [${x}, ${y}], isCorrect: ${isCorrect}`);
-
   const existingIndex = getExistingIndex(selectedCells, x, y);
 
   if (existingIndex !== -1) {
@@ -1506,8 +1508,6 @@ function cellClickAction({
     this.transition("win");
 
     updateContext({ selectedCells: [] });
-    localStorage.removeItem("selectedCells");
-    return;
   }
 }
 
@@ -2180,4 +2180,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-BxObMU5h.js.map
+//# sourceMappingURL=index-D4-7OOqZ.js.map
