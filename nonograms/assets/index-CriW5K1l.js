@@ -2114,7 +2114,6 @@ class AudioController {
     }
   }
   playAudio(audioName) {
-    console.log("~~~ Play");
     if (this.#sounds[audioName]) {
       this.#sounds[audioName].getNode().play();
     }
@@ -2230,4 +2229,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-BO9dgPCg.js.map
+//# sourceMappingURL=index-CriW5K1l.js.map
