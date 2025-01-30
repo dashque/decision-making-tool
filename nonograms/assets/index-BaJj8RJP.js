@@ -217,11 +217,11 @@ class BaseComponent {
   }
 }
 
-const footer = "_footer_pz4kx_1";
-const ghLink = "_ghLink_pz4kx_10";
-const rssLogoLink = "_rssLogoLink_pz4kx_19";
-const rssLogoImg = "_rssLogoImg_pz4kx_25";
-const year = "_year_pz4kx_30";
+const footer = "_footer_i1jyf_1";
+const ghLink = "_ghLink_i1jyf_10";
+const rssLogoLink = "_rssLogoLink_i1jyf_19";
+const rssLogoImg = "_rssLogoImg_i1jyf_25";
+const year = "_year_i1jyf_30";
 const styles$7 = {
 	footer: footer,
 	ghLink: ghLink,
@@ -289,9 +289,9 @@ class Footer extends BaseComponent {
   }
 }
 
-const header = "_header_m8jl6_1";
-const h1 = "_h1_m8jl6_10";
-const logoLink = "_logoLink_m8jl6_18";
+const header = "_header_j839k_1";
+const h1 = "_h1_j839k_10";
+const logoLink = "_logoLink_j839k_18";
 const styles$6 = {
 	header: header,
 	h1: h1,
@@ -347,15 +347,15 @@ class Header extends BaseComponent {
   addTimer() {}
 }
 
-const gameControls = "_gameControls_ah2hk_1";
-const randomBtn = "_randomBtn_ah2hk_19";
-const resetBtn = "_resetBtn_ah2hk_20";
-const saveBtn = "_saveBtn_ah2hk_21";
-const continueBtn = "_continueBtn_ah2hk_22";
-const solutionBtn = "_solutionBtn_ah2hk_23";
-const selectTemplate = "_selectTemplate_ah2hk_44";
-const option = "_option_ah2hk_63";
-const inactive = "_inactive_ah2hk_69";
+const gameControls = "_gameControls_x475m_1";
+const randomBtn = "_randomBtn_x475m_19";
+const resetBtn = "_resetBtn_x475m_20";
+const saveBtn = "_saveBtn_x475m_21";
+const continueBtn = "_continueBtn_x475m_22";
+const solutionBtn = "_solutionBtn_x475m_23";
+const selectTemplate = "_selectTemplate_x475m_44";
+const option = "_option_x475m_63";
+const inactive = "_inactive_x475m_69";
 const styles$5 = {
 	gameControls: gameControls,
 	randomBtn: randomBtn,
@@ -511,16 +511,16 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameboardContainer = "_gameboardContainer_1o712_1";
-const gameBoard = "_gameBoard_1o712_8";
-const easy = "_easy_1o712_15";
-const medium = "_medium_1o712_20";
-const hard = "_hard_1o712_25";
-const horizontalGrid = "_horizontalGrid_1o712_30";
-const verticalGrid = "_verticalGrid_1o712_39";
-const gap = "_gap_1o712_46";
-const hintHorizontal = "_hintHorizontal_1o712_54";
-const hintVertical = "_hintVertical_1o712_67";
+const gameboardContainer = "_gameboardContainer_1ybnd_1";
+const gameBoard = "_gameBoard_1ybnd_9";
+const easy = "_easy_1ybnd_16";
+const medium = "_medium_1ybnd_21";
+const hard = "_hard_1ybnd_26";
+const horizontalGrid = "_horizontalGrid_1ybnd_31";
+const verticalGrid = "_verticalGrid_1ybnd_40";
+const gap = "_gap_1ybnd_47";
+const hintHorizontal = "_hintHorizontal_1ybnd_55";
+const hintVertical = "_hintVertical_1ybnd_68";
 const styles$3 = {
 	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
@@ -699,8 +699,8 @@ class GameBoard extends BaseComponent {
   }
 }
 
-const main = "_main_e0bqu_1";
-const invitation = "_invitation_e0bqu_11";
+const main = "_main_nqa98_1";
+const invitation = "_invitation_nqa98_11";
 const styles$2 = {
 	main: main,
 	invitation: invitation
@@ -2007,9 +2007,9 @@ class CellController {
   }
 }
 
-const dialog = "_dialog_1gdtu_1";
-const popupContainer = "_popupContainer_1gdtu_15";
-const popupButton = "_popupButton_1gdtu_22";
+const dialog = "_dialog_bo24d_1";
+const popupContainer = "_popupContainer_bo24d_15";
+const popupButton = "_popupButton_bo24d_22";
 const styles$1 = {
 	dialog: dialog,
 	popupContainer: popupContainer,
@@ -2173,4 +2173,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-C6nLq_qH.js.map
+//# sourceMappingURL=index-BaJj8RJP.js.map
