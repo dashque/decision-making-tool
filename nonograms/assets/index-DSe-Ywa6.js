@@ -495,11 +495,7 @@ class Cell extends BaseComponent {
     this.removeClass(styles$4.marked);
   }
   setBackground() {
-    if (this.checkContainClass(styles$4.marked)) {
-      this.toggleClass(styles$4.filled, styles$4.marked);
-    } else {
-      this.toggleClass(styles$4.filled, styles$4.empty);
-    }
+    this.toggleClass(styles$4.filled, styles$4.empty);
   }
 
   setMark() {
@@ -515,16 +511,16 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameboardContainer = "_gameboardContainer_1r0oo_1";
-const gameBoard = "_gameBoard_1r0oo_10";
-const easy = "_easy_1r0oo_17";
-const medium = "_medium_1r0oo_22";
-const hard = "_hard_1r0oo_27";
-const horizontalGrid = "_horizontalGrid_1r0oo_32";
-const verticalGrid = "_verticalGrid_1r0oo_41";
-const gap = "_gap_1r0oo_48";
-const hintHorizontal = "_hintHorizontal_1r0oo_56";
-const hintVertical = "_hintVertical_1r0oo_68";
+const gameboardContainer = "_gameboardContainer_1lkyq_1";
+const gameBoard = "_gameBoard_1lkyq_10";
+const easy = "_easy_1lkyq_17";
+const medium = "_medium_1lkyq_22";
+const hard = "_hard_1lkyq_27";
+const horizontalGrid = "_horizontalGrid_1lkyq_32";
+const verticalGrid = "_verticalGrid_1lkyq_41";
+const gap = "_gap_1lkyq_48";
+const hintHorizontal = "_hintHorizontal_1lkyq_56";
+const hintVertical = "_hintVertical_1lkyq_68";
 const styles$3 = {
 	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
@@ -546,11 +542,17 @@ class GameBoard extends BaseComponent {
    * @param {number} width
    * @param {number} height
    */
-  constructor(templateConroller, cellController, stateMachine) {
+  constructor(
+    templateConroller,
+    cellController,
+    stateMachine,
+    audioController,
+  ) {
     super({ tag: "section", className: styles$3.gameboardContainer });
     this.cellController = cellController;
     this.stateMachine = stateMachine;
     this.templateConroller = templateConroller;
+    this.audioController = audioController;
 
     this.gap = this.addGap();
     this.horizontalGrid = this.addHorizontalGrid();
@@ -1528,7 +1530,6 @@ const stateMachine = createMachine({
     template: levelConfig.easy.find((template) => template.name === "Dog"),
     progress: null,
     time: null,
-    score: 0,
     history: [],
     id: "Reviewer 1",
     selectedCells: [],
@@ -1537,8 +1538,8 @@ const stateMachine = createMachine({
   },
   stateInitializing: {
     actions: {
-      onEnter({ context: { getContext } }) {
-        console.log(`Enter: Initializing`, getContext());
+      onEnter() {
+        console.log(`Enter: Initializing`);
       },
       onExit({ context: { getContext, updateContext } }) {
         updateContext({
@@ -1577,8 +1578,8 @@ const stateMachine = createMachine({
   },
   stateWaitingForInput: {
     actions: {
-      onEnter({ context: { getContext } }) {
-        console.log(`Enter: Waiting for input`, getContext());
+      onEnter() {
+        console.log(`Enter: Waiting for input`);
       },
       onExit({ context: { getContext } }) {
         console.log(` Exit:: Waiting for input`, getContext());
@@ -1619,8 +1620,8 @@ const stateMachine = createMachine({
   },
   statePlaying: {
     actions: {
-      onEnter({ prevState, trigger, context: { getContext } }) {
-        console.log(`Enter: Playing ${prevState} by ${trigger}`, getContext());
+      onEnter({ prevState, trigger }) {
+        console.log(`Enter: Playing ${prevState} by ${trigger}`);
       },
       onExit({ context: { getContext } }) {
         console.log(`Exit: Playing`, getContext());
@@ -1639,12 +1640,12 @@ const stateMachine = createMachine({
       },
       chooseTemplate: {
         target: "statePlaying",
-        action({ data, context: { getContext, updateContext } }) {
+        action({ data, context: { updateContext } }) {
           updateContext({
             template: data.template,
             matrixState: data.template.matrix,
           });
-          console.log("Select template", getContext());
+          console.log("Select template");
         },
       },
       cellClick: {
@@ -1653,15 +1654,15 @@ const stateMachine = createMachine({
       },
       win: {
         target: "stateGameOver",
-        action({ context: { getContext } }) {
-          console.log("Win", getContext());
+        action() {
+          console.log("Win");
         },
       },
       reset: {
         target: "statePlaying",
-        action({ context: { getContext, updateContext } }) {
-          updateContext({ score: 0, progress: null });
-          console.log(`Reset`, getContext());
+        action({ context: { updateContext } }) {
+          updateContext({ progress: null });
+          console.log(`Reset`);
         },
       },
       saveGame: {
@@ -1680,8 +1681,8 @@ const stateMachine = createMachine({
   },
   stateSolution: {
     actions: {
-      onEnter({ prevState, trigger, context: { getContext } }) {
-        console.log(`Enter: Playing ${prevState} by ${trigger}`, getContext());
+      onEnter({ prevState, trigger }) {
+        console.log(`Enter: Playing ${prevState} by ${trigger}`);
       },
       onExit({ context: { getContext } }) {
         console.log(`Exit: Playing`, getContext());
@@ -1691,7 +1692,7 @@ const stateMachine = createMachine({
       reset: {
         target: "statePlaying",
         action({ context: { getContext, updateContext } }) {
-          updateContext({ score: 0, progress: null });
+          updateContext({ progress: null });
           console.log(`Reset`, getContext());
         },
       },
@@ -1734,9 +1735,8 @@ const stateMachine = createMachine({
   },
   stateGameOver: {
     actions: {
-      onEnter({ context: { getContext, updateContext } }) {
-        updateContext({ score: 0 });
-        console.log(`Enter: Game over`, getContext());
+      onEnter() {
+        console.log(`Enter: Game over`);
       },
     },
     transitions: {
@@ -2002,14 +2002,18 @@ class TemplateController {
 }
 
 class CellController {
-  constructor(stateMachine) {
+  constructor(stateMachine, audioController) {
     this.stateMachine = stateMachine;
+    this.audioController = audioController;
   }
 
   onClick(x, y, event) {
     if (event.button !== 0) {
+      this.audioController.playAudio("click");
       return;
     }
+    this.audioController.playAudio("click");
+
     this.stateMachine.transition("cellClick", { x, y });
   }
 }
@@ -2078,6 +2082,45 @@ class Modal extends BaseComponent {
   }
 }
 
+class Audio extends BaseComponent {
+  constructor(src, preloadValue) {
+    super({ tag: "audio", className: "" });
+
+    this.getNode();
+    this.setSrc(src);
+    this.setPreload(preloadValue);
+    this.appendToParent(document.body);
+  }
+  setSrc(src) {
+    this.getNode().src = src;
+  }
+  setPreload(value) {
+    this.getNode().preload = value;
+  }
+}
+
+const audioConfig = {
+  click: "../../../public/audio/click2.wav",
+  win: "../../../public/audio/win.mp3",
+};
+
+class AudioController {
+  #sounds = {};
+
+  constructor(audioConfig) {
+    for (const [name, src] of Object.entries(audioConfig)) {
+      const audioElem = new Audio(src, "auto");
+      this.#sounds[name] = audioElem;
+    }
+  }
+  playAudio(audioName) {
+    console.log("~~~ Play");
+    if (this.#sounds[audioName]) {
+      this.#sounds[audioName].getNode().play();
+    }
+  }
+}
+
 class Main extends BaseComponent {
   /**
    *
@@ -2094,6 +2137,8 @@ class Main extends BaseComponent {
     this.addTemplateSelector();
     this.addControls();
 
+    this.audioController = new AudioController(audioConfig);
+
     this.controlButtonsController = new ControlButtonsController(
       stateMachine,
       this.controls,
@@ -2106,7 +2151,10 @@ class Main extends BaseComponent {
       this.templateSelector,
     );
 
-    this.cellController = new CellController(stateMachine);
+    this.cellController = new CellController(
+      stateMachine,
+      this.audioController,
+    );
 
     this.addGameBoard();
   }
@@ -2134,6 +2182,7 @@ class Main extends BaseComponent {
       this.templateController,
       this.cellController,
       stateMachine,
+      this.audioController,
     );
     this.append(this.gameBoard);
   }
@@ -2148,6 +2197,7 @@ class Main extends BaseComponent {
       onClose: () => this.modal.getNode().close(),
     });
     document.body.appendChild(this.modal.getNode());
+    this.audioController.playAudio("win");
     return this.modal.getNode().showModal();
   }
 
@@ -2180,4 +2230,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-D4-7OOqZ.js.map
+//# sourceMappingURL=index-DSe-Ywa6.js.map
