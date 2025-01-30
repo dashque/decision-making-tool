@@ -217,11 +217,11 @@ class BaseComponent {
   }
 }
 
-const footer = "_footer_at3v2_1";
-const ghLink = "_ghLink_at3v2_10";
-const rssLogoLink = "_rssLogoLink_at3v2_18";
-const rssLogoImg = "_rssLogoImg_at3v2_23";
-const year = "_year_at3v2_27";
+const footer = "_footer_pz4kx_1";
+const ghLink = "_ghLink_pz4kx_10";
+const rssLogoLink = "_rssLogoLink_pz4kx_19";
+const rssLogoImg = "_rssLogoImg_pz4kx_25";
+const year = "_year_pz4kx_30";
 const styles$7 = {
 	footer: footer,
 	ghLink: ghLink,
@@ -289,9 +289,9 @@ class Footer extends BaseComponent {
   }
 }
 
-const header = "_header_1n07p_1";
-const h1 = "_h1_1n07p_10";
-const logoLink = "_logoLink_1n07p_18";
+const header = "_header_m8jl6_1";
+const h1 = "_h1_m8jl6_10";
+const logoLink = "_logoLink_m8jl6_18";
 const styles$6 = {
 	header: header,
 	h1: h1,
@@ -347,23 +347,23 @@ class Header extends BaseComponent {
   addTimer() {}
 }
 
-const gameControls = "_gameControls_1pzaw_1";
-const selectTemplate = "_selectTemplate_1pzaw_19";
-const randomBtn = "_randomBtn_1pzaw_20";
-const resetBtn = "_resetBtn_1pzaw_21";
-const saveBtn = "_saveBtn_1pzaw_22";
-const continueBtn = "_continueBtn_1pzaw_23";
-const solutionBtn = "_solutionBtn_1pzaw_24";
-const option = "_option_1pzaw_54";
-const inactive = "_inactive_1pzaw_60";
+const gameControls = "_gameControls_ah2hk_1";
+const randomBtn = "_randomBtn_ah2hk_19";
+const resetBtn = "_resetBtn_ah2hk_20";
+const saveBtn = "_saveBtn_ah2hk_21";
+const continueBtn = "_continueBtn_ah2hk_22";
+const solutionBtn = "_solutionBtn_ah2hk_23";
+const selectTemplate = "_selectTemplate_ah2hk_44";
+const option = "_option_ah2hk_63";
+const inactive = "_inactive_ah2hk_69";
 const styles$5 = {
 	gameControls: gameControls,
-	selectTemplate: selectTemplate,
 	randomBtn: randomBtn,
 	resetBtn: resetBtn,
 	saveBtn: saveBtn,
 	continueBtn: continueBtn,
 	solutionBtn: solutionBtn,
+	selectTemplate: selectTemplate,
 	option: option,
 	inactive: inactive
 };
@@ -490,6 +490,10 @@ class Cell extends BaseComponent {
     });
   }
 
+  removeAllClasses() {
+    this.removeClass(styles$4.filled);
+    this.removeClass(styles$4.marked);
+  }
   setBackground() {
     this.toggleClass(styles$4.filled, styles$4.empty);
   }
@@ -497,18 +501,26 @@ class Cell extends BaseComponent {
   setMark() {
     this.toggleClass(styles$4.marked, styles$4.empty);
   }
+
+  disable() {
+    this.getNode().disabled = true;
+  }
+
+  enable() {
+    this.getNode().disabled = false;
+  }
 }
 
-const gameboardContainer = "_gameboardContainer_wfnwo_1";
-const gameBoard = "_gameBoard_wfnwo_8";
-const easy = "_easy_wfnwo_15";
-const medium = "_medium_wfnwo_20";
-const hard = "_hard_wfnwo_25";
-const horizontalGrid = "_horizontalGrid_wfnwo_30";
-const verticalGrid = "_verticalGrid_wfnwo_38";
-const gap = "_gap_wfnwo_44";
-const hintHorizontal = "_hintHorizontal_wfnwo_52";
-const hintVertical = "_hintVertical_wfnwo_65";
+const gameboardContainer = "_gameboardContainer_1o712_1";
+const gameBoard = "_gameBoard_1o712_8";
+const easy = "_easy_1o712_15";
+const medium = "_medium_1o712_20";
+const hard = "_hard_1o712_25";
+const horizontalGrid = "_horizontalGrid_1o712_30";
+const verticalGrid = "_verticalGrid_1o712_39";
+const gap = "_gap_1o712_46";
+const hintHorizontal = "_hintHorizontal_1o712_54";
+const hintVertical = "_hintVertical_1o712_67";
 const styles$3 = {
 	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
@@ -542,12 +554,14 @@ class GameBoard extends BaseComponent {
     this.board = this.addBoard();
 
     this.stateMachine.subscribe("stateChanged", ({ trigger, state }) => {
-      if (
-        state === "stateGameOver" ||
-        trigger === "reset" ||
-        trigger === "getRandomGame"
-      ) {
+      if (state === "stateGameOver" || trigger === "reset") {
         this.updateGameBoard(this.stateMachine.getContext().template);
+      } else if (trigger === "solution") {
+        const matrix = this.stateMachine.getContext().matrixState;
+        this.applySolution(matrix);
+      } else if (trigger === "getRandomGame") {
+        this.updateGameBoard(this.stateMachine.getContext().template);
+        this.templateConroller.setTemplateFromMachine();
       }
     });
 
@@ -558,6 +572,18 @@ class GameBoard extends BaseComponent {
     });
   }
 
+  applySolution(matrix) {
+    this.board.getChildren().forEach((cell, index) => {
+      const x = index % this.width;
+      const y = Math.floor(index / this.width);
+      cell.disable();
+      cell.removeAllClasses();
+
+      if (matrix[y][x] === 1) {
+        cell.setBackground();
+      }
+    });
+  }
   addBoard() {
     const board = new BaseComponent({
       tag: "div",
@@ -679,14 +705,6 @@ const styles$2 = {
 	main: main,
 	invitation: invitation
 };
-
-function fisherYatesShuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
 
 class EventEmitter {
   #listeners = {};
@@ -1507,7 +1525,8 @@ const stateMachine = createMachine({
     history: [],
     id: "Reviewer 1",
     selectedCells: [],
-    matrixState: [],
+    matrixState: levelConfig.easy.find((template) => template.name === "Dog")
+      .matrix,
   },
   stateInitializing: {
     actions: {
@@ -1526,14 +1545,20 @@ const stateMachine = createMachine({
       getRandomGame: {
         target: "stateWaitingForInput",
         action({ data, context: { updateContext } }) {
-          updateContext({ template: data.template });
+          updateContext({
+            template: data.template,
+            matrixState: data.template.matrix,
+          });
           console.log(`random game: ${data.template.name}`);
         },
       },
       chooseTemplate: {
         target: "statePlaying",
         action({ data, context: { updateContext } }) {
-          updateContext({ template: data.template });
+          updateContext({
+            template: data.template,
+            matrixState: data.template.matrix,
+          });
           console.log("Select template");
         },
       },
@@ -1557,26 +1582,31 @@ const stateMachine = createMachine({
         target: "statePlaying",
         action: cellClickAction,
       },
+      solution: {
+        target: "stateSolution",
+        action({ context: { getContext } }) {
+          console.log("Solution", getContext());
+        },
+      },
       chooseTemplate: {
         target: "statePlaying",
         action({ data, context: { getContext, updateContext } }) {
-          updateContext({ template: data.template });
+          updateContext({
+            template: data.template,
+            matrixState: data.template.matrix,
+          });
           console.log("Select template", getContext());
         },
       },
       getRandomGame: {
         target: "stateWaitingForInput",
         action({ data, context: { updateContext } }) {
-          updateContext({ template: data.template });
+          updateContext({
+            template: data.template,
+            matrixState: data.template.matrix,
+          });
           console.log(`random game: ${data.template.name}`);
         },
-      },
-    },
-    getRandomGame: {
-      target: "stateWaitingForInput",
-      action({ data, context: { updateContext } }) {
-        updateContext({ template: data.template });
-        console.log(`random game: ${data.template.name}`);
       },
     },
   },
@@ -1593,14 +1623,20 @@ const stateMachine = createMachine({
       getRandomGame: {
         target: "stateWaitingForInput",
         action({ data, context: { updateContext } }) {
-          updateContext({ template: data.template });
+          updateContext({
+            template: data.template,
+            matrixState: data.template.matrix,
+          });
           console.log(`random game: ${data.template.name}`);
         },
       },
       chooseTemplate: {
         target: "statePlaying",
         action({ data, context: { getContext, updateContext } }) {
-          updateContext({ template: data.template });
+          updateContext({
+            template: data.template,
+            matrixState: data.template.matrix,
+          });
           console.log("Select template", getContext());
         },
       },
@@ -1628,10 +1664,39 @@ const stateMachine = createMachine({
         },
       },
       solution: {
-        target: "stateWaitingForInput",
+        target: "stateSolution",
         action({ context: { getContext } }) {
           console.log("Solution", getContext());
         },
+      },
+    },
+  },
+  stateSolution: {
+    actions: {
+      onEnter({ prevState, trigger, context: { getContext } }) {
+        console.log(`Enter: Playing ${prevState} by ${trigger}`, getContext());
+      },
+      onExit({ context: { getContext } }) {
+        console.log(`Exit: Playing`, getContext());
+      },
+    },
+    transitions: {
+      reset: {
+        target: "statePlaying",
+        action({ context: { getContext, updateContext } }) {
+          updateContext({ score: 0, progress: null });
+          console.log(`Reset`, getContext());
+        },
+      },
+    },
+    chooseTemplate: {
+      target: "statePlaying",
+      action({ data, context: { getContext, updateContext } }) {
+        updateContext({
+          template: data.template,
+          matrixState: data.template.matrix,
+        });
+        console.log("Select template", getContext());
       },
     },
   },
@@ -1645,7 +1710,10 @@ const stateMachine = createMachine({
       getRandomGame: {
         target: "stateWaitingForInput",
         action({ data, context: { updateContext } }) {
-          updateContext({ template: data.template });
+          updateContext({
+            template: data.template,
+            matrixState: data.template.matrix,
+          });
           console.log(`random game: ${data.template.name}`);
         },
       },
@@ -1675,20 +1743,34 @@ const stateMachine = createMachine({
       chooseTemplate: {
         target: "statePlaying",
         action({ data, context: { getContext, updateContext } }) {
-          updateContext({ template: data.template });
+          updateContext({
+            template: data.template,
+            matrixState: data.template.matrix,
+          });
           console.log("Select template", getContext());
         },
       },
       getRandomGame: {
         target: "stateWaitingForInput",
         action({ data, context: { updateContext } }) {
-          updateContext({ template: data.template });
+          updateContext({
+            template: data.template,
+            matrixState: data.template.matrix,
+          });
           console.log(`random game: ${data.template.name}`);
         },
       },
     },
   },
 });
+
+function fisherYatesShuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 
 class ControlButtonsController {
   constructor(stateMachine, controlButtons, config) {
@@ -1729,6 +1811,8 @@ class ControlButtonsController {
 
       case "stateWaitingForInput":
         this.controlButtons.enable(this.buttons.randomGameButton);
+        this.controlButtons.enable(this.buttons.solutionButton);
+
         break;
 
       case "statePlaying":
@@ -1750,6 +1834,9 @@ class ControlButtonsController {
         this.controlButtons.disable(this.buttons.saveGameButton);
         this.controlButtons.disable(this.buttons.solutionButton);
         this.controlButtons.enable(this.buttons.randomGameButton);
+        break;
+      case "stateSolution":
+        this.controlButtons.enable(this.buttons.resetGameButton);
         break;
       case "chooseTemplate":
         this.controlButtons.enable(this.buttons.randomGameButton);
@@ -1777,10 +1864,9 @@ class ControlButtonsController {
         ...this.config.hard,
       ])[0];
 
-      this.stateMachine.getContext().template;
-
       this.stateMachine.transition("getRandomGame", {
         template: randomTemplates,
+        matrixState: randomTemplates.matrix,
       });
     });
 
@@ -1812,6 +1898,10 @@ class TemplateSelector extends BaseComponent {
     this.config = config;
     this.getNode();
     this.#addOptions();
+  }
+
+  setValue(templateName) {
+    this.getNode().value = templateName;
   }
 
   getTemplatesFromConfig() {
@@ -1857,6 +1947,12 @@ class TemplateController {
       const chosenTemplate = event.target.value;
       this.setTemplate(chosenTemplate);
     });
+  }
+
+  setTemplateFromMachine() {
+    const currentTemplate = this.stateMachine.getContext().template;
+    this.selectedTemplate = currentTemplate;
+    this.selector.setValue(currentTemplate.name);
   }
 
   getSelectedTemplate() {
@@ -2077,4 +2173,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-Kgl0D1SM.js.map
+//# sourceMappingURL=index-C6nLq_qH.js.map
