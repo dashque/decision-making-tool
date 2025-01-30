@@ -2100,8 +2100,8 @@ class Audio extends BaseComponent {
 }
 
 const audioConfig = {
-  click: "../../../public/audio/click2.wav",
-  win: "../../../public/audio/win.mp3",
+  click: "./audio/click2.wav",
+  win: "./audio/win.mp3",
 };
 
 class AudioController {
@@ -2230,4 +2230,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-DSe-Ywa6.js.map
+//# sourceMappingURL=index-BO9dgPCg.js.map
