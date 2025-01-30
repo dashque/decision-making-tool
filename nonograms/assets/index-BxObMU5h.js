@@ -456,11 +456,11 @@ class GameControls extends BaseComponent {
   }
 }
 
-const cell = "_cell_18u39_1";
-const filled = "_filled_18u39_10";
-const filledhover = "_filledhover_18u39_13";
-const empty = "_empty_18u39_17";
-const marked = "_marked_18u39_21";
+const cell = "_cell_1ccz8_1";
+const filled = "_filled_1ccz8_11";
+const filledhover = "_filledhover_1ccz8_14";
+const empty = "_empty_1ccz8_18";
+const marked = "_marked_1ccz8_22";
 const styles$4 = {
 	cell: cell,
 	filled: filled,
@@ -511,16 +511,16 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameboardContainer = "_gameboardContainer_1ybnd_1";
-const gameBoard = "_gameBoard_1ybnd_9";
-const easy = "_easy_1ybnd_16";
-const medium = "_medium_1ybnd_21";
-const hard = "_hard_1ybnd_26";
-const horizontalGrid = "_horizontalGrid_1ybnd_31";
-const verticalGrid = "_verticalGrid_1ybnd_40";
-const gap = "_gap_1ybnd_47";
-const hintHorizontal = "_hintHorizontal_1ybnd_55";
-const hintVertical = "_hintVertical_1ybnd_68";
+const gameboardContainer = "_gameboardContainer_1ewyr_1";
+const gameBoard = "_gameBoard_1ewyr_10";
+const easy = "_easy_1ewyr_17";
+const medium = "_medium_1ewyr_22";
+const hard = "_hard_1ewyr_27";
+const horizontalGrid = "_horizontalGrid_1ewyr_32";
+const verticalGrid = "_verticalGrid_1ewyr_41";
+const gap = "_gap_1ewyr_48";
+const hintHorizontal = "_hintHorizontal_1ewyr_56";
+const hintVertical = "_hintVertical_1ewyr_69";
 const styles$3 = {
 	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
@@ -1475,21 +1475,17 @@ const hasIncorrectSelections = (selectedCells) => {
 const getExistingIndex = (selectedCells, x, y) =>
   selectedCells.findIndex((selected) => selected.x === x && selected.y === y);
 
-const checkIfIsWin = (matrix, selectedCells) => {
-  return (
-    selectedCells.filter((cell) => cell.isCorrect).length ===
-      getCorrectCellsCount(matrix) && !hasIncorrectSelections(selectedCells)
-  );
-};
-
-function cellClickAction({ data: { x, y }, context: { getContext } }) {
+function cellClickAction({
+  data: { x, y },
+  context: { getContext, updateContext },
+}) {
   const {
     template: { matrix },
     selectedCells,
   } = getContext();
   const isCorrect = matrix[y][x] === 1;
 
-  console.log(`click at [${x}, ${y}], isCorrect: ${isCorrect}`);
+  // console.log(`click at [${x}, ${y}], isCorrect: ${isCorrect}`);
 
   const existingIndex = getExistingIndex(selectedCells, x, y);
 
@@ -1499,8 +1495,19 @@ function cellClickAction({ data: { x, y }, context: { getContext } }) {
     selectedCells.push({ x, y, isCorrect });
   }
 
-  if (checkIfIsWin(matrix, selectedCells)) {
+  const correctSelectedCount = selectedCells.filter(
+    (cell) => cell.isCorrect,
+  ).length;
+
+  if (
+    correctSelectedCount === getCorrectCellsCount(matrix) &&
+    !hasIncorrectSelections(selectedCells)
+  ) {
     this.transition("win");
+
+    updateContext({ selectedCells: [] });
+    localStorage.removeItem("selectedCells");
+    return;
   }
 }
 
@@ -2173,4 +2180,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper();
 root.init();
-//# sourceMappingURL=index-BaJj8RJP.js.map
+//# sourceMappingURL=index-BxObMU5h.js.map
