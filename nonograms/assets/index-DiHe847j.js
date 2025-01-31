@@ -322,14 +322,12 @@ class Timer extends BaseComponent {
           this.resetTimer();
         }
 
-        if (trigger === "saveGame") {
-          this.pauseTimer();
-        }
-
-        // if (trigger === "continue") {
-        //   this.setTextContent(getContext().time); // TODO не уверена что работает
-        //   this.startTime();
+        // if (trigger === "saveGame") {
+        //   this.pauseTimer();
         // }
+        if (trigger === "continue") {
+          this.startTime();
+        }
       },
     );
     this.updateDisplay();
@@ -2255,20 +2253,22 @@ class AudioController {
   }
 }
 
-const leaderBoard = "_leaderBoard_1j0r6_1";
+const leaderBoard = "_leaderBoard_1wr83_1";
+const h3 = "_h3_1wr83_12";
 const styles$1 = {
-	leaderBoard: leaderBoard
+	leaderBoard: leaderBoard,
+	h3: h3
 };
 
 class LeaderBoard extends BaseComponent {
   constructor() {
     super({ tag: "section", className: styles$1.leaderBoard });
+    this.history = JSON.parse(localStorage.getItem("gameHistory")) || [];
   }
 
   addResults() {
     this.destroyChildren();
-    this.history = JSON.parse(localStorage.getItem("gameHistory")) || [];
-
+    this.addHeader();
     this.history.map((elem, i) => {
       const result = new BaseComponent({
         tag: "span",
@@ -2279,6 +2279,11 @@ class LeaderBoard extends BaseComponent {
       );
       this.append(result);
     });
+  }
+  addHeader() {
+    const h3 = new BaseComponent({ tag: "h3", className: styles$1.h3 });
+    h3.setTextContent("Leaderboard:");
+    this.append(h3);
   }
 }
 
@@ -2393,4 +2398,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-B-iRCK_v.js.map
+//# sourceMappingURL=index-DiHe847j.js.map
