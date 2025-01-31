@@ -305,7 +305,7 @@ class Timer extends BaseComponent {
 
     this.stateMachine.subscribe(
       "stateChanged",
-      ({ trigger, state, context: { updateContext, getContext } }) => {
+      ({ trigger, state, context: { updateContext } }) => {
         if (trigger === "win") {
           updateContext({
             message: "That's a WIN! Congrats! " + this.timerTime,
@@ -326,10 +326,10 @@ class Timer extends BaseComponent {
           this.pauseTimer();
         }
 
-        if (trigger === "continue") {
-          this.setTextContent(getContext().time); // TODO не уверена что работает
-          this.startTime();
-        }
+        // if (trigger === "continue") {
+        //   this.setTextContent(getContext().time); // TODO не уверена что работает
+        //   this.startTime();
+        // }
       },
     );
     this.updateDisplay();
@@ -566,6 +566,7 @@ const styles$4 = {
 class Cell extends BaseComponent {
   constructor() {
     super({ tag: "button", className: styles$4.cell });
+    this.addAttributes({ "aria-label": "cell" });
     this.getNode();
   }
 
@@ -664,11 +665,17 @@ class GameBoard extends BaseComponent {
           this.templateConroller.updateTemplate(
             this.stateMachine.getContext().template,
           );
-          if (trigger === "chooseTemplate") {
-            updateContext({
-              template: this.templateConroller.selectedTemplate,
-            });
-          }
+        }
+        if (trigger === "chooseTemplate") {
+          updateContext({
+            template: this.templateConroller.selectedTemplate,
+          });
+        }
+        if (trigger === "continue") {
+          this.updateGameBoard(this.stateMachine.getContext().template);
+          this.templateConroller.updateTemplate(
+            this.stateMachine.getContext().template,
+          );
         }
       },
     );
@@ -1616,6 +1623,36 @@ function cellClickAction({
   }
 }
 
+function setDataToLS({ template, selectedCells }) {
+  const gameData = {
+    templateName: template.name,
+    level: template.difficulty,
+    matrix: template.matrix,
+    selectedCells,
+  };
+
+  localStorage.setItem("Zagorky: nonogramGameState", JSON.stringify(gameData));
+}
+
+function getDataFromLS() {
+  const savedData = localStorage.getItem("Zagorky: nonogramGameState");
+  if (!savedData) {
+    return;
+  }
+  const { templateName, level, matrix, selectedCells } = JSON.parse(savedData);
+
+  const template = levelConfig[level].find(
+    (template) => template.name === templateName,
+  );
+  if (template) {
+    return {
+      template: template,
+      matrixState: matrix,
+      selectedCells: selectedCells,
+    };
+  }
+}
+
 /**
  * @typedef {Object} StateDef
  * @property {Object} actions - object of actions for the state
@@ -1643,15 +1680,14 @@ const stateMachine = createMachine({
   },
 
   stateWaitingForInput: {
-    actions: {
-      // onEnter() {
-      //   console.log(`Enter: Waiting for input`);
-      // },
-      // onExit({ context: { getContext } }) {
-      //   console.log(` Exit:: Waiting for input`, getContext());
-      // },
-    },
+    actions: {},
     transitions: {
+      continue: {
+        target: "statePlaying",
+        action({ prevState, context: { getContext } }) {
+          console.log("Continue from", prevState, getContext());
+        },
+      },
       solution: {
         target: "stateSolution",
         action() {
@@ -1689,9 +1725,6 @@ const stateMachine = createMachine({
       onEnter({ prevState, trigger }) {
         console.log(`Enter: Playing ${prevState} by ${trigger}`);
       },
-      // onExit({ context: { getContext } }) {
-      //   console.log(`Exit: Playing`, getContext());
-      // },
     },
     transitions: {
       getRandomGame: {
@@ -1747,6 +1780,12 @@ const stateMachine = createMachine({
             },
           });
           console.log("Save", getContext());
+        },
+      },
+      continue: {
+        target: "stateWaitingForInput",
+        action({ context: { updateContext } }) {
+          updateContext(getDataFromLS());
         },
       },
       solution: {
@@ -1865,6 +1904,8 @@ class ControlButtonsController {
         break;
 
       case "stateWaitingForInput":
+        this.controlButtons.enable(this.buttons.continueGameButton);
+
         this.controlButtons.enable(this.buttons.randomGameButton);
         this.controlButtons.enable(this.buttons.solutionButton);
 
@@ -1885,15 +1926,19 @@ class ControlButtonsController {
         break;
       case "stateGameOver":
         this.controlButtons.enable(this.buttons.resetGameButton);
-        this.controlButtons.disable(this.buttons.continueGameButton);
+        this.controlButtons.enable(this.buttons.continueGameButton);
         this.controlButtons.disable(this.buttons.saveGameButton);
         this.controlButtons.disable(this.buttons.solutionButton);
         this.controlButtons.enable(this.buttons.randomGameButton);
         break;
       case "stateSolution":
+        this.controlButtons.enable(this.buttons.continueGameButton);
         this.controlButtons.enable(this.buttons.resetGameButton);
+        this.controlButtons.enable(this.buttons.solutionButton);
+
         break;
       case "chooseTemplate":
+        this.controlButtons.enable(this.buttons.continueGameButton);
         this.controlButtons.enable(this.buttons.randomGameButton);
         break;
       default:
@@ -1930,11 +1975,26 @@ class ControlButtonsController {
     });
 
     buttons.saveGameButton.addListener("click", () => {
-      this.stateMachine.transition("saveGame");
+      const context = this.stateMachine.getContext();
+      setDataToLS({
+        template: context.template,
+        selectedCells: context.selectedCells,
+        duration: context.time,
+      });
     });
 
     buttons.continueGameButton.addListener("click", () => {
-      this.stateMachine.transition("continue", {});
+      const data = getDataFromLS();
+      this.stateMachine.transition(
+        "continue",
+        ({ context: { updateContext } }) => {
+          updateContext({
+            template: data.template,
+            selectedCells: data.selectedCells,
+            matrixState: data.matrixState,
+          });
+        },
+      );
     });
 
     buttons.solutionButton.addListener("click", () => {
@@ -2276,4 +2336,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-DGwsybic.js.map
+//# sourceMappingURL=index-Igzg48Mk.js.map
