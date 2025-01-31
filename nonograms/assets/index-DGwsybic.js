@@ -550,11 +550,11 @@ class GameControls extends BaseComponent {
   }
 }
 
-const cell = "_cell_zeugk_1";
-const filled = "_filled_zeugk_10";
-const filledhover = "_filledhover_zeugk_13";
-const empty = "_empty_zeugk_17";
-const marked = "_marked_zeugk_21";
+const cell = "_cell_fxxni_1";
+const filled = "_filled_fxxni_11";
+const filledhover = "_filledhover_fxxni_14";
+const empty = "_empty_fxxni_18";
+const marked = "_marked_fxxni_22";
 const styles$4 = {
 	cell: cell,
 	filled: filled,
@@ -2276,4 +2276,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-CCARpOYg.js.map
+//# sourceMappingURL=index-DGwsybic.js.map

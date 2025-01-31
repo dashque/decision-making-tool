@@ -345,30 +345,31 @@ summary {
   cursor: not-allowed;
   color: #2e8e95;
   background-color: rgba(205, 197, 197, 0.6196078431);
-}._cell_zeugk_1 {
+}._cell_fxxni_1 {
   cursor: pointer;
   width: 100%;
   height: 100%;
   border: 1px solid rgba(0, 0, 0, 0.1764705882);
+  border-radius: 3px;
   font-size: 12px;
   background-color: rgba(255, 252, 252, 0.5607843137);
 }
 
-._filled_zeugk_10 {
+._filled_fxxni_11 {
   background-color: rgba(0, 0, 0, 0.462745098);
 }
-._filledhover_zeugk_13 {
+._filledhover_fxxni_14 {
   background-color: initial;
 }
 
-._empty_zeugk_17 {
+._empty_fxxni_18 {
   background-color: rgba(255, 252, 252, 0.5607843137);
 }
 
-._marked_zeugk_21 {
+._marked_fxxni_22 {
   background-color: rgba(255, 252, 252, 0.5607843137);
 }
-._marked_zeugk_21::after {
+._marked_fxxni_22::after {
   content: "X";
   display: block;
   line-height: 1;
