@@ -647,23 +647,31 @@ class GameBoard extends BaseComponent {
     this.verticalGrid = this.addVerticalGrid();
     this.board = this.addBoard();
 
-    this.stateMachine.subscribe("stateChanged", ({ trigger, state }) => {
-      if (state === "stateGameOver") {
-        this.board.getChildren().forEach((elem) => elem.disable());
-      }
-      if (trigger === "reset") {
-        this.updateGameBoard(this.stateMachine.getContext().template);
-      }
-      if (trigger === "solution") {
-        this.applySolution(this.stateMachine.getContext().matrixState);
-      }
-      if (trigger === "getRandomGame") {
-        this.updateGameBoard(this.stateMachine.getContext().template);
-        this.templateConroller.updateTemplate(
-          this.stateMachine.getContext().template,
-        );
-      }
-    });
+    this.stateMachine.subscribe(
+      "stateChanged",
+      ({ trigger, state, context: { updateContext } }) => {
+        if (state === "stateGameOver") {
+          this.board.getChildren().forEach((elem) => elem.disable());
+        }
+        if (trigger === "reset") {
+          this.updateGameBoard(this.stateMachine.getContext().template);
+        }
+        if (trigger === "solution") {
+          this.applySolution(this.stateMachine.getContext().matrixState);
+        }
+        if (trigger === "getRandomGame") {
+          this.updateGameBoard(this.stateMachine.getContext().template);
+          this.templateConroller.updateTemplate(
+            this.stateMachine.getContext().template,
+          );
+          if (trigger === "chooseTemplate") {
+            updateContext({
+              template: this.templateConroller.selectedTemplate,
+            });
+          }
+        }
+      },
+    );
 
     this.updateGameBoard(this.stateMachine.getContext().template);
 
@@ -1981,12 +1989,6 @@ class TemplateController {
     this.selector = selector;
     this.stateMachine = stateMachine;
 
-    this.selectedTemplate = this.stateMachine.getContext().template;
-    this.stateMachine.transition("chooseTemplate", {
-      template: this.selectedTemplate,
-    });
-    //TODO переместить в гб
-
     this.setEventListener();
   }
 
@@ -2274,4 +2276,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-DNu45mA4.js.map
+//# sourceMappingURL=index-CCARpOYg.js.map
