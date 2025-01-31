@@ -305,23 +305,28 @@ class Timer extends BaseComponent {
 
     this.stateMachine.subscribe(
       "stateChanged",
-      ({ trigger, context: { updateContext, getContext } }) => {
-        if (trigger === "cellClick" && !this.isRunninig) {
-          this.startTimer();
-        } else if (
-          trigger === "reset" ||
-          trigger === "getRandomGame" ||
-          trigger === "chooseTemplate"
-        ) {
-          this.resetTimer();
-        } else if (trigger === "win") {
+      ({ trigger, state, context: { updateContext, getContext } }) => {
+        if (trigger === "win") {
           updateContext({
             message: "That's a WIN! Congrats! " + this.timerTime,
           });
+
           this.resetTimer();
-        } else if (trigger === "saveGame") {
+        }
+
+        if (trigger === "cellClick" && !this.isRunninig) {
+          this.startTimer();
+        }
+
+        if (state !== "statePlaying") {
+          this.resetTimer();
+        }
+
+        if (trigger === "saveGame") {
           this.pauseTimer();
-        } else if (trigger === "continue") {
+        }
+
+        if (trigger === "continue") {
           this.setTextContent(getContext().time); // TODO не уверена что работает
           this.startTime();
         }
@@ -402,7 +407,7 @@ class Header extends BaseComponent {
     const h1 = new BaseComponent({
       tag: "h1",
       className: styles$6.h1,
-      text: "Nonorgams",
+      text: "Nonograms",
     });
     this.append(h1);
   }
@@ -631,17 +636,11 @@ class GameBoard extends BaseComponent {
    * @param {number} width
    * @param {number} height
    */
-  constructor(
-    templateConroller,
-    cellController,
-    stateMachine,
-    audioController,
-  ) {
+  constructor(templateConroller, cellController, stateMachine) {
     super({ tag: "section", className: styles$3.gameboardContainer });
     this.cellController = cellController;
     this.stateMachine = stateMachine;
     this.templateConroller = templateConroller;
-    this.audioController = audioController;
 
     this.gap = this.addGap();
     this.horizontalGrid = this.addHorizontalGrid();
@@ -651,14 +650,18 @@ class GameBoard extends BaseComponent {
     this.stateMachine.subscribe("stateChanged", ({ trigger, state }) => {
       if (state === "stateGameOver") {
         this.board.getChildren().forEach((elem) => elem.disable());
-      } else if (trigger === "reset") {
+      }
+      if (trigger === "reset") {
         this.updateGameBoard(this.stateMachine.getContext().template);
-      } else if (trigger === "solution") {
-        const matrix = this.stateMachine.getContext().matrixState;
-        this.applySolution(matrix);
-      } else if (trigger === "getRandomGame") {
+      }
+      if (trigger === "solution") {
+        this.applySolution(this.stateMachine.getContext().matrixState);
+      }
+      if (trigger === "getRandomGame") {
         this.updateGameBoard(this.stateMachine.getContext().template);
-        this.templateConroller.setTemplateFromMachine();
+        this.templateConroller.updateTemplate(
+          this.stateMachine.getContext().template,
+        );
       }
     });
 
@@ -681,6 +684,7 @@ class GameBoard extends BaseComponent {
       }
     });
   }
+
   addBoard() {
     const board = new BaseComponent({
       tag: "div",
@@ -1615,16 +1619,19 @@ function cellClickAction({
  * @property {string} [transitions.switch.target] - action while transiting
  */
 
+const initialTemplate = levelConfig.easy.find(
+  (template) => template.name === "Dog",
+);
+
 const stateMachine = createMachine({
   initialState: "stateWaitingForInput",
   context: {
-    template: levelConfig.easy.find((template) => template.name === "Dog"),
+    template: initialTemplate,
     time: null,
     message: "",
     history: [],
     selectedCells: [],
-    matrixState: levelConfig.easy.find((template) => template.name === "Dog")
-      .matrix,
+    matrixState: initialTemplate.matrix,
   },
 
   stateWaitingForInput: {
@@ -1717,7 +1724,7 @@ const stateMachine = createMachine({
         },
       },
       saveGame: {
-        target: "stateSaving",
+        target: "statePlaying",
         action({ data, context: { getContext, updateContext } }) {
           updateContext({
             context: {
@@ -1765,31 +1772,7 @@ const stateMachine = createMachine({
       },
     },
   },
-  stateSaving: {
-    actions: {
-      onEnter({ context: { getContext } }) {
-        console.log(`Enter: Save`, getContext());
-      },
-    },
-    transitions: {
-      getRandomGame: {
-        target: "stateWaitingForInput",
-        action({ data, context: { updateContext } }) {
-          updateContext({
-            template: data.template,
-            matrixState: data.template.matrix,
-          });
-          console.log(`random game: ${data.template.name}`);
-        },
-      },
-      continue: {
-        target: "stateWaitingForInput",
-        action({ context: { getContext } }) {
-          console.log("Continue", getContext());
-        },
-      },
-    },
-  },
+
   stateGameOver: {
     actions: {
       onEnter() {
@@ -2002,6 +1985,7 @@ class TemplateController {
     this.stateMachine.transition("chooseTemplate", {
       template: this.selectedTemplate,
     });
+    //TODO переместить в гб
 
     this.setEventListener();
   }
@@ -2013,10 +1997,9 @@ class TemplateController {
     });
   }
 
-  setTemplateFromMachine() {
-    const currentTemplate = this.stateMachine.getContext().template;
-    this.selectedTemplate = currentTemplate;
-    this.selector.setValue(currentTemplate.name);
+  updateTemplate(newTemplate) {
+    this.selectedTemplate = newTemplate;
+    this.selector.setValue(newTemplate.name);
   }
 
   getSelectedTemplate() {
@@ -2066,10 +2049,8 @@ class CellController {
 
   onClick(x, y, event) {
     if (event.button !== 0) {
-      this.audioController.playAudio("click");
       return;
     }
-    this.audioController.playAudio("click");
 
     this.stateMachine.transition("cellClick", { x, y });
   }
@@ -2156,21 +2137,33 @@ class Audio extends BaseComponent {
   }
 }
 
-const audioConfig = {
-  click: "./audio/click2.wav",
-  win: "./audio/win.mp3",
-};
-
 class AudioController {
+  #audioConfig = {
+    click: "./audio/click2.wav",
+    win: "./audio/win.mp3",
+  };
+
   #sounds = {};
 
-  constructor(audioConfig) {
-    for (const [name, src] of Object.entries(audioConfig)) {
-      const audioElem = new Audio(src, "auto");
-      this.#sounds[name] = audioElem;
+  constructor(stateMachine) {
+    this.stateMachine = stateMachine;
+
+    for (const [name, src] of Object.entries(this.#audioConfig)) {
+      this.#sounds[name] = new Audio(src, "auto");
+
+      this.stateMachine.subscribe("stateChanged", ({ state, trigger }) => {
+        if (state === "statePlaying" && trigger === "cellClick") {
+          this.#playAudio("click");
+        }
+
+        if (state === "stateGameOver" && trigger === "win") {
+          this.#playAudio("win");
+        }
+      });
     }
   }
-  playAudio(audioName) {
+
+  #playAudio(audioName) {
     if (this.#sounds[audioName]) {
       this.#sounds[audioName].getNode().play();
     }
@@ -2193,7 +2186,7 @@ class Main extends BaseComponent {
     this.addTemplateSelector();
     this.addControls();
 
-    this.audioController = new AudioController(audioConfig);
+    this.audioController = new AudioController(stateMachine);
 
     this.controlButtonsController = new ControlButtonsController(
       stateMachine,
@@ -2207,10 +2200,7 @@ class Main extends BaseComponent {
       this.templateSelector,
     );
 
-    this.cellController = new CellController(
-      stateMachine,
-      this.audioController,
-    );
+    this.cellController = new CellController(stateMachine);
 
     this.addGameBoard();
   }
@@ -2238,7 +2228,6 @@ class Main extends BaseComponent {
       this.templateController,
       this.cellController,
       stateMachine,
-      this.audioController,
     );
     this.append(this.gameBoard);
   }
@@ -2250,11 +2239,9 @@ class Main extends BaseComponent {
     }
     this.modal = new Modal({
       text: text,
-      // text: `That's a WIN! Congrats! ${stateMachine.getContext().time}`,
       onClose: () => this.modal.getNode().close(),
     });
     document.body.appendChild(this.modal.getNode());
-    this.audioController.playAudio("win");
     return this.modal.getNode().showModal();
   }
 
@@ -2287,4 +2274,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-CxcTdh1w.js.map
+//# sourceMappingURL=index-DNu45mA4.js.map
