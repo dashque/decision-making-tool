@@ -222,7 +222,7 @@ const ghLink = "_ghLink_i1jyf_10";
 const rssLogoLink = "_rssLogoLink_i1jyf_19";
 const rssLogoImg = "_rssLogoImg_i1jyf_25";
 const year = "_year_i1jyf_30";
-const styles$8 = {
+const styles$9 = {
 	footer: footer,
 	ghLink: ghLink,
 	rssLogoLink: rssLogoLink,
@@ -237,7 +237,7 @@ class Footer extends BaseComponent {
    * @param {string} className
    */
   constructor() {
-    super({ tag: "footer", className: styles$8.footer });
+    super({ tag: "footer", className: styles$9.footer });
     this.getNode();
     this.addGithubLink();
     this.addRSSLogo();
@@ -247,7 +247,7 @@ class Footer extends BaseComponent {
   addGithubLink() {
     const a = new BaseComponent({
       tag: "a",
-      className: styles$8.ghLink,
+      className: styles$9.ghLink,
       text: "GitHub",
     });
     a.addAttributes({
@@ -260,7 +260,7 @@ class Footer extends BaseComponent {
   addRSSLogo() {
     const a = new BaseComponent({
       tag: "a",
-      className: styles$8.rssLogoLink,
+      className: styles$9.rssLogoLink,
     });
     a.addAttributes({
       href: "https://rs.school/courses/javascript",
@@ -268,7 +268,7 @@ class Footer extends BaseComponent {
     });
     const logo = new BaseComponent({
       tag: "img",
-      className: styles$8.rssLogoImg,
+      className: styles$9.rssLogoImg,
     });
 
     logo.addAttributes({
@@ -282,7 +282,7 @@ class Footer extends BaseComponent {
   addYear() {
     const p = new BaseComponent({
       tag: "p",
-      className: styles$8.year,
+      className: styles$9.year,
       text: "2025",
     });
     this.append(p);
@@ -290,13 +290,13 @@ class Footer extends BaseComponent {
 }
 
 const timer = "_timer_1fr8o_1";
-const styles$7 = {
+const styles$8 = {
 	timer: timer
 };
 
 class Timer extends BaseComponent {
   constructor(stateMachine) {
-    super({ tag: "span", className: styles$7.timer });
+    super({ tag: "span", className: styles$8.timer });
     this.stateMachine = stateMachine;
     this.timer = null;
     this.startTime = null;
@@ -382,7 +382,7 @@ class Timer extends BaseComponent {
 const header = "_header_g56zx_1";
 const h1 = "_h1_g56zx_9";
 const logoLink = "_logoLink_g56zx_19";
-const styles$6 = {
+const styles$7 = {
 	header: header,
 	h1: h1,
 	logoLink: logoLink
@@ -395,7 +395,7 @@ class Header extends BaseComponent {
    * @param {string} className
    */
   constructor(stateMachine) {
-    super({ tag: "header", className: styles$6.header });
+    super({ tag: "header", className: styles$7.header });
     this.stateMachine = stateMachine;
     this.getNode();
     this.addLogo();
@@ -406,7 +406,7 @@ class Header extends BaseComponent {
   addH1() {
     const h1 = new BaseComponent({
       tag: "h1",
-      className: styles$6.h1,
+      className: styles$7.h1,
       text: "Nonograms",
     });
     this.append(h1);
@@ -415,7 +415,7 @@ class Header extends BaseComponent {
   addLogo() {
     const a = new BaseComponent({
       tag: "a",
-      className: styles$6.logoLink,
+      className: styles$7.logoLink,
     });
 
     a.addAttributes({
@@ -450,7 +450,7 @@ const solutionBtn = "_solutionBtn_x475m_23";
 const selectTemplate = "_selectTemplate_x475m_44";
 const option = "_option_x475m_63";
 const inactive = "_inactive_x475m_69";
-const styles$5 = {
+const styles$6 = {
 	gameControls: gameControls,
 	randomBtn: randomBtn,
 	resetBtn: resetBtn,
@@ -468,7 +468,7 @@ class GameControls extends BaseComponent {
    * @param {import("../../core/StateMachine").StateDef} stateMachine
    */
   constructor() {
-    super({ tag: "div", className: styles$5.gameControls });
+    super({ tag: "div", className: styles$6.gameControls });
     this.getNode();
     this.addButtons();
   }
@@ -476,37 +476,37 @@ class GameControls extends BaseComponent {
   addButtons() {
     this.themeChanger = new BaseComponent({
       tag: "button",
-      className: styles$5.randomBtn,
+      className: styles$6.randomBtn,
       text: "Change theme",
     });
 
     this.randomGameButton = new BaseComponent({
       tag: "button",
-      className: styles$5.randomBtn,
+      className: styles$6.randomBtn,
       text: "Random game",
     });
 
     this.resetGameButton = new BaseComponent({
       tag: "button",
-      className: styles$5.resetBtn,
+      className: styles$6.resetBtn,
       text: "Reset game",
     });
 
     this.saveGameButton = new BaseComponent({
       tag: "button",
-      className: styles$5.saveBtn,
+      className: styles$6.saveBtn,
       text: "Save game",
     });
 
     this.continueGameButton = new BaseComponent({
       tag: "button",
-      className: styles$5.continueBtn,
+      className: styles$6.continueBtn,
       text: "Continue game",
     });
 
     this.solutionButton = new BaseComponent({
       tag: "button",
-      className: styles$5.solutionBtn,
+      className: styles$6.solutionBtn,
       text: "Solution",
     });
 
@@ -522,12 +522,12 @@ class GameControls extends BaseComponent {
 
   enable(button) {
     button.getNode().disabled = false;
-    button.removeClass(styles$5.inactive);
+    button.removeClass(styles$6.inactive);
   }
 
   disable(button) {
     button.getNode().disabled = true;
-    button.addClass(styles$5.inactive);
+    button.addClass(styles$6.inactive);
   }
 
   disableAll(buttons) {
@@ -555,7 +555,7 @@ const filled = "_filled_fxxni_11";
 const filledhover = "_filledhover_fxxni_14";
 const empty = "_empty_fxxni_18";
 const marked = "_marked_fxxni_22";
-const styles$4 = {
+const styles$5 = {
 	cell: cell,
 	filled: filled,
 	filledhover: filledhover,
@@ -565,7 +565,7 @@ const styles$4 = {
 
 class Cell extends BaseComponent {
   constructor() {
-    super({ tag: "button", className: styles$4.cell });
+    super({ tag: "button", className: styles$5.cell });
     this.addAttributes({ "aria-label": "cell" });
     this.getNode();
   }
@@ -586,15 +586,15 @@ class Cell extends BaseComponent {
   }
 
   removeAllClasses() {
-    this.removeClass(styles$4.filled);
-    this.removeClass(styles$4.marked);
+    this.removeClass(styles$5.filled);
+    this.removeClass(styles$5.marked);
   }
   setBackground() {
-    this.toggleClass(styles$4.filled, styles$4.empty);
+    this.toggleClass(styles$5.filled, styles$5.empty);
   }
 
   setMark() {
-    this.toggleClass(styles$4.marked, styles$4.empty);
+    this.toggleClass(styles$5.marked, styles$5.empty);
   }
 
   disable() {
@@ -616,7 +616,7 @@ const verticalGrid = "_verticalGrid_zl7qi_64";
 const gap = "_gap_zl7qi_74";
 const hintHorizontal = "_hintHorizontal_zl7qi_82";
 const hintVertical = "_hintVertical_zl7qi_94";
-const styles$3 = {
+const styles$4 = {
 	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
 	easy: easy,
@@ -638,7 +638,7 @@ class GameBoard extends BaseComponent {
    * @param {number} height
    */
   constructor(templateConroller, cellController, stateMachine) {
-    super({ tag: "section", className: styles$3.gameboardContainer });
+    super({ tag: "section", className: styles$4.gameboardContainer });
     this.cellController = cellController;
     this.stateMachine = stateMachine;
     this.templateConroller = templateConroller;
@@ -648,37 +648,27 @@ class GameBoard extends BaseComponent {
     this.verticalGrid = this.addVerticalGrid();
     this.board = this.addBoard();
 
-    this.stateMachine.subscribe(
-      "stateChanged",
-      ({ trigger, state, context: { updateContext } }) => {
-        if (state === "stateGameOver") {
-          this.board.getChildren().forEach((elem) => elem.disable());
-        }
-        if (trigger === "reset") {
-          this.updateGameBoard(this.stateMachine.getContext().template);
-        }
-        if (trigger === "solution") {
-          this.applySolution(this.stateMachine.getContext().matrixState);
-        }
-        if (trigger === "getRandomGame") {
-          this.updateGameBoard(this.stateMachine.getContext().template);
-          this.templateConroller.updateTemplate(
-            this.stateMachine.getContext().template,
-          );
-        }
-        if (trigger === "chooseTemplate") {
-          updateContext({
-            template: this.templateConroller.selectedTemplate,
-          });
-        }
-        if (trigger === "continue") {
-          this.updateGameBoard(this.stateMachine.getContext().template);
-          this.templateConroller.updateTemplate(
-            this.stateMachine.getContext().template,
-          );
-        }
-      },
-    );
+    this.stateMachine.subscribe("stateChanged", ({ trigger, state }) => {
+      if (state === "stateGameOver") {
+        this.board.getChildren().forEach((elem) => elem.disable());
+      } else if (trigger === "reset") {
+        this.updateGameBoard(this.stateMachine.getContext().template);
+      } else if (trigger === "solution") {
+        this.applySolution(this.stateMachine.getContext().matrixState);
+      } else if (trigger === "getRandomGame" || trigger === "chooseTemplate") {
+        this.updateGameBoard(this.stateMachine.getContext().template);
+        this.templateConroller.updateTemplate(
+          this.stateMachine.getContext().template,
+        );
+      } else if (trigger === "continue") {
+        console.log("error");
+
+        this.updateGameBoard(this.stateMachine.getContext().template);
+        this.templateConroller.updateTemplate(
+          this.stateMachine.getContext().template,
+        );
+      }
+    });
 
     this.updateGameBoard(this.stateMachine.getContext().template);
 
@@ -703,7 +693,7 @@ class GameBoard extends BaseComponent {
   addBoard() {
     const board = new BaseComponent({
       tag: "div",
-      className: styles$3.gameBoard,
+      className: styles$4.gameBoard,
     });
     board.getNode();
     this.append(board);
@@ -712,7 +702,7 @@ class GameBoard extends BaseComponent {
   addGap() {
     const gap = new BaseComponent({
       tag: "div",
-      className: styles$3.gap,
+      className: styles$4.gap,
     });
     gap.getNode();
     this.append(gap);
@@ -733,7 +723,7 @@ class GameBoard extends BaseComponent {
     const vertHints = hints.map((hint) => {
       const hintComp = new BaseComponent({
         tag: "div",
-        className: styles$3.hintVertical,
+        className: styles$4.hintVertical,
       });
       hint.map((el) => {
         const hintEl = new BaseComponent({
@@ -751,7 +741,7 @@ class GameBoard extends BaseComponent {
   addVerticalGrid() {
     const verticalGrid = new BaseComponent({
       tag: "div",
-      className: styles$3.verticalGrid,
+      className: styles$4.verticalGrid,
     });
     verticalGrid.getNode();
     this.append(verticalGrid);
@@ -762,7 +752,7 @@ class GameBoard extends BaseComponent {
     const horizHints = hints.map((hint) => {
       const hintComp = new BaseComponent({
         tag: "div",
-        className: styles$3.hintHorizontal,
+        className: styles$4.hintHorizontal,
       });
       hint.map((el) => {
         const hintEl = new BaseComponent({
@@ -779,7 +769,7 @@ class GameBoard extends BaseComponent {
   addHorizontalGrid() {
     const horizontalGrid = new BaseComponent({
       tag: "div",
-      className: styles$3.horizontalGrid,
+      className: styles$4.horizontalGrid,
     });
     horizontalGrid.getNode();
     this.append(horizontalGrid);
@@ -798,9 +788,9 @@ class GameBoard extends BaseComponent {
 
   clearGameBoard() {
     this.board.destroyChildren();
-    this.board.removeClass(styles$3.easy);
-    this.board.removeClass(styles$3.medium);
-    this.board.removeClass(styles$3.hard);
+    this.board.removeClass(styles$4.easy);
+    this.board.removeClass(styles$4.medium);
+    this.board.removeClass(styles$4.hard);
     this.verticalGrid.destroyChildren();
     this.horizontalGrid.destroyChildren();
   }
@@ -808,7 +798,7 @@ class GameBoard extends BaseComponent {
     this.clearGameBoard();
 
     this.width = selectedTemplate.size;
-    this.board.addClass(styles$3[selectedTemplate.difficulty]);
+    this.board.addClass(styles$4[selectedTemplate.difficulty]);
     this.addCells();
     this.addVerticalHints(selectedTemplate.verticalHints);
     this.addHorizontalHints(selectedTemplate.horizontalHints);
@@ -817,7 +807,7 @@ class GameBoard extends BaseComponent {
 
 const main = "_main_nqa98_1";
 const invitation = "_invitation_nqa98_11";
-const styles$2 = {
+const styles$3 = {
 	main: main,
 	invitation: invitation
 };
@@ -1753,7 +1743,34 @@ const stateMachine = createMachine({
       },
       win: {
         target: "stateGameOver",
-        action() {
+        action({ context: { updateContext, getContext } }) {
+          const { template, time } = getContext();
+
+          const solvedTemplate = template.name;
+
+          const formattedTime = new Date(time * 1000)
+            .toISOString()
+            .substr(14, 5);
+
+          let history = JSON.parse(localStorage.getItem("gameHistory")) || [];
+
+          history.push({
+            solvedTemplate,
+            difficulty: template.difficulty,
+            time: formattedTime,
+          });
+
+          history = history.sort((a, b) => {
+            const [aMin, aSec] = a.time.split(":").map(Number);
+            const [bMin, bSec] = b.time.split(":").map(Number);
+            return bMin * 60 + bSec - (aMin * 60 + aSec);
+          });
+
+          history = history.slice(0, 5);
+
+          localStorage.setItem("gameHistory", JSON.stringify(history));
+          updateContext({ history });
+
           console.log("Win");
         },
       },
@@ -1981,10 +1998,15 @@ class ControlButtonsController {
         selectedCells: context.selectedCells,
         duration: context.time,
       });
+      this.controlButtons.disable(this.buttons.saveGameButton);
     });
 
     buttons.continueGameButton.addListener("click", () => {
       const data = getDataFromLS();
+      console.log(data.template);
+      console.log(data.selectedCells);
+      console.log(data.matrixState);
+      //TODO не обновляются данные в state Machine почему?(
       this.stateMachine.transition(
         "continue",
         ({ context: { updateContext } }) => {
@@ -1995,6 +2017,7 @@ class ControlButtonsController {
           });
         },
       );
+      this.controlButtons.disable(this.buttons.continueGameButton);
     });
 
     buttons.solutionButton.addListener("click", () => {
@@ -2007,7 +2030,7 @@ class TemplateSelector extends BaseComponent {
   constructor(config) {
     super({
       tag: "select",
-      className: styles$5.selectTemplate,
+      className: styles$6.selectTemplate,
       text: "Select game",
     });
     this.config = config;
@@ -2028,7 +2051,7 @@ class TemplateSelector extends BaseComponent {
     templates.forEach((template) => {
       const option = new BaseComponent({
         tag: "option",
-        className: styles$5.option,
+        className: styles$6.option,
         text: `${template.name} (${template.difficulty})`,
       });
       option.addAttributes({
@@ -2121,7 +2144,7 @@ class CellController {
 const dialog = "_dialog_bo24d_1";
 const popupContainer = "_popupContainer_bo24d_15";
 const popupButton = "_popupButton_bo24d_22";
-const styles$1 = {
+const styles$2 = {
 	dialog: dialog,
 	popupContainer: popupContainer,
 	popupButton: popupButton
@@ -2129,7 +2152,7 @@ const styles$1 = {
 
 class Modal extends BaseComponent {
   constructor({ onClose, text }) {
-    super({ tag: "dialog", className: styles$1.dialog });
+    super({ tag: "dialog", className: styles$2.dialog });
     this.onClose = onClose;
     this.text = text;
 
@@ -2140,7 +2163,7 @@ class Modal extends BaseComponent {
   addPopupContainer() {
     const popupContainer = new BaseComponent({
       tag: "div",
-      className: styles$1.popupContainer,
+      className: styles$2.popupContainer,
     });
 
     const text = this.addText(this.text);
@@ -2153,7 +2176,7 @@ class Modal extends BaseComponent {
   addCloseButton() {
     const popupButton = new BaseComponent({
       tag: "button",
-      className: styles$1.popupButton,
+      className: styles$2.popupButton,
     });
 
     popupButton.addListener("click", () => {
@@ -2232,6 +2255,33 @@ class AudioController {
   }
 }
 
+const leaderBoard = "_leaderBoard_1j0r6_1";
+const styles$1 = {
+	leaderBoard: leaderBoard
+};
+
+class LeaderBoard extends BaseComponent {
+  constructor() {
+    super({ tag: "section", className: styles$1.leaderBoard });
+  }
+
+  addResults() {
+    this.destroyChildren();
+    this.history = JSON.parse(localStorage.getItem("gameHistory")) || [];
+
+    this.history.map((elem, i) => {
+      const result = new BaseComponent({
+        tag: "span",
+        className: styles$1.result,
+      });
+      result.setTextContent(
+        `${i + 1}. ${elem.solvedTemplate.toUpperCase()} - ${elem.difficulty.toUpperCase()} - ${elem.time}`,
+      );
+      this.append(result);
+    });
+  }
+}
+
 class Main extends BaseComponent {
   /**
    *
@@ -2239,7 +2289,7 @@ class Main extends BaseComponent {
    * @param {string} className
    */
   constructor() {
-    super({ tag: "main", className: styles$2.main });
+    super({ tag: "main", className: styles$3.main });
 
     this.getNode();
     this.subscribeToState();
@@ -2265,11 +2315,17 @@ class Main extends BaseComponent {
     this.cellController = new CellController(stateMachine);
 
     this.addGameBoard();
+    this.addLeaderBoard();
+  }
+
+  addLeaderBoard() {
+    this.leaderBoard = new LeaderBoard();
+    this.append(this.leaderBoard);
   }
   addInvitation() {
     this.h2 = new BaseComponent({
       tag: "h2",
-      className: styles$2.invitation,
+      className: styles$3.invitation,
       text: "Hi! Do you wanna choose a game? ",
     });
     this.append(this.h2);
@@ -2311,6 +2367,7 @@ class Main extends BaseComponent {
     stateMachine.subscribe("stateChanged", ({ state }) => {
       if (state === "stateGameOver") {
         this.addModal(stateMachine.getContext().message);
+        this.leaderBoard.addResults();
       }
     });
   }
@@ -2336,4 +2393,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-Igzg48Mk.js.map
+//# sourceMappingURL=index-B-iRCK_v.js.map
