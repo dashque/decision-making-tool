@@ -273,7 +273,7 @@ summary {
 
 ._logoLink_g56zx_19 {
   padding: 0 20px;
-}._gameControls_x475m_1 {
+}._gameControls_6qptf_1, ._settingsToggler_6qptf_1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -281,21 +281,21 @@ summary {
   justify-content: center;
   width: 100%;
   max-width: 100%;
-  margin: 20px auto;
   margin: 0 auto;
   padding: 10px;
 }
 @media (width < 440px) {
-  ._gameControls_x475m_1 {
+  ._gameControls_6qptf_1, ._settingsToggler_6qptf_1 {
     max-width: 100%;
   }
 }
 
-._randomBtn_x475m_19,
-._resetBtn_x475m_20,
-._saveBtn_x475m_21,
-._continueBtn_x475m_22,
-._solutionBtn_x475m_23 {
+._randomBtn_6qptf_18,
+._soundChanger_6qptf_19,
+._resetBtn_6qptf_20,
+._saveBtn_6qptf_21,
+._continueBtn_6qptf_22,
+._solutionBtn_6qptf_23 {
   cursor: pointer;
   margin: 5px;
   padding: 5px 8px;
@@ -307,16 +307,17 @@ summary {
   max-width: 130px;
   font-weight: 400;
 }
-._randomBtn_x475m_19:hover,
-._resetBtn_x475m_20:hover,
-._saveBtn_x475m_21:hover,
-._continueBtn_x475m_22:hover,
-._solutionBtn_x475m_23:hover {
+._randomBtn_6qptf_18:hover,
+._soundChanger_6qptf_19:hover,
+._resetBtn_6qptf_20:hover,
+._saveBtn_6qptf_21:hover,
+._continueBtn_6qptf_22:hover,
+._solutionBtn_6qptf_23:hover {
   color: #2e8e95;
   background-color: rgba(254, 242, 242, 0.7882352941);
 }
 
-._selectTemplate_x475m_44 {
+._selectTemplate_6qptf_45 {
   cursor: pointer;
   margin: 5px;
   padding: 5px 8px;
@@ -325,23 +326,23 @@ summary {
   text-align: center;
   background-color: rgba(255, 252, 252, 0.5607843137);
   width: 100%;
-  max-width: 200px;
-  padding: 0;
+  max-width: 220px;
+  padding: 3px;
   text-align: center;
   outline: none;
 }
-._selectTemplate_x475m_44:hover {
+._selectTemplate_6qptf_45:hover {
   color: #2e8e95;
   background-color: rgba(254, 242, 242, 0.7882352941);
 }
 
-._option_x475m_63 {
+._option_6qptf_64 {
   width: 100%;
   max-width: 130px;
   padding: 0;
 }
 
-._inactive_x475m_69 {
+._inactive_6qptf_70 {
   cursor: not-allowed;
   color: #2e8e95;
   background-color: rgba(205, 197, 197, 0.6196078431);

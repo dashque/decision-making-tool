@@ -444,18 +444,22 @@ class Header extends BaseComponent {
   }
 }
 
-const gameControls = "_gameControls_x475m_1";
-const randomBtn = "_randomBtn_x475m_19";
-const resetBtn = "_resetBtn_x475m_20";
-const saveBtn = "_saveBtn_x475m_21";
-const continueBtn = "_continueBtn_x475m_22";
-const solutionBtn = "_solutionBtn_x475m_23";
-const selectTemplate = "_selectTemplate_x475m_44";
-const option = "_option_x475m_63";
-const inactive = "_inactive_x475m_69";
+const gameControls = "_gameControls_6qptf_1";
+const settingsToggler = "_settingsToggler_6qptf_1";
+const randomBtn = "_randomBtn_6qptf_18";
+const soundChanger = "_soundChanger_6qptf_19";
+const resetBtn = "_resetBtn_6qptf_20";
+const saveBtn = "_saveBtn_6qptf_21";
+const continueBtn = "_continueBtn_6qptf_22";
+const solutionBtn = "_solutionBtn_6qptf_23";
+const selectTemplate = "_selectTemplate_6qptf_45";
+const option = "_option_6qptf_64";
+const inactive = "_inactive_6qptf_70";
 const styles$6 = {
 	gameControls: gameControls,
+	settingsToggler: settingsToggler,
 	randomBtn: randomBtn,
+	soundChanger: soundChanger,
 	resetBtn: resetBtn,
 	saveBtn: saveBtn,
 	continueBtn: continueBtn,
@@ -477,34 +481,34 @@ class GameControls extends BaseComponent {
   }
 
   addButtons() {
-    this.themeChanger = new BaseComponent({
-      tag: "button",
-      className: styles$6.randomBtn,
-      text: "Change theme",
-    });
-
     this.randomGameButton = new BaseComponent({
       tag: "button",
       className: styles$6.randomBtn,
       text: "Random game",
     });
+    this.randomGameButton.addAttributes({ "aria-label": "random-game-button" });
 
     this.resetGameButton = new BaseComponent({
       tag: "button",
       className: styles$6.resetBtn,
       text: "Reset game",
     });
+    this.resetGameButton.addAttributes({ "aria-label": "reset-game-button" });
 
     this.saveGameButton = new BaseComponent({
       tag: "button",
       className: styles$6.saveBtn,
       text: "Save game",
     });
+    this.saveGameButton.addAttributes({ "aria-label": "save-game-button" });
 
     this.continueGameButton = new BaseComponent({
       tag: "button",
       className: styles$6.continueBtn,
       text: "Continue game",
+    });
+    this.continueGameButton.addAttributes({
+      "aria-label": "continue-game-button",
     });
 
     this.solutionButton = new BaseComponent({
@@ -512,9 +516,9 @@ class GameControls extends BaseComponent {
       className: styles$6.solutionBtn,
       text: "Solution",
     });
+    this.solutionButton.addAttributes({ "aria-label": "solution-button" });
 
     this.appendChildren([
-      this.themeChanger,
       this.randomGameButton,
       this.resetGameButton,
       this.saveGameButton,
@@ -580,7 +584,10 @@ class Cell extends BaseComponent {
       cb(event);
     });
   }
-
+  removeAllClasses() {
+    this.removeClass(styles$5.filled);
+    this.removeClass(styles$5.marked);
+  }
   onLeftClick(cb) {
     this.addListener("click", (event) => {
       cb(event);
@@ -590,7 +597,7 @@ class Cell extends BaseComponent {
 
   setBackground() {
     this.removeClass(styles$5.marked);
-    if (!this.getNode().classList.contains((styles$5.filled))) {
+    if (!this.getNode().classList.contains(styles$5.filled)) {
       this.addClass(styles$5.filled);
     } else {
       this.removeClass(styles$5.filled);
@@ -599,7 +606,7 @@ class Cell extends BaseComponent {
 
   setMark() {
     this.removeClass(styles$5.filled);
-    if (!this.getNode().classList.contains((styles$5.marked))) {
+    if (!this.getNode().classList.contains(styles$5.marked)) {
       this.addClass(styles$5.marked);
     } else {
       this.removeClass(styles$5.marked);
@@ -1868,19 +1875,28 @@ const stateMachine = createMachine({
           console.log(`Reset`);
         },
       },
-    },
-    chooseTemplate: {
-      target: "stateWaitingForInput",
-      action({ data, context: { getContext, updateContext } }) {
-        updateContext({
-          template: data.template,
-          matrixState: data.template.matrix,
-        });
-        console.log("Select template", getContext());
+      chooseTemplate: {
+        target: "stateWaitingForInput",
+        action({ data, context: { getContext, updateContext } }) {
+          updateContext({
+            template: data.template,
+            matrixState: data.template.matrix,
+          });
+          console.log("Select template", getContext());
+        },
+      },
+      getRandomGame: {
+        target: "stateWaitingForInput",
+        action({ data, context: { updateContext } }) {
+          updateContext({
+            template: data.template,
+            matrixState: data.template.matrix,
+          });
+          console.log(`Random game from solution: ${data.template.name}`);
+        },
       },
     },
   },
-
   stateGameOver: {
     actions: {
       onEnter() {
@@ -1966,7 +1982,6 @@ class ControlButtonsController {
 
       case "stateWaitingForInput":
         this.controlButtons.enable(this.buttons.continueGameButton);
-
         this.controlButtons.enable(this.buttons.randomGameButton);
         this.controlButtons.enable(this.buttons.solutionButton);
 
@@ -1996,7 +2011,7 @@ class ControlButtonsController {
         this.controlButtons.enable(this.buttons.continueGameButton);
         this.controlButtons.enable(this.buttons.resetGameButton);
         this.controlButtons.enable(this.buttons.solutionButton);
-
+        this.controlButtons.enable(this.buttons.randomGameButton);
         break;
       case "chooseTemplate":
         this.controlButtons.enable(this.buttons.continueGameButton);
@@ -2014,10 +2029,6 @@ class ControlButtonsController {
     }
   }
   setupButtonsListeners(buttons) {
-    buttons.themeChanger.addListener("click", () => {
-      document.body.classList.toggle("darkTheme");
-    });
-
     buttons.randomGameButton.addListener("click", () => {
       const randomTemplates = fisherYatesShuffle([
         ...this.config.easy,
@@ -2067,46 +2078,6 @@ class ControlButtonsController {
     buttons.solutionButton.addListener("click", () => {
       this.stateMachine.transition("solution");
     });
-  }
-}
-
-class TemplateSelector extends BaseComponent {
-  constructor(config) {
-    super({
-      tag: "select",
-      className: styles$6.selectTemplate,
-      text: "Select game",
-    });
-    this.config = config;
-    this.getNode();
-    this.#addOptions();
-  }
-
-  setValue(templateName) {
-    this.getNode().value = templateName;
-  }
-
-  getTemplatesFromConfig() {
-    return [...this.config.easy, ...this.config.medium, ...this.config.hard];
-  }
-
-  #addOptions() {
-    const templates = this.getTemplatesFromConfig();
-    templates.forEach((template) => {
-      const option = new BaseComponent({
-        tag: "option",
-        className: styles$6.option,
-        text: `${template.name} (${template.difficulty})`,
-      });
-      option.addAttributes({
-        value: template.name,
-      });
-      this.append(option);
-    });
-  }
-
-  addEventListeners(event, callback) {
-    this.addListener("change", callback);
   }
 }
 
@@ -2301,6 +2272,19 @@ class AudioController {
       this.#sounds[audioName].getNode().play();
     }
   }
+
+  mute() {
+    console.log("mute");
+    for (const sound of Object.values(this.#sounds)) {
+      sound.getNode().muted = true;
+    }
+  }
+  unmute() {
+    console.log("unmute");
+    for (const sound of Object.values(this.#sounds)) {
+      sound.getNode().muted = false;
+    }
+  }
 }
 
 const leaderBoard = "_leaderBoard_1wr83_1";
@@ -2337,6 +2321,108 @@ class LeaderBoard extends BaseComponent {
   }
 }
 
+class TemplateSelector extends BaseComponent {
+  constructor(config) {
+    super({
+      tag: "select",
+      className: styles$6.selectTemplate,
+      text: "Select game",
+    });
+    this.config = config;
+    this.getNode();
+    this.#addOptions();
+  }
+
+  setValue(templateName) {
+    this.getNode().value = templateName;
+  }
+
+  getTemplatesFromConfig() {
+    return [...this.config.easy, ...this.config.medium, ...this.config.hard];
+  }
+
+  #addOptions() {
+    const templates = this.getTemplatesFromConfig();
+    templates.forEach((template) => {
+      const option = new BaseComponent({
+        tag: "option",
+        className: styles$6.option,
+        text: `${template.name} (${template.difficulty})`,
+      });
+      option.addAttributes({
+        value: template.name,
+      });
+      this.append(option);
+    });
+  }
+
+  addEventListeners(event, callback) {
+    this.addListener("change", callback);
+  }
+}
+
+class SettingsToggler extends BaseComponent {
+  constructor(config, audioController) {
+    super({ tag: "div", className: styles$6.settingsToggler });
+    this.config = config;
+    this.audioController = audioController;
+    this.addThemeChanger();
+    this.addTemplateSelector();
+    this.addSoundChanger();
+    this.addListeners();
+  }
+
+  addThemeChanger() {
+    this.themeChanger = new BaseComponent({
+      tag: "button",
+      className: styles$6.randomBtn,
+      text: "Change theme",
+    });
+    this.themeChanger.addAttributes({ "aria-label": "theme-changer-button" });
+    this.append(this.themeChanger);
+  }
+
+  addSoundChanger() {
+    this.soundChanger = new BaseComponent({
+      tag: "button",
+      className: styles$6.soundChanger,
+      text: "Sounds: On",
+    });
+    this.soundChanger.addClass("on");
+    this.soundChanger.addAttributes({ "aria-label": "sound-changer-button" });
+    this.append(this.soundChanger);
+  }
+
+  addTemplateSelector() {
+    this.templateSelector = new TemplateSelector(this.config);
+    this.templateSelector.addAttributes({ "area-label": "template-selector" });
+    this.append(this.templateSelector);
+  }
+
+  getTemplateSelector() {
+    return this.templateSelector;
+  }
+
+  addListeners() {
+    this.themeChanger.addListener("click", () => {
+      document.body.classList.toggle("darkTheme");
+    });
+    this.soundChanger.addListener("click", () => {
+      if (this.soundChanger.getNode().classList.contains("on")) {
+        this.soundChanger.setTextContent("Sounds: Off");
+        this.soundChanger.removeClass("on");
+        this.soundChanger.addClass("off");
+        this.audioController.mute();
+      } else if (this.soundChanger.getNode().classList.contains("off")) {
+        this.soundChanger.setTextContent("Sounds: On");
+        this.soundChanger.removeClass("off");
+        this.soundChanger.addClass("on");
+        this.audioController.unmute();
+      }
+    });
+  }
+}
+
 class Main extends BaseComponent {
   /**
    *
@@ -2349,11 +2435,11 @@ class Main extends BaseComponent {
     this.getNode();
     this.subscribeToState();
 
-    this.addInvitation();
-    this.addTemplateSelector();
-    this.addControls();
-
     this.audioController = new AudioController(stateMachine);
+
+    this.addInvitation();
+    this.addSettingsToggler();
+    this.addControls();
 
     this.controlButtonsController = new ControlButtonsController(
       stateMachine,
@@ -2364,13 +2450,21 @@ class Main extends BaseComponent {
     this.templateController = new TemplateController(
       levelConfig,
       stateMachine,
-      this.templateSelector,
+      this.settingsToggler.getTemplateSelector(),
     );
 
     this.cellController = new CellController(stateMachine);
 
     this.addGameBoard();
     this.addLeaderBoard();
+  }
+
+  addSettingsToggler() {
+    this.settingsToggler = new SettingsToggler(
+      levelConfig,
+      this.audioController,
+    );
+    this.append(this.settingsToggler);
   }
 
   addLeaderBoard() {
@@ -2384,11 +2478,6 @@ class Main extends BaseComponent {
       text: "Hi! Do you wanna choose a game? ",
     });
     this.append(this.h2);
-  }
-
-  addTemplateSelector() {
-    this.templateSelector = new TemplateSelector(levelConfig);
-    this.append(this.templateSelector);
   }
 
   addControls() {
@@ -2448,4 +2537,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-mC_b4zoi.js.map
+//# sourceMappingURL=index-CSSaPiyt.js.map
