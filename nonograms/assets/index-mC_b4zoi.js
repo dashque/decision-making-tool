@@ -1625,7 +1625,10 @@ function cellClickRightAction({
   data: { x, y },
   context: { getContext, updateContext },
 }) {
-  const { selectedCells } = getContext();
+  const {
+    template: { matrix },
+    selectedCells,
+  } = getContext();
   const existingIndex = getExistingIndex(selectedCells, x, y);
 
   if (existingIndex !== -1) {
@@ -2445,4 +2448,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-GnXA_uAf.js.map
+//# sourceMappingURL=index-mC_b4zoi.js.map
