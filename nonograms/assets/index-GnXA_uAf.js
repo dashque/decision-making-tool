@@ -308,13 +308,16 @@ class Timer extends BaseComponent {
       ({ trigger, state, context: { updateContext } }) => {
         if (trigger === "win") {
           updateContext({
-            message: "That's a WIN! Congrats! " + this.timerTime,
+            message: `Great! You have solved the nonogram in ${this.timerTime} seconds!`,
           });
 
           this.resetTimer();
         }
 
-        if (trigger === "cellClick" && !this.isRunninig) {
+        if (
+          trigger === "cellClick" ||
+          (trigger === "cellClickRight" && !this.isRunninig)
+        ) {
           this.startTimer();
         }
 
@@ -322,12 +325,14 @@ class Timer extends BaseComponent {
           this.resetTimer();
         }
 
-        // if (trigger === "saveGame") {
-        //   this.pauseTimer();
-        // }
-        if (trigger === "continue") {
-          this.startTime();
+        if (trigger === "saveGame") {
+          this.pauseTimer();
         }
+
+        // if (trigger === "continue") {
+        //   this.setTextContent(getContext().time); // TODO не уверена что работает
+        //   this.startTime();
+        // }
       },
     );
     this.updateDisplay();
@@ -425,7 +430,7 @@ class Header extends BaseComponent {
     });
 
     logo.addAttributes({
-      src: "./img/favicon.ico",
+      src: "/img/favicon.ico",
       alt: "Logo Nonograms",
     });
 
@@ -583,16 +588,22 @@ class Cell extends BaseComponent {
     });
   }
 
-  removeAllClasses() {
-    this.removeClass(styles$5.filled);
-    this.removeClass(styles$5.marked);
-  }
   setBackground() {
-    this.toggleClass(styles$5.filled, styles$5.empty);
+    this.removeClass(styles$5.marked);
+    if (!this.getNode().classList.contains((styles$5.filled))) {
+      this.addClass(styles$5.filled);
+    } else {
+      this.removeClass(styles$5.filled);
+    }
   }
 
   setMark() {
-    this.toggleClass(styles$5.marked, styles$5.empty);
+    this.removeClass(styles$5.filled);
+    if (!this.getNode().classList.contains((styles$5.marked))) {
+      this.addClass(styles$5.marked);
+    } else {
+      this.removeClass(styles$5.marked);
+    }
   }
 
   disable() {
@@ -604,16 +615,16 @@ class Cell extends BaseComponent {
   }
 }
 
-const gameboardContainer = "_gameboardContainer_zl7qi_1";
-const gameBoard = "_gameBoard_zl7qi_10";
-const easy = "_easy_zl7qi_17";
-const medium = "_medium_zl7qi_23";
-const hard = "_hard_zl7qi_36";
-const horizontalGrid = "_horizontalGrid_zl7qi_52";
-const verticalGrid = "_verticalGrid_zl7qi_64";
-const gap = "_gap_zl7qi_74";
-const hintHorizontal = "_hintHorizontal_zl7qi_82";
-const hintVertical = "_hintVertical_zl7qi_94";
+const gameboardContainer = "_gameboardContainer_1xi0j_1";
+const gameBoard = "_gameBoard_1xi0j_10";
+const easy = "_easy_1xi0j_17";
+const medium = "_medium_1xi0j_23";
+const hard = "_hard_1xi0j_36";
+const horizontalGrid = "_horizontalGrid_1xi0j_52";
+const verticalGrid = "_verticalGrid_1xi0j_63";
+const gap = "_gap_1xi0j_73";
+const hintHorizontal = "_hintHorizontal_1xi0j_81";
+const hintVertical = "_hintVertical_1xi0j_93";
 const styles$4 = {
 	gameboardContainer: gameboardContainer,
 	gameBoard: gameBoard,
@@ -1596,7 +1607,7 @@ function cellClickAction({
   } else {
     selectedCells.push({ x, y, isCorrect });
   }
-
+  console.log("lc", selectedCells);
   const correctSelectedCount = selectedCells.filter(
     (cell) => cell.isCorrect,
   ).length;
@@ -1607,6 +1618,30 @@ function cellClickAction({
   ) {
     this.transition("win");
 
+    updateContext({ selectedCells: [] });
+  }
+}
+function cellClickRightAction({
+  data: { x, y },
+  context: { getContext, updateContext },
+}) {
+  const { selectedCells } = getContext();
+  const existingIndex = getExistingIndex(selectedCells, x, y);
+
+  if (existingIndex !== -1) {
+    selectedCells.splice(existingIndex, 1);
+  }
+
+  updateContext({ selectedCells });
+
+  const correctSelectedCount = selectedCells.filter(
+    (cell) => cell.isCorrect,
+  ).length;
+  if (
+    correctSelectedCount === getCorrectCellsCount(matrix) &&
+    !hasIncorrectSelections(selectedCells)
+  ) {
+    this.transition("win");
     updateContext({ selectedCells: [] });
   }
 }
@@ -1702,6 +1737,10 @@ const stateMachine = createMachine({
           console.log(`Random game from waiting: ${data.template.name}`);
         },
       },
+      cellClickRight: {
+        target: "statePlaying",
+        action: cellClickRightAction,
+      },
       cellClick: {
         target: "statePlaying",
         action: cellClickAction,
@@ -1734,6 +1773,10 @@ const stateMachine = createMachine({
           });
           console.log("Select template from playing");
         },
+      },
+      cellClickRight: {
+        target: "statePlaying",
+        action: cellClickRightAction,
       },
       cellClick: {
         target: "statePlaying",
@@ -2125,23 +2168,22 @@ class TemplateController {
 }
 
 class CellController {
-  constructor(stateMachine, audioController) {
+  constructor(stateMachine) {
     this.stateMachine = stateMachine;
-    this.audioController = audioController;
   }
 
   onClick(x, y, event) {
-    if (event.button !== 0) {
-      return;
+    if (event.button === 0) {
+      this.stateMachine.transition("cellClick", { x, y });
+    } else if (event.button === 2) {
+      this.stateMachine.transition("cellClickRight", { x, y });
     }
-
-    this.stateMachine.transition("cellClick", { x, y });
   }
 }
 
-const dialog = "_dialog_bo24d_1";
-const popupContainer = "_popupContainer_bo24d_15";
-const popupButton = "_popupButton_bo24d_22";
+const dialog = "_dialog_1tn5w_1";
+const popupContainer = "_popupContainer_1tn5w_15";
+const popupButton = "_popupButton_1tn5w_23";
 const styles$2 = {
 	dialog: dialog,
 	popupContainer: popupContainer,
@@ -2222,7 +2264,8 @@ class Audio extends BaseComponent {
 
 class AudioController {
   #audioConfig = {
-    click: "./audio/click2.wav",
+    clickRight: "./audio/click.wav",
+    click: "./audio/click3.mp3",
     win: "./audio/win.mp3",
   };
 
@@ -2237,6 +2280,10 @@ class AudioController {
       this.stateMachine.subscribe("stateChanged", ({ state, trigger }) => {
         if (state === "statePlaying" && trigger === "cellClick") {
           this.#playAudio("click");
+        }
+
+        if (state === "statePlaying" && trigger === "cellClickRight") {
+          this.#playAudio("clickRight");
         }
 
         if (state === "stateGameOver" && trigger === "win") {
@@ -2372,7 +2419,7 @@ class Main extends BaseComponent {
     stateMachine.subscribe("stateChanged", ({ state }) => {
       if (state === "stateGameOver") {
         this.addModal(stateMachine.getContext().message);
-        this.leaderBoard.addResults();
+        // this.leaderBoard.addResults();
       }
     });
   }
@@ -2398,4 +2445,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-DiHe847j.js.map
+//# sourceMappingURL=index-GnXA_uAf.js.map
