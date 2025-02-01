@@ -310,9 +310,8 @@ class Timer extends BaseComponent {
           const totalTime = this.gameTime;
           updateContext({
             time: totalTime,
-            message: `Great! You have solved the nonogram in ${totalTime} seconds!`,
+            message: `Great! You have solved the nonogram in ${this.getMin(totalTime)}:${this.getSec(totalTime)} seconds!`,
           });
-          console.log("~~~timer", getContext());
           this.resetTimer();
         }
 
@@ -327,15 +326,23 @@ class Timer extends BaseComponent {
           this.resetTimer();
         }
 
-        if (trigger === "saveGame") {
+        if (trigger === "saveGame" && state === "statePlaying") {
           const savedTime = this.gameTime;
-          updateContext({ time: savedTime });
+          updateContext({
+            time: savedTime,
+          });
         }
 
         if (trigger === "continue") {
-          this.gameTime = getContext().time;
-          this.startTime = Date.now() - this.gameTime * 1000;
-          this.startTimer();
+          this.setGameTime(getContext().time);
+          // this.startTime = Date.now() - this.gameTime * 1000;
+          this.updateTimer();
+          if (
+            trigger === "cellClick" ||
+            (trigger === "cellClickRight" && !this.isRunninig)
+          ) {
+            this.startTimer();
+          }
         }
       },
     );
@@ -368,19 +375,27 @@ class Timer extends BaseComponent {
   setGameTime(value) {
     this.gameTime = value;
   }
-  updateTimer() {
-    const resultMin = String(Math.floor(this.gameTime / 60)).padStart(2, "0");
-    const resultSec = String(this.gameTime % 60).padStart(2, "0");
-    return `Time: ${resultMin}:${resultSec}`;
+
+  getMin(time) {
+    return String(Math.floor(time / 60)).padStart(2, "0");
   }
+
+  getSec(time) {
+    return String(time % 60).padStart(2, "0");
+  }
+
+  updateTimer() {
+    return `Time: ${this.getMin(this.gameTime)}:${this.getSec(this.gameTime)}`;
+  }
+
   updateDisplay() {
     return this.setTextContent(this.updateTimer());
   }
 }
 
-const header = "_header_g56zx_1";
-const h1 = "_h1_g56zx_9";
-const logoLink = "_logoLink_g56zx_19";
+const header = "_header_81yck_1";
+const h1 = "_h1_81yck_10";
+const logoLink = "_logoLink_81yck_20";
 const styles$7 = {
 	header: header,
 	h1: h1,
@@ -440,17 +455,17 @@ class Header extends BaseComponent {
   }
 }
 
-const gameControls = "_gameControls_6qptf_1";
-const settingsToggler = "_settingsToggler_6qptf_1";
-const randomBtn = "_randomBtn_6qptf_18";
-const soundChanger = "_soundChanger_6qptf_19";
-const resetBtn = "_resetBtn_6qptf_20";
-const saveBtn = "_saveBtn_6qptf_21";
-const continueBtn = "_continueBtn_6qptf_22";
-const solutionBtn = "_solutionBtn_6qptf_23";
-const selectTemplate = "_selectTemplate_6qptf_45";
-const option = "_option_6qptf_64";
-const inactive = "_inactive_6qptf_70";
+const gameControls = "_gameControls_s3tz3_1";
+const settingsToggler = "_settingsToggler_s3tz3_1";
+const randomBtn = "_randomBtn_s3tz3_18";
+const soundChanger = "_soundChanger_s3tz3_19";
+const resetBtn = "_resetBtn_s3tz3_20";
+const saveBtn = "_saveBtn_s3tz3_21";
+const solutionBtn = "_solutionBtn_s3tz3_22";
+const continueBtn = "_continueBtn_s3tz3_43";
+const selectTemplate = "_selectTemplate_s3tz3_59";
+const option = "_option_s3tz3_78";
+const inactive = "_inactive_s3tz3_84";
 const styles$6 = {
 	gameControls: gameControls,
 	settingsToggler: settingsToggler,
@@ -458,8 +473,8 @@ const styles$6 = {
 	soundChanger: soundChanger,
 	resetBtn: resetBtn,
 	saveBtn: saveBtn,
-	continueBtn: continueBtn,
 	solutionBtn: solutionBtn,
+	continueBtn: continueBtn,
 	selectTemplate: selectTemplate,
 	option: option,
 	inactive: inactive
@@ -501,7 +516,7 @@ class GameControls extends BaseComponent {
     this.continueGameButton = new BaseComponent({
       tag: "button",
       className: styles$6.continueBtn,
-      text: "Continue game",
+      text: "Continue last game",
     });
     this.continueGameButton.addAttributes({
       "aria-label": "continue-game-button",
@@ -517,8 +532,8 @@ class GameControls extends BaseComponent {
     this.appendChildren([
       this.randomGameButton,
       this.resetGameButton,
-      this.saveGameButton,
       this.continueGameButton,
+      this.saveGameButton,
       this.solutionButton,
     ]);
   }
@@ -1661,6 +1676,50 @@ function cellClickRightAction({
   }
 }
 
+function setDataToLS({ template, selectedCells, time }) {
+  const gameData = {
+    templateName: template.name,
+    level: template.difficulty,
+    matrix: template.matrix,
+    selectedCells,
+    time,
+  };
+
+  localStorage.setItem("Zagorky: saveGame", JSON.stringify(gameData));
+}
+
+function getDataFromLS() {
+  const savedData = localStorage.getItem("Zagorky: saveGame");
+  if (!savedData) {
+    return;
+  }
+  const { templateName, level, matrix, selectedCells, time } =
+    JSON.parse(savedData);
+
+  const template = levelConfig[level].find(
+    (template) => template.name === templateName,
+  );
+  if (template) {
+    return {
+      template: template,
+      matrixState: matrix,
+      selectedCells: selectedCells,
+      time: time,
+    };
+  }
+}
+
+function saveHistoryToLS(newResult) {
+  let history = JSON.parse(localStorage.getItem("Zagorky: gameHistory")) || [];
+
+  history.push(newResult);
+  history.sort((a, b) => a.time - b.time);
+  history = history.slice(0, 5);
+  localStorage.setItem("Zagorky: gameHistory", JSON.stringify(history));
+
+  return history;
+}
+
 /**
  * @typedef {Object} StateDef
  * @property {Object} actions - object of actions for the state
@@ -1680,7 +1739,7 @@ const stateMachine = createMachine({
   initialState: "stateWaitingForInput",
   context: {
     template: initialTemplate,
-    time: null,
+    time: 0,
     message: "",
     history: [],
     selectedCells: [],
@@ -1787,18 +1846,9 @@ const stateMachine = createMachine({
       },
       saveGame: {
         target: "statePlaying",
-        action: function ({ data, context: { getContext, updateContext } }) {
-          updateContext({
-            history: [
-              {
-                time: data.time,
-                selectedCells: data.selectedCells,
-                template: data.template,
-                matrixState: data.matrix,
-              },
-            ],
-          });
-        },
+        // action({ context: { getContext } }) {
+        //   console.log("Saving game", getContext());
+        // },
       },
       continue: {
         target: "statePlaying",
@@ -1861,6 +1911,18 @@ const stateMachine = createMachine({
       },
     },
     transitions: {
+      continue: {
+        target: "statePlaying",
+        action({ prevState, data, context: { getContext, updateContext } }) {
+          updateContext({
+            template: data.template,
+            selectedCells: data.selectedCells,
+            matrixState: data.matrixState,
+            time: data.time,
+          });
+          console.log("Continue from", prevState, getContext());
+        },
+      },
       chooseTemplate: {
         target: "stateWaitingForInput",
         action({ data, context: { updateContext } }) {
@@ -1892,50 +1954,6 @@ const stateMachine = createMachine({
   },
 });
 
-function setDataToLS({ template, selectedCells, time }) {
-  const gameData = {
-    templateName: template.name,
-    level: template.difficulty,
-    matrix: template.matrix,
-    selectedCells,
-    time,
-  };
-
-  localStorage.setItem("Zagorky: nonogramGameState", JSON.stringify(gameData));
-}
-
-function getDataFromLS() {
-  const savedData = localStorage.getItem("Zagorky: nonogramGameState");
-  if (!savedData) {
-    return;
-  }
-  const { templateName, level, matrix, selectedCells, time } =
-    JSON.parse(savedData);
-
-  const template = levelConfig[level].find(
-    (template) => template.name === templateName,
-  );
-  if (template) {
-    return {
-      template: template,
-      matrixState: matrix,
-      selectedCells: selectedCells,
-      time: time,
-    };
-  }
-}
-
-function saveHistoryToLS(newResult) {
-  let history = JSON.parse(localStorage.getItem("gameHistory")) || [];
-
-  history.push(newResult);
-  history.sort((a, b) => a.time - b.time);
-  history = history.slice(0, 5);
-  localStorage.setItem("gameHistory", JSON.stringify(history));
-
-  return history;
-}
-
 function fisherYatesShuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -1955,7 +1973,7 @@ class ControlButtonsController {
   }
 
   setupListeners() {
-    this.stateMachine.subscribe("stateChanged", () => {
+    this.stateMachine.subscribe("stateChanged", ({ prevState }) => {
       this.updateButtonsState();
     });
   }
@@ -1972,50 +1990,50 @@ class ControlButtonsController {
     ]);
 
     switch (state) {
-      case "stateInitializing":
-        this.controlButtons.disableAll([
-          this.buttons.resetGameButton,
-          this.buttons.saveGameButton,
-          this.buttons.continueGameButton,
-          this.buttons.solutionButton,
-        ]);
-        break;
-
       case "stateWaitingForInput":
-        this.controlButtons.enable(this.buttons.continueGameButton);
+        if (JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
+          this.controlButtons.enable(this.buttons.continueGameButton);
+        }
+        this.controlButtons.disable(this.buttons.continueGameButton);
+        this.controlButtons.disable(this.buttons.continueGameButton);
         this.controlButtons.enable(this.buttons.randomGameButton);
         this.controlButtons.enable(this.buttons.solutionButton);
 
         break;
 
       case "statePlaying":
+        if (JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
+          this.controlButtons.enable(this.buttons.continueGameButton);
+          this.controlButtons.disable(this.buttons.saveGameButton);
+        }
         this.controlButtons.enable(this.buttons.resetGameButton);
-        this.controlButtons.enable(this.buttons.saveGameButton);
-        this.controlButtons.enable(this.buttons.solutionButton);
-        this.controlButtons.enable(this.buttons.randomGameButton);
-        break;
-      case "stateSaving":
-        this.controlButtons.enable(this.buttons.resetGameButton);
-        this.controlButtons.enable(this.buttons.continueGameButton);
         this.controlButtons.enable(this.buttons.saveGameButton);
         this.controlButtons.enable(this.buttons.solutionButton);
         this.controlButtons.enable(this.buttons.randomGameButton);
         break;
       case "stateGameOver":
+        if (JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
+          this.controlButtons.enable(this.buttons.continueGameButton);
+          this.controlButtons.disable(this.buttons.saveGameButton);
+        }
         this.controlButtons.enable(this.buttons.resetGameButton);
-        this.controlButtons.enable(this.buttons.continueGameButton);
         this.controlButtons.disable(this.buttons.saveGameButton);
         this.controlButtons.disable(this.buttons.solutionButton);
         this.controlButtons.enable(this.buttons.randomGameButton);
         break;
       case "stateSolution":
-        this.controlButtons.enable(this.buttons.continueGameButton);
+        if (JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
+          this.controlButtons.enable(this.buttons.continueGameButton);
+        }
         this.controlButtons.enable(this.buttons.resetGameButton);
         this.controlButtons.enable(this.buttons.solutionButton);
         this.controlButtons.enable(this.buttons.randomGameButton);
         break;
       case "chooseTemplate":
-        this.controlButtons.enable(this.buttons.continueGameButton);
+        if (JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
+          this.controlButtons.enable(this.buttons.continueGameButton);
+        }
+
         this.controlButtons.enable(this.buttons.randomGameButton);
         break;
       default:
@@ -2048,6 +2066,7 @@ class ControlButtonsController {
     });
 
     buttons.saveGameButton.addListener("click", () => {
+      this.stateMachine.transition("saveGame");
       const context = this.stateMachine.getContext();
       setDataToLS({
         template: context.template,
@@ -2066,7 +2085,6 @@ class ControlButtonsController {
         matrixState: data.matrixState,
         time: data.time,
       });
-      this.controlButtons.disable(this.buttons.continueGameButton);
     });
 
     buttons.solutionButton.addListener("click", () => {
@@ -2303,6 +2321,7 @@ class LeaderBoard extends BaseComponent {
         tag: "span",
         className: styles$1.result,
       });
+
       result.setTextContent(
         `${i + 1}. ${elem.template} - ${elem.level} - ${this.#formattedTime(elem.time)}`,
       );
@@ -2551,4 +2570,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-BnpCBlhH.js.map
+//# sourceMappingURL=index-cG0Q64Zf.js.map
