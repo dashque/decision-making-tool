@@ -305,12 +305,14 @@ class Timer extends BaseComponent {
 
     this.stateMachine.subscribe(
       "stateChanged",
-      ({ trigger, state, context: { updateContext } }) => {
+      ({ trigger, state, context: { getContext, updateContext } }) => {
         if (trigger === "win") {
+          const totalTime = this.gameTime;
           updateContext({
-            message: `Great! You have solved the nonogram in ${this.timerTime} seconds!`,
+            time: totalTime,
+            message: `Great! You have solved the nonogram in ${totalTime} seconds!`,
           });
-
+          console.log("~~~timer", getContext());
           this.resetTimer();
         }
 
@@ -326,13 +328,15 @@ class Timer extends BaseComponent {
         }
 
         if (trigger === "saveGame") {
-          this.pauseTimer();
+          const savedTime = this.gameTime;
+          updateContext({ time: savedTime });
         }
 
-        // if (trigger === "continue") {
-        //   this.setTextContent(getContext().time); // TODO не уверена что работает
-        //   this.startTime();
-        // }
+        if (trigger === "continue") {
+          this.gameTime = getContext().time;
+          this.startTime = Date.now() - this.gameTime * 1000;
+          this.startTimer();
+        }
       },
     );
     this.updateDisplay();
@@ -341,9 +345,9 @@ class Timer extends BaseComponent {
   resetTimer() {
     if (this.timer) {
       clearInterval(this.timer);
+      this.gameTime = 0;
       this.startTime = null;
       this.timer = null;
-      this.gameTime = 0;
       this.updateDisplay();
       this.isRunninig = false;
     }
@@ -361,24 +365,16 @@ class Timer extends BaseComponent {
     }, 1000);
   }
 
-  pauseTimer() {
-    if (!this.isRunninig) return;
-    clearInterval(this.timer);
-    this.isRunninig = false;
+  setGameTime(value) {
+    this.gameTime = value;
   }
-
-  getMins() {
-    return Math.floor(this.gameTime / 60);
-  }
-
-  getSecs() {
-    return this.gameTime % 60;
+  updateTimer() {
+    const resultMin = String(Math.floor(this.gameTime / 60)).padStart(2, "0");
+    const resultSec = String(this.gameTime % 60).padStart(2, "0");
+    return `Time: ${resultMin}:${resultSec}`;
   }
   updateDisplay() {
-    const resultMin = String(this.getMins()).padStart(2, "0");
-    const resultSec = String(this.getSecs()).padStart(2, "0");
-    this.timerTime = `Time: ${resultMin}:${resultSec}`;
-    this.setTextContent(this.timerTime);
+    return this.setTextContent(this.updateTimer());
   }
 }
 
@@ -677,11 +673,12 @@ class GameBoard extends BaseComponent {
           this.stateMachine.getContext().template,
         );
       } else if (trigger === "continue") {
-        console.log("error");
-
         this.updateGameBoard(this.stateMachine.getContext().template);
         this.templateConroller.updateTemplate(
           this.stateMachine.getContext().template,
+        );
+        this.applyPreviousSolution(
+          this.createMatrix(this.stateMachine.getContext().selectedCells),
         );
       }
     });
@@ -693,11 +690,34 @@ class GameBoard extends BaseComponent {
     });
   }
 
+  createMatrix(selectedCells) {
+    const templateSize = this.stateMachine.getContext().template.size;
+    const matrix = Array.from({ length: templateSize }, () =>
+      Array(templateSize).fill(0),
+    );
+
+    selectedCells.forEach(({ x, y }) => {
+      matrix[y][x] = 1;
+    });
+    return matrix;
+  }
+
   applySolution(matrix) {
     this.board.getChildren().forEach((cell, index) => {
       const x = index % this.width;
       const y = Math.floor(index / this.width);
       cell.disable();
+      cell.removeAllClasses();
+
+      if (matrix[y][x] === 1) {
+        cell.setBackground();
+      }
+    });
+  }
+  applyPreviousSolution(matrix) {
+    this.board.getChildren().forEach((cell, index) => {
+      const x = index % this.width;
+      const y = Math.floor(index / this.width);
       cell.removeAllClasses();
 
       if (matrix[y][x] === 1) {
@@ -1025,7 +1045,6 @@ const levelConfig = {
         [0, 1, 0, 1, 0],
         [0, 1, 0, 1, 0],
       ],
-      preview: "./public/img/templates/easy/dog.png",
     },
     {
       difficulty: "easy",
@@ -1040,7 +1059,6 @@ const levelConfig = {
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0],
       ],
-      preview: "./public/img/templates/easy/heart.png",
     },
     {
       difficulty: "easy",
@@ -1055,7 +1073,6 @@ const levelConfig = {
         [1, 0, 1, 0, 1],
         [1, 0, 0, 0, 1],
       ],
-      preview: "./public/img/templates/easy/bat.png",
     },
     {
       difficulty: "easy",
@@ -1070,7 +1087,6 @@ const levelConfig = {
         [1, 1, 1, 1, 0],
         [1, 1, 1, 1, 1],
       ],
-      preview: "./public/img/templates/easy/cat.png",
     },
     {
       difficulty: "easy",
@@ -1085,7 +1101,6 @@ const levelConfig = {
         [0, 1, 1, 1, 0],
         [1, 0, 1, 0, 1],
       ],
-      preview: "./public/img/templates/easy/snowflake.png",
     },
   ],
   medium: [
@@ -1129,7 +1144,6 @@ const levelConfig = {
         [0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
       ],
-      preview: "./public/img/templates/medium/snail.png",
     },
     {
       difficulty: "medium",
@@ -1160,7 +1174,6 @@ const levelConfig = {
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       ],
-      preview: "./public/img/templates/medium/house.png",
     },
     {
       difficulty: "medium",
@@ -1202,7 +1215,6 @@ const levelConfig = {
         [0, 0, 1, 0, 0, 1, 1, 1, 0, 0],
         [0, 1, 1, 0, 1, 1, 1, 0, 0, 0],
       ],
-      preview: "./public/img/templates/medium/playing-dog.png",
     },
     {
       difficulty: "medium",
@@ -1244,7 +1256,6 @@ const levelConfig = {
         [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
         [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
       ],
-      preview: "./public/img/templates/medium/chilling-cat.png",
     },
     {
       difficulty: "medium",
@@ -1286,7 +1297,6 @@ const levelConfig = {
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
       ],
-      preview: "./public/img/templates/medium/tv.png",
     },
   ],
   hard: [
@@ -1345,7 +1355,6 @@ const levelConfig = {
         [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
       ],
-      preview: "./public/img/templates/hard/peaks.png",
     },
     {
       difficulty: "hard",
@@ -1402,7 +1411,6 @@ const levelConfig = {
         [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       ],
-      preview: "./public/img/templates/hard/castle.png",
     },
     {
       difficulty: "hard",
@@ -1459,7 +1467,6 @@ const levelConfig = {
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1],
       ],
-      preview: "./public/img/templates/hard/house.png",
     },
     {
       difficulty: "hard",
@@ -1516,7 +1523,6 @@ const levelConfig = {
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       ],
-      preview: "./public/img/templates/hard/candle.png",
     },
     {
       difficulty: "hard",
@@ -1573,7 +1579,6 @@ const levelConfig = {
         [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
       ],
-      preview: "./public/img/templates/hard/flowers.png",
     },
   ],
 };
@@ -1656,36 +1661,6 @@ function cellClickRightAction({
   }
 }
 
-function setDataToLS({ template, selectedCells }) {
-  const gameData = {
-    templateName: template.name,
-    level: template.difficulty,
-    matrix: template.matrix,
-    selectedCells,
-  };
-
-  localStorage.setItem("Zagorky: nonogramGameState", JSON.stringify(gameData));
-}
-
-function getDataFromLS() {
-  const savedData = localStorage.getItem("Zagorky: nonogramGameState");
-  if (!savedData) {
-    return;
-  }
-  const { templateName, level, matrix, selectedCells } = JSON.parse(savedData);
-
-  const template = levelConfig[level].find(
-    (template) => template.name === templateName,
-  );
-  if (template) {
-    return {
-      template: template,
-      matrixState: matrix,
-      selectedCells: selectedCells,
-    };
-  }
-}
-
 /**
  * @typedef {Object} StateDef
  * @property {Object} actions - object of actions for the state
@@ -1717,7 +1692,13 @@ const stateMachine = createMachine({
     transitions: {
       continue: {
         target: "statePlaying",
-        action({ prevState, context: { getContext } }) {
+        action({ prevState, data, context: { getContext, updateContext } }) {
+          updateContext({
+            template: data.template,
+            selectedCells: data.selectedCells,
+            matrixState: data.matrixState,
+            time: data.time,
+          });
           console.log("Continue from", prevState, getContext());
         },
       },
@@ -1734,17 +1715,18 @@ const stateMachine = createMachine({
             template: data.template,
             matrixState: data.template.matrix,
           });
-          console.log("Select template", getContext());
+          console.log("Select template", getContext().template);
         },
       },
       getRandomGame: {
         target: "stateWaitingForInput",
-        action({ data, context: { updateContext } }) {
+        action({ state, data, context: { updateContext } }) {
           updateContext({
             template: data.template,
             matrixState: data.template.matrix,
+            selectedCells: [],
           });
-          console.log(`Random game from waiting: ${data.template.name}`);
+          console.log(`Random game from ${state}: ${data.template.name}`);
         },
       },
       cellClickRight: {
@@ -1759,29 +1741,30 @@ const stateMachine = createMachine({
   },
   statePlaying: {
     actions: {
-      onEnter({ prevState, trigger }) {
-        console.log(`Enter: Playing ${prevState} by ${trigger}`);
+      onEnter({ state, prevState, trigger }) {
+        console.log(`Enter: ${state} ${prevState} by ${trigger}`);
       },
     },
     transitions: {
       getRandomGame: {
         target: "stateWaitingForInput",
-        action({ data, context: { updateContext } }) {
+        action({ state, data, context: { updateContext } }) {
           updateContext({
             template: data.template,
             matrixState: data.template.matrix,
+            selectedCells: [],
           });
-          console.log(`Random game from playing: ${data.template.name}`);
+          console.log(`Random game from: ${state} ${data.template.name}`);
         },
       },
       chooseTemplate: {
         target: "stateWaitingForInput",
-        action({ data, context: { updateContext } }) {
+        action({ state, data, context: { updateContext } }) {
           updateContext({
             template: data.template,
             matrixState: data.template.matrix,
           });
-          console.log("Select template from playing");
+          console.log("Select template from", state);
         },
       },
       cellClickRight: {
@@ -1794,66 +1777,39 @@ const stateMachine = createMachine({
       },
       win: {
         target: "stateGameOver",
-        action({ context: { updateContext, getContext } }) {
-          const { template, time } = getContext();
-
-          const solvedTemplate = template.name;
-
-          const formattedTime = new Date(time * 1000)
-            .toISOString()
-            .substr(14, 5);
-
-          let history = JSON.parse(localStorage.getItem("gameHistory")) || [];
-
-          history.push({
-            solvedTemplate,
-            difficulty: template.difficulty,
-            time: formattedTime,
-          });
-
-          history = history.sort((a, b) => {
-            const [aMin, aSec] = a.time.split(":").map(Number);
-            const [bMin, bSec] = b.time.split(":").map(Number);
-            return bMin * 60 + bSec - (aMin * 60 + aSec);
-          });
-
-          history = history.slice(0, 5);
-
-          localStorage.setItem("gameHistory", JSON.stringify(history));
-          updateContext({ history });
-
-          console.log("Win");
-        },
+        action() {},
       },
       reset: {
         target: "stateWaitingForInput",
         action({ context: { updateContext } }) {
           updateContext({ selectedCells: [] });
-          console.log(`Reset`);
         },
       },
       saveGame: {
         target: "statePlaying",
-        action({ data, context: { getContext, updateContext } }) {
+        action: function ({ data, context: { getContext, updateContext } }) {
           updateContext({
-            context: {
-              history: [
-                {
-                  time: data.time,
-                  selectedCells: data.selectedCells,
-                  template: data.template,
-                  matrixState: data.matrix,
-                },
-              ],
-            },
+            history: [
+              {
+                time: data.time,
+                selectedCells: data.selectedCells,
+                template: data.template,
+                matrixState: data.matrix,
+              },
+            ],
           });
-          console.log("Save", getContext());
         },
       },
       continue: {
-        target: "stateWaitingForInput",
-        action({ context: { updateContext } }) {
-          updateContext(getDataFromLS());
+        target: "statePlaying",
+        action({ prevState, data, context: { getContext, updateContext } }) {
+          updateContext({
+            template: data.template,
+            selectedCells: data.selectedCells,
+            matrixState: data.matrixState,
+            time: data.time,
+          });
+          console.log("Continue from", prevState, getContext());
         },
       },
       solution: {
@@ -1891,6 +1847,7 @@ const stateMachine = createMachine({
           updateContext({
             template: data.template,
             matrixState: data.template.matrix,
+            selectedCells: [],
           });
           console.log(`Random game from solution: ${data.template.name}`);
         },
@@ -1920,13 +1877,13 @@ const stateMachine = createMachine({
           console.log(`Reset`);
         },
       },
-
       getRandomGame: {
         target: "stateWaitingForInput",
         action({ data, context: { updateContext } }) {
           updateContext({
             template: data.template,
             matrixState: data.template.matrix,
+            selectedCells: [],
           });
           console.log(`random game: ${data.template.name}`);
         },
@@ -1934,6 +1891,50 @@ const stateMachine = createMachine({
     },
   },
 });
+
+function setDataToLS({ template, selectedCells, time }) {
+  const gameData = {
+    templateName: template.name,
+    level: template.difficulty,
+    matrix: template.matrix,
+    selectedCells,
+    time,
+  };
+
+  localStorage.setItem("Zagorky: nonogramGameState", JSON.stringify(gameData));
+}
+
+function getDataFromLS() {
+  const savedData = localStorage.getItem("Zagorky: nonogramGameState");
+  if (!savedData) {
+    return;
+  }
+  const { templateName, level, matrix, selectedCells, time } =
+    JSON.parse(savedData);
+
+  const template = levelConfig[level].find(
+    (template) => template.name === templateName,
+  );
+  if (template) {
+    return {
+      template: template,
+      matrixState: matrix,
+      selectedCells: selectedCells,
+      time: time,
+    };
+  }
+}
+
+function saveHistoryToLS(newResult) {
+  let history = JSON.parse(localStorage.getItem("gameHistory")) || [];
+
+  history.push(newResult);
+  history.sort((a, b) => a.time - b.time);
+  history = history.slice(0, 5);
+  localStorage.setItem("gameHistory", JSON.stringify(history));
+
+  return history;
+}
 
 function fisherYatesShuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -2051,27 +2052,20 @@ class ControlButtonsController {
       setDataToLS({
         template: context.template,
         selectedCells: context.selectedCells,
-        duration: context.time,
+        time: context.time,
       });
       this.controlButtons.disable(this.buttons.saveGameButton);
     });
 
     buttons.continueGameButton.addListener("click", () => {
       const data = getDataFromLS();
-      console.log(data.template);
-      console.log(data.selectedCells);
-      console.log(data.matrixState);
-      //TODO не обновляются данные в state Machine почему?(
-      this.stateMachine.transition(
-        "continue",
-        ({ context: { updateContext } }) => {
-          updateContext({
-            template: data.template,
-            selectedCells: data.selectedCells,
-            matrixState: data.matrixState,
-          });
-        },
-      );
+
+      this.stateMachine.transition("continue", {
+        template: data.template,
+        selectedCells: data.selectedCells,
+        matrixState: data.matrixState,
+        time: data.time,
+      });
       this.controlButtons.disable(this.buttons.continueGameButton);
     });
 
@@ -2297,27 +2291,41 @@ const styles$1 = {
 class LeaderBoard extends BaseComponent {
   constructor() {
     super({ tag: "section", className: styles$1.leaderBoard });
+    this.getNode();
+    this.#addHeader();
     this.history = JSON.parse(localStorage.getItem("gameHistory")) || [];
   }
 
-  addResults() {
+  #addResults() {
     this.destroyChildren();
-    this.addHeader();
     this.history.map((elem, i) => {
       const result = new BaseComponent({
         tag: "span",
         className: styles$1.result,
       });
       result.setTextContent(
-        `${i + 1}. ${elem.solvedTemplate.toUpperCase()} - ${elem.difficulty.toUpperCase()} - ${elem.time}`,
+        `${i + 1}. ${elem.template} - ${elem.level} - ${this.#formattedTime(elem.time)}`,
       );
       this.append(result);
     });
   }
-  addHeader() {
+
+  #formattedTime(time) {
+    const resultMin = String(Math.floor(time / 60)).padStart(2, "0");
+    const resultSec = String(time % 60).padStart(2, "0");
+    return `${resultMin}:${resultSec}`;
+  }
+
+  #addHeader() {
     const h3 = new BaseComponent({ tag: "h3", className: styles$1.h3 });
     h3.setTextContent("Leaderboard:");
     this.append(h3);
+  }
+
+  saveToHistory(newResults) {
+    this.history = saveHistoryToLS(newResults);
+    this.destroyChildren();
+    this.#addResults();
   }
 }
 
@@ -2508,10 +2516,16 @@ class Main extends BaseComponent {
   }
 
   subscribeToState() {
-    stateMachine.subscribe("stateChanged", ({ state }) => {
-      if (state === "stateGameOver") {
+    stateMachine.subscribe("stateChanged", ({ trigger }) => {
+      if (trigger === "win") {
         this.addModal(stateMachine.getContext().message);
-        // this.leaderBoard.addResults();
+        const context = stateMachine.getContext();
+        const newResults = {
+          template: context.template.name,
+          level: context.template.difficulty,
+          time: context.time,
+        };
+        this.leaderBoard.saveToHistory(newResults);
       }
     });
   }
@@ -2537,4 +2551,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-Bc6je-sW.js.map
+//# sourceMappingURL=index-BnpCBlhH.js.map
