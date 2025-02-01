@@ -430,7 +430,7 @@ class Header extends BaseComponent {
     });
 
     logo.addAttributes({
-      src: "/img/favicon.ico",
+      src: "./img/favicon.ico",
       alt: "Logo Nonograms",
     });
 
@@ -2537,4 +2537,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-CSSaPiyt.js.map
+//# sourceMappingURL=index-Bc6je-sW.js.map
