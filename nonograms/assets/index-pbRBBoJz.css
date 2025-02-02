@@ -211,16 +211,16 @@ Add the correct display in Chrome and Safari.
 summary {
 	display: list-item;
 }
-._footer_1vlb8_1 {
+._footer_1i0ai_1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   max-width: 1200px;
-  background-color: rgba(163, 124, 124, 0.53);
+  background-color: rgba(163, 124, 124, 0.292);
 }
 
-._ghLink_1vlb8_10 {
+._ghLink_1i0ai_10 {
   margin: 0;
   padding: 5px 20px;
   font-size: 18px;
@@ -229,18 +229,18 @@ summary {
   text-decoration: none;
 }
 
-._rssLogoLink_1vlb8_19 {
+._rssLogoLink_1i0ai_19 {
   margin: 0;
   padding: 5px 20px;
   text-decoration: none;
 }
 
-._rssLogoImg_1vlb8_25 {
+._rssLogoImg_1i0ai_25 {
   width: 60px;
   margin: 0;
 }
 
-._year_1vlb8_30 {
+._year_1i0ai_30 {
   margin: 0;
   padding: 5px 20px;
   font-size: 18px;
@@ -253,16 +253,16 @@ summary {
   font-size: 16px;
   font-weight: 700;
   color: #317b81;
-}._header_u8j1x_1 {
+}._header_1bgxt_1 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   width: 100%;
   max-width: 1200px;
   padding: 5px 0;
-  background-color: rgba(163, 124, 124, 0.53);
+  background-color: rgba(163, 124, 124, 0.293);
 }
 
-._h1_u8j1x_10 {
+._h1_1bgxt_10 {
   align-content: center;
   margin: 0;
   padding: 0 20px;
@@ -272,11 +272,11 @@ summary {
   text-align: end;
 }
 
-._logoLink_u8j1x_20 {
+._logoLink_1bgxt_20 {
   padding: 0 20px;
 }
 
-._logoLink_u8j1x_20 img {
+._logoLink_1bgxt_20 img {
   border-radius: 5px;
 }._gameControls_db55y_1, ._settingsToggler_db55y_1 {
   display: flex;

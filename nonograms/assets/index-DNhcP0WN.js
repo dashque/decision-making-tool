@@ -217,11 +217,11 @@ class BaseComponent {
   }
 }
 
-const footer = "_footer_1vlb8_1";
-const ghLink = "_ghLink_1vlb8_10";
-const rssLogoLink = "_rssLogoLink_1vlb8_19";
-const rssLogoImg = "_rssLogoImg_1vlb8_25";
-const year = "_year_1vlb8_30";
+const footer = "_footer_1i0ai_1";
+const ghLink = "_ghLink_1i0ai_10";
+const rssLogoLink = "_rssLogoLink_1i0ai_19";
+const rssLogoImg = "_rssLogoImg_1i0ai_25";
+const year = "_year_1i0ai_30";
 const styles$9 = {
 	footer: footer,
 	ghLink: ghLink,
@@ -396,9 +396,9 @@ class Timer extends BaseComponent {
   }
 }
 
-const header = "_header_u8j1x_1";
-const h1 = "_h1_u8j1x_10";
-const logoLink = "_logoLink_u8j1x_20";
+const header = "_header_1bgxt_1";
+const h1 = "_h1_1bgxt_10";
+const logoLink = "_logoLink_1bgxt_20";
 const styles$7 = {
 	header: header,
 	h1: h1,
@@ -2383,9 +2383,19 @@ class TemplateSelector extends BaseComponent {
       className: styles$6.selectTemplate,
       text: "Select game",
     });
+    this.addAttributes({ id: "templateSelector" });
+
     this.config = config;
+
     this.getNode();
+    this.#addLabel();
     this.#addOptions();
+  }
+
+  #addLabel() {
+    this.label = new BaseComponent({ tag: "label" });
+    this.label.addAttributes({ for: "templateSelector" });
+    this.label.getNode();
   }
 
   setValue(templateName) {
@@ -2598,4 +2608,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-yzLkHXjL.js.map
+//# sourceMappingURL=index-DNhcP0WN.js.map
