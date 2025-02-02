@@ -2388,15 +2388,8 @@ class TemplateSelector extends BaseComponent {
     this.config = config;
 
     this.getNode();
-    // this.#addLabel();
     this.#addOptions();
   }
-
-  // #addLabel() {
-  //   this.label = new BaseComponent({ tag: "label" });
-  //   this.label.addAttributes({ for: "templateSelector" });
-  //   this.label.getNode();
-  // }
 
   setValue(templateName) {
     this.getNode().value = templateName;
@@ -2416,6 +2409,7 @@ class TemplateSelector extends BaseComponent {
       });
       option.addAttributes({
         value: template.name,
+        "area-label": template.name,
       });
       this.append(option);
     });
@@ -2608,4 +2602,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-Be-M9cSu.js.map
+//# sourceMappingURL=index-C8gSToQy.js.map
