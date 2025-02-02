@@ -1713,11 +1713,9 @@ function getDataFromLS() {
 
 function saveHistoryToLS(newResult) {
   let history = JSON.parse(localStorage.getItem("Zagorky: gameHistory")) || [];
-  if (history.length > 5) {
-    history.shift();
-  }
+
   history.push(newResult);
-  history = history.slice(0, 5);
+  history = history.sort((a, b) => a.time - b.time).slice(0, 5);
 
   localStorage.setItem("Zagorky: gameHistory", JSON.stringify(history));
 
@@ -2337,6 +2335,7 @@ class LeaderBoard extends BaseComponent {
     this.#addHeader();
     this.history =
       JSON.parse(localStorage.getItem("Zagorky: gameHistory")) || [];
+    this.#addResults();
   }
 
   #addResults() {
@@ -2345,7 +2344,7 @@ class LeaderBoard extends BaseComponent {
 
     this.history
       .sort((a, b) => a.time - b.time)
-      .map((elem, i) => {
+      .forEach((elem, i) => {
         const result = new BaseComponent({
           tag: "span",
           className: styles$1.result,
@@ -2599,4 +2598,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-DivbqAcF.js.map
+//# sourceMappingURL=index-yzLkHXjL.js.map
