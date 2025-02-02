@@ -2383,20 +2383,20 @@ class TemplateSelector extends BaseComponent {
       className: styles$6.selectTemplate,
       text: "Select game",
     });
-    this.addAttributes({ id: "templateSelector" });
+    this.addAttributes({ "area-label": "templateSelector" });
 
     this.config = config;
 
     this.getNode();
-    this.#addLabel();
+    // this.#addLabel();
     this.#addOptions();
   }
 
-  #addLabel() {
-    this.label = new BaseComponent({ tag: "label" });
-    this.label.addAttributes({ for: "templateSelector" });
-    this.label.getNode();
-  }
+  // #addLabel() {
+  //   this.label = new BaseComponent({ tag: "label" });
+  //   this.label.addAttributes({ for: "templateSelector" });
+  //   this.label.getNode();
+  // }
 
   setValue(templateName) {
     this.getNode().value = templateName;
@@ -2608,4 +2608,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-DNhcP0WN.js.map
+//# sourceMappingURL=index-Be-M9cSu.js.map
