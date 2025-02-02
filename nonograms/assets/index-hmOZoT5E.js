@@ -217,11 +217,11 @@ class BaseComponent {
   }
 }
 
-const footer = "_footer_i1jyf_1";
-const ghLink = "_ghLink_i1jyf_10";
-const rssLogoLink = "_rssLogoLink_i1jyf_19";
-const rssLogoImg = "_rssLogoImg_i1jyf_25";
-const year = "_year_i1jyf_30";
+const footer = "_footer_3knsd_1";
+const ghLink = "_ghLink_3knsd_10";
+const rssLogoLink = "_rssLogoLink_3knsd_19";
+const rssLogoImg = "_rssLogoImg_3knsd_25";
+const year = "_year_3knsd_30";
 const styles$9 = {
 	footer: footer,
 	ghLink: ghLink,
@@ -289,7 +289,7 @@ class Footer extends BaseComponent {
   }
 }
 
-const timer = "_timer_1fr8o_1";
+const timer = "_timer_1cy31_1";
 const styles$8 = {
 	timer: timer
 };
@@ -393,9 +393,9 @@ class Timer extends BaseComponent {
   }
 }
 
-const header = "_header_81yck_1";
-const h1 = "_h1_81yck_10";
-const logoLink = "_logoLink_81yck_20";
+const header = "_header_ka5gc_1";
+const h1 = "_h1_ka5gc_10";
+const logoLink = "_logoLink_ka5gc_20";
 const styles$7 = {
 	header: header,
 	h1: h1,
@@ -455,17 +455,17 @@ class Header extends BaseComponent {
   }
 }
 
-const gameControls = "_gameControls_xgp3x_1";
-const settingsToggler = "_settingsToggler_xgp3x_1";
-const randomBtn = "_randomBtn_xgp3x_18";
-const soundChanger = "_soundChanger_xgp3x_19";
-const resetBtn = "_resetBtn_xgp3x_20";
-const saveBtn = "_saveBtn_xgp3x_21";
-const solutionBtn = "_solutionBtn_xgp3x_22";
-const continueBtn = "_continueBtn_xgp3x_43";
-const selectTemplate = "_selectTemplate_xgp3x_59";
-const option = "_option_xgp3x_78";
-const inactive = "_inactive_xgp3x_84";
+const gameControls = "_gameControls_f540r_1";
+const settingsToggler = "_settingsToggler_f540r_1";
+const randomBtn = "_randomBtn_f540r_18";
+const soundChanger = "_soundChanger_f540r_19";
+const resetBtn = "_resetBtn_f540r_20";
+const saveBtn = "_saveBtn_f540r_21";
+const solutionBtn = "_solutionBtn_f540r_22";
+const continueBtn = "_continueBtn_f540r_43";
+const selectTemplate = "_selectTemplate_f540r_59";
+const option = "_option_f540r_78";
+const inactive = "_inactive_f540r_84";
 const styles$6 = {
 	gameControls: gameControls,
 	settingsToggler: settingsToggler,
@@ -856,8 +856,8 @@ class GameBoard extends BaseComponent {
   }
 }
 
-const main = "_main_nqa98_1";
-const invitation = "_invitation_nqa98_11";
+const main = "_main_1l7vb_1";
+const invitation = "_invitation_1l7vb_11";
 const styles$3 = {
 	main: main,
 	invitation: invitation
@@ -2173,9 +2173,9 @@ class CellController {
   }
 }
 
-const dialog = "_dialog_1tn5w_1";
-const popupContainer = "_popupContainer_1tn5w_15";
-const popupButton = "_popupButton_1tn5w_23";
+const dialog = "_dialog_scg6m_1";
+const popupContainer = "_popupContainer_scg6m_15";
+const popupButton = "_popupButton_scg6m_23";
 const styles$2 = {
 	dialog: dialog,
 	popupContainer: popupContainer,
@@ -2305,8 +2305,8 @@ class AudioController {
   }
 }
 
-const leaderBoard = "_leaderBoard_1m2r3_1";
-const h3 = "_h3_1m2r3_12";
+const leaderBoard = "_leaderBoard_6zwjr_1";
+const h3 = "_h3_6zwjr_12";
 const styles$1 = {
 	leaderBoard: leaderBoard,
 	h3: h3
@@ -2578,4 +2578,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-DQgfmRjY.js.map
+//# sourceMappingURL=index-hmOZoT5E.js.map
