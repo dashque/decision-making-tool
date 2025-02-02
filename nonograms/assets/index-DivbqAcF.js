@@ -306,6 +306,9 @@ class Timer extends BaseComponent {
     this.stateMachine.subscribe(
       "stateChanged",
       ({ trigger, state, context: { getContext, updateContext } }) => {
+        if (trigger === "chooseTemplate" || trigger === "getRandomGame") {
+          this.resetTimer();
+        }
         if (trigger === "win") {
           const totalTime = this.gameTime;
           updateContext({
@@ -455,17 +458,17 @@ class Header extends BaseComponent {
   }
 }
 
-const gameControls = "_gameControls_db1ty_1";
-const settingsToggler = "_settingsToggler_db1ty_1";
-const randomBtn = "_randomBtn_db1ty_18";
-const soundChanger = "_soundChanger_db1ty_19";
-const resetBtn = "_resetBtn_db1ty_20";
-const saveBtn = "_saveBtn_db1ty_21";
-const solutionBtn = "_solutionBtn_db1ty_22";
-const continueBtn = "_continueBtn_db1ty_43";
-const selectTemplate = "_selectTemplate_db1ty_59";
-const option = "_option_db1ty_78";
-const inactive = "_inactive_db1ty_84";
+const gameControls = "_gameControls_db55y_1";
+const settingsToggler = "_settingsToggler_db55y_1";
+const randomBtn = "_randomBtn_db55y_18";
+const soundChanger = "_soundChanger_db55y_19";
+const resetBtn = "_resetBtn_db55y_20";
+const saveBtn = "_saveBtn_db55y_21";
+const solutionBtn = "_solutionBtn_db55y_22";
+const continueBtn = "_continueBtn_db55y_50";
+const selectTemplate = "_selectTemplate_db55y_69";
+const option = "_option_db55y_91";
+const inactive = "_inactive_db55y_97";
 const styles$6 = {
 	gameControls: gameControls,
 	settingsToggler: settingsToggler,
@@ -1710,10 +1713,12 @@ function getDataFromLS() {
 
 function saveHistoryToLS(newResult) {
   let history = JSON.parse(localStorage.getItem("Zagorky: gameHistory")) || [];
-
+  if (history.length > 5) {
+    history.shift();
+  }
   history.push(newResult);
-  history.sort((a, b) => a.time - b.time);
   history = history.slice(0, 5);
+
   localStorage.setItem("Zagorky: gameHistory", JSON.stringify(history));
 
   return history;
@@ -1772,6 +1777,7 @@ const stateMachine = createMachine({
           updateContext({
             template: data.template,
             matrixState: data.template.matrix,
+            selectedCells: [],
           });
           console.log("Select template", getContext().template);
         },
@@ -1791,12 +1797,16 @@ const stateMachine = createMachine({
         target: "statePlaying",
         action: cellClickRightAction,
       },
+      saveGame: {
+        target: "statePlaying",
+      },
       cellClick: {
         target: "statePlaying",
         action: cellClickAction,
       },
     },
   },
+
   statePlaying: {
     actions: {
       onEnter({ state, prevState, trigger }) {
@@ -1821,6 +1831,7 @@ const stateMachine = createMachine({
           updateContext({
             template: data.template,
             matrixState: data.template.matrix,
+            selectedCells: [],
           });
           console.log("Select template from", state);
         },
@@ -1883,6 +1894,7 @@ const stateMachine = createMachine({
           updateContext({
             template: data.template,
             matrixState: data.template.matrix,
+            selectedCells: [],
           });
           console.log("Select template", getContext());
         },
@@ -1937,6 +1949,7 @@ const stateMachine = createMachine({
           updateContext({
             template: data.template,
             matrixState: data.template.matrix,
+            selectedCells: [],
           });
           console.log("Select template from init");
         },
@@ -1978,6 +1991,7 @@ class ControlButtonsController {
     this.buttons = controlButtons.getControlButtons();
     this.setupListeners();
     this.setupButtonsListeners(this.buttons);
+    this.updateButtonsState();
   }
 
   setupListeners() {
@@ -2004,6 +2018,7 @@ class ControlButtonsController {
         }
         this.controlButtons.enable(this.buttons.randomGameButton);
         this.controlButtons.enable(this.buttons.solutionButton);
+        this.controlButtons.enable(this.buttons.saveGameButton);
 
         break;
 
@@ -2079,11 +2094,14 @@ class ControlButtonsController {
         selectedCells: context.selectedCells,
         time: context.time,
       });
-      this.controlButtons.disable(this.buttons.saveGameButton);
+      this.controlButtons.enable(this.buttons.continueGameButton);
     });
 
     buttons.continueGameButton.addListener("click", () => {
       const data = getDataFromLS();
+      if (!data) {
+        console.log(`There is no saved game 😓`);
+      }
 
       this.stateMachine.transition("continue", {
         template: data.template,
@@ -2173,9 +2191,9 @@ class CellController {
   }
 }
 
-const dialog = "_dialog_1els0_1";
-const popupContainer = "_popupContainer_1els0_15";
-const popupButton = "_popupButton_1els0_23";
+const dialog = "_dialog_45myi_1";
+const popupContainer = "_popupContainer_45myi_15";
+const popupButton = "_popupButton_45myi_23";
 const styles$2 = {
 	dialog: dialog,
 	popupContainer: popupContainer,
@@ -2317,24 +2335,27 @@ class LeaderBoard extends BaseComponent {
     super({ tag: "section", className: styles$1.leaderBoard });
     this.getNode();
     this.#addHeader();
-    this.history = JSON.parse(localStorage.getItem("gameHistory")) || [];
+    this.history =
+      JSON.parse(localStorage.getItem("Zagorky: gameHistory")) || [];
   }
 
   #addResults() {
     this.destroyChildren();
     this.#addHeader();
 
-    this.history.map((elem, i) => {
-      const result = new BaseComponent({
-        tag: "span",
-        className: styles$1.result,
-      });
+    this.history
+      .sort((a, b) => a.time - b.time)
+      .map((elem, i) => {
+        const result = new BaseComponent({
+          tag: "span",
+          className: styles$1.result,
+        });
 
-      result.setTextContent(
-        `${i + 1}. ${elem.template} - ${elem.level} - ${this.#formattedTime(elem.time)}`,
-      );
-      this.append(result);
-    });
+        result.setTextContent(
+          `${i + 1}. ${elem.template} - ${elem.level} - ${this.#formattedTime(elem.time)}`,
+        );
+        this.append(result);
+      });
   }
 
   #formattedTime(time) {
@@ -2578,4 +2599,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-BkCIfEFe.js.map
+//# sourceMappingURL=index-DivbqAcF.js.map

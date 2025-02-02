@@ -278,7 +278,7 @@ summary {
 
 ._logoLink_u8j1x_20 img {
   border-radius: 5px;
-}._gameControls_db1ty_1, ._settingsToggler_db1ty_1 {
+}._gameControls_db55y_1, ._settingsToggler_db55y_1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -290,16 +290,16 @@ summary {
   font-size: 14px;
 }
 @media (width < 440px) {
-  ._gameControls_db1ty_1, ._settingsToggler_db1ty_1 {
+  ._gameControls_db55y_1, ._settingsToggler_db55y_1 {
     max-width: 100%;
   }
 }
 
-._randomBtn_db1ty_18,
-._soundChanger_db1ty_19,
-._resetBtn_db1ty_20,
-._saveBtn_db1ty_21,
-._solutionBtn_db1ty_22 {
+._randomBtn_db55y_18,
+._soundChanger_db55y_19,
+._resetBtn_db55y_20,
+._saveBtn_db55y_21,
+._solutionBtn_db55y_22 {
   cursor: pointer;
   margin: 5px;
   padding: 5px 8px;
@@ -311,16 +311,23 @@ summary {
   max-width: 115px;
   font-weight: 400;
 }
-._randomBtn_db1ty_18:hover,
-._soundChanger_db1ty_19:hover,
-._resetBtn_db1ty_20:hover,
-._saveBtn_db1ty_21:hover,
-._solutionBtn_db1ty_22:hover {
+._randomBtn_db55y_18:hover,
+._soundChanger_db55y_19:hover,
+._resetBtn_db55y_20:hover,
+._saveBtn_db55y_21:hover,
+._solutionBtn_db55y_22:hover {
   color: #317b81;
   background-color: rgba(254, 242, 242, 0.7882352941);
 }
+._randomBtn_db55y_18:active,
+._soundChanger_db55y_19:active,
+._resetBtn_db55y_20:active,
+._saveBtn_db55y_21:active,
+._solutionBtn_db55y_22:active {
+  background-color: rgb(255, 255, 255);
+}
 
-._continueBtn_db1ty_43 {
+._continueBtn_db55y_50 {
   cursor: pointer;
   margin: 5px;
   padding: 5px 8px;
@@ -331,12 +338,15 @@ summary {
   width: 100%;
   max-width: 145px;
 }
-._continueBtn_db1ty_43:hover {
+._continueBtn_db55y_50:hover {
   color: #317b81;
   background-color: rgba(254, 242, 242, 0.7882352941);
 }
+._continueBtn_db55y_50:active {
+  background-color: rgb(255, 255, 255);
+}
 
-._selectTemplate_db1ty_59 {
+._selectTemplate_db55y_69 {
   cursor: pointer;
   margin: 5px;
   padding: 5px 8px;
@@ -350,18 +360,21 @@ summary {
   text-align: center;
   outline: none;
 }
-._selectTemplate_db1ty_59:hover {
+._selectTemplate_db55y_69:hover {
   color: #317b81;
   background-color: rgba(254, 242, 242, 0.7882352941);
 }
+._selectTemplate_db55y_69:active {
+  background-color: rgb(255, 255, 255);
+}
 
-._option_db1ty_78 {
+._option_db55y_91 {
   width: 100%;
   max-width: 130px;
   padding: 0;
 }
 
-._inactive_db1ty_84 {
+._inactive_db55y_97 {
   cursor: not-allowed;
   color: #2e8e95;
   background-color: rgba(205, 197, 197, 0.6196078431);
@@ -518,7 +531,7 @@ summary {
   color: #317b81;
   text-align: center;
   text-shadow: 1px black;
-}._dialog_1els0_1 {
+}._dialog_45myi_1 {
   z-index: 1000;
   width: 100%;
   max-width: 400px;
@@ -528,11 +541,11 @@ summary {
   background: white;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
-._dialog_1els0_1::backdrop {
+._dialog_45myi_1::backdrop {
   background: rgba(0, 0, 0, 0.5);
 }
 
-._popupContainer_1els0_15 {
+._popupContainer_45myi_15 {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -540,7 +553,7 @@ summary {
   text-align: center;
 }
 
-._popupButton_1els0_23 {
+._popupButton_45myi_23 {
   cursor: pointer;
   margin: 5px;
   padding: 5px 8px;
@@ -551,11 +564,14 @@ summary {
   width: 100px;
   background-color: rgba(250, 215, 236, 0.585);
 }
-._popupButton_1els0_23:hover {
+._popupButton_45myi_23:hover {
   color: #317b81;
   background-color: rgba(254, 242, 242, 0.7882352941);
 }
-._popupButton_1els0_23::after {
+._popupButton_45myi_23:active {
+  background-color: rgb(255, 255, 255);
+}
+._popupButton_45myi_23::after {
   content: "X";
 }._leaderBoard_1dkp6_1 {
   display: flex;
