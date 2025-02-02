@@ -455,17 +455,17 @@ class Header extends BaseComponent {
   }
 }
 
-const gameControls = "_gameControls_s3tz3_1";
-const settingsToggler = "_settingsToggler_s3tz3_1";
-const randomBtn = "_randomBtn_s3tz3_18";
-const soundChanger = "_soundChanger_s3tz3_19";
-const resetBtn = "_resetBtn_s3tz3_20";
-const saveBtn = "_saveBtn_s3tz3_21";
-const solutionBtn = "_solutionBtn_s3tz3_22";
-const continueBtn = "_continueBtn_s3tz3_43";
-const selectTemplate = "_selectTemplate_s3tz3_59";
-const option = "_option_s3tz3_78";
-const inactive = "_inactive_s3tz3_84";
+const gameControls = "_gameControls_xgp3x_1";
+const settingsToggler = "_settingsToggler_xgp3x_1";
+const randomBtn = "_randomBtn_xgp3x_18";
+const soundChanger = "_soundChanger_xgp3x_19";
+const resetBtn = "_resetBtn_xgp3x_20";
+const saveBtn = "_saveBtn_xgp3x_21";
+const solutionBtn = "_solutionBtn_xgp3x_22";
+const continueBtn = "_continueBtn_xgp3x_43";
+const selectTemplate = "_selectTemplate_xgp3x_59";
+const option = "_option_xgp3x_78";
+const inactive = "_inactive_xgp3x_84";
 const styles$6 = {
 	gameControls: gameControls,
 	settingsToggler: settingsToggler,
@@ -1634,7 +1634,6 @@ function cellClickAction({
   } else {
     selectedCells.push({ x, y, isCorrect });
   }
-  console.log("lc", selectedCells);
   const correctSelectedCount = selectedCells.filter(
     (cell) => cell.isCorrect,
   ).length;
@@ -1846,9 +1845,6 @@ const stateMachine = createMachine({
       },
       saveGame: {
         target: "statePlaying",
-        // action({ context: { getContext } }) {
-        //   console.log("Saving game", getContext());
-        // },
       },
       continue: {
         target: "statePlaying",
@@ -1900,6 +1896,18 @@ const stateMachine = createMachine({
             selectedCells: [],
           });
           console.log(`Random game from solution: ${data.template.name}`);
+        },
+      },
+      continue: {
+        target: "statePlaying",
+        action({ prevState, data, context: { getContext, updateContext } }) {
+          updateContext({
+            template: data.template,
+            selectedCells: data.selectedCells,
+            matrixState: data.matrixState,
+            time: data.time,
+          });
+          console.log("Continue from", prevState, getContext());
         },
       },
     },
@@ -1973,7 +1981,7 @@ class ControlButtonsController {
   }
 
   setupListeners() {
-    this.stateMachine.subscribe("stateChanged", ({ prevState }) => {
+    this.stateMachine.subscribe("stateChanged", () => {
       this.updateButtonsState();
     });
   }
@@ -1991,18 +1999,16 @@ class ControlButtonsController {
 
     switch (state) {
       case "stateWaitingForInput":
-        if (JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
+        if (!!JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
           this.controlButtons.enable(this.buttons.continueGameButton);
         }
-        this.controlButtons.disable(this.buttons.continueGameButton);
-        this.controlButtons.disable(this.buttons.continueGameButton);
         this.controlButtons.enable(this.buttons.randomGameButton);
         this.controlButtons.enable(this.buttons.solutionButton);
 
         break;
 
       case "statePlaying":
-        if (JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
+        if (!!JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
           this.controlButtons.enable(this.buttons.continueGameButton);
           this.controlButtons.disable(this.buttons.saveGameButton);
         }
@@ -2012,7 +2018,7 @@ class ControlButtonsController {
         this.controlButtons.enable(this.buttons.randomGameButton);
         break;
       case "stateGameOver":
-        if (JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
+        if (!!JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
           this.controlButtons.enable(this.buttons.continueGameButton);
           this.controlButtons.disable(this.buttons.saveGameButton);
         }
@@ -2022,7 +2028,7 @@ class ControlButtonsController {
         this.controlButtons.enable(this.buttons.randomGameButton);
         break;
       case "stateSolution":
-        if (JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
+        if (!!JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
           this.controlButtons.enable(this.buttons.continueGameButton);
         }
         this.controlButtons.enable(this.buttons.resetGameButton);
@@ -2030,7 +2036,7 @@ class ControlButtonsController {
         this.controlButtons.enable(this.buttons.randomGameButton);
         break;
       case "chooseTemplate":
-        if (JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
+        if (!!JSON.parse(localStorage.getItem("Zagorky: saveGame"))) {
           this.controlButtons.enable(this.buttons.continueGameButton);
         }
 
@@ -2299,8 +2305,8 @@ class AudioController {
   }
 }
 
-const leaderBoard = "_leaderBoard_1wr83_1";
-const h3 = "_h3_1wr83_12";
+const leaderBoard = "_leaderBoard_1m2r3_1";
+const h3 = "_h3_1m2r3_12";
 const styles$1 = {
 	leaderBoard: leaderBoard,
 	h3: h3
@@ -2316,6 +2322,8 @@ class LeaderBoard extends BaseComponent {
 
   #addResults() {
     this.destroyChildren();
+    this.#addHeader();
+
     this.history.map((elem, i) => {
       const result = new BaseComponent({
         tag: "span",
@@ -2570,4 +2578,4 @@ class Wrapper extends BaseComponent {
 
 const root = new Wrapper(stateMachine);
 root.init();
-//# sourceMappingURL=index-cG0Q64Zf.js.map
+//# sourceMappingURL=index-DQgfmRjY.js.map
