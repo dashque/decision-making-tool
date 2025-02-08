@@ -1,4 +1,6 @@
-1. [link]()
+
+# Self - Introduction 
+1. [Link](https://youtube.com/shorts/QikH38xFWtw?feature=share)
 
 2. Transcription:
 
