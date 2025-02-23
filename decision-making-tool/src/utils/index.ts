@@ -9,7 +9,7 @@ export type Nil = null | undefined;
 export type Nullable<T> = T | Nil;
 
 export type ConstructorOf<T> = {
-  new (...arguments: never[]): T;
+  new (...arguments_: never[]): T;
   prototype: T;
 };
 

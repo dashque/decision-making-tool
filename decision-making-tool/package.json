@@ -14,12 +14,15 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
     "@eslint/js": "^9.21.0",
     "eslint": "^9.21.0",
     "eslint-plugin-unicorn": "^57.0.0",
     "gh-pages": "^6.3.0",
     "globals": "^16.0.0",
     "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
     "prettier": "^3.5.2",
     "stylelint": "^16.14.1",
     "stylelint-config-clean-order": "^7.0.0",
