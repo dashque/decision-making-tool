@@ -1,11 +1,15 @@
-type Properties = {
-  tag: string;
+import type { Children } from '../types';
+
+type Properties<T extends keyof HTMLElementTagNameMap> = {
+  tag: T;
   cssClasses?: string[] | string;
   attributes?: Record<string, string>;
-  children?: string | HTMLElement | HTMLElement[];
+  children?: Children;
 };
 
-function createElement(properties: Properties): HTMLElement {
+function createElement<T extends keyof HTMLElementTagNameMap>(
+  properties: Properties<T>,
+): HTMLElementTagNameMap[T] {
   const { tag, cssClasses = [], attributes = {}, children = [] } = properties;
   const element = document.createElement(tag);
   element.classList.add(...cssClasses);
@@ -15,7 +19,7 @@ function createElement(properties: Properties): HTMLElement {
   }
 
   if (children) {
-    if (typeof children === 'string' || children instanceof HTMLElement) {
+    if (typeof children === 'string' || children instanceof Node) {
       element.append(children);
     } else if (Array.isArray(children)) {
       for (const childElement of children) {
