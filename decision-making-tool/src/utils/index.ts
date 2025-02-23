@@ -9,8 +9,8 @@ export type Nil = null | undefined;
 export type Nullable<T> = T | Nil;
 
 export type ConstructorOf<T> = {
-  new (...arguments_: never[]): T;
   prototype: T;
+  new (...arguments_: never[]): T;
 };
 
 export function assertIsNonNullable<T>(
@@ -18,16 +18,11 @@ export function assertIsNonNullable<T>(
   ...infos: unknown[]
 ): asserts value is NonNullable<T> {
   if (value === undefined || value === null) {
-    throw new Error(
-      `Nullish assertion Error: "${String(value)}"; ${infos?.join(' ')}`,
-    );
+    throw new Error(`Nullish assertion Error: "${String(value)}"; ${infos?.join(' ')}`);
   }
 }
 
-export function isInstanceOf<T>(
-  elementType: ConstructorOf<T>,
-  value: unknown,
-): value is T {
+export function isInstanceOf<T>(elementType: ConstructorOf<T>, value: unknown): value is T {
   return value instanceof elementType;
 }
 

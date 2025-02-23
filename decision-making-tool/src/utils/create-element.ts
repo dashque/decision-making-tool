@@ -1,11 +1,4 @@
-import type { Children } from '../types';
-
-type Properties<T extends keyof HTMLElementTagNameMap> = {
-  tag: T;
-  cssClasses?: string[] | string;
-  attributes?: Record<string, string>;
-  children?: Children;
-};
+import type { Properties } from '../types';
 
 function createElement<T extends keyof HTMLElementTagNameMap>(
   properties: Properties<T>,
