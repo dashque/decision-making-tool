@@ -1,4 +1,3 @@
-import { Button } from './utils/factory.ts';
+import { drawErrorPage } from './pages/error';
 
-Button.append('Helloooo');
-document.body.append(Button);
+document.body.append(drawErrorPage());
