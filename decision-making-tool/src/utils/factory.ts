@@ -37,7 +37,7 @@ const Button = (children: Children): HTMLButtonElement => {
     children,
   });
 };
-const Input = (children: Children, forLabel: string): HTMLInputElement =>
+const Input = (children: Children, id: string): HTMLInputElement =>
   createElement({
     tag: 'input',
     children,
@@ -56,9 +56,9 @@ const Input = (children: Children, forLabel: string): HTMLInputElement =>
       'transition',
       'duration-200',
     ],
-    attributes: { for: `${forLabel}` },
+    attributes: { id: `${id}` },
   });
-const Label = (children: Children, id: string): HTMLLabelElement =>
-  createElement({ tag: 'label', children, attributes: { type: 'text', id: `${id}` } });
+const Label = (children: Children, forLabel: string): HTMLLabelElement =>
+  createElement({ tag: 'label', children, attributes: { type: 'text', for: `${forLabel}` } });
 
 export { H1, H2, Main, Section, Div, Button, Input, Label };
