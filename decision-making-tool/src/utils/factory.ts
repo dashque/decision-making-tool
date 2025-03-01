@@ -60,5 +60,7 @@ const Input = (children: Children, id: string): HTMLInputElement =>
   });
 const Label = (children: Children, forLabel: string): HTMLLabelElement =>
   createElement({ tag: 'label', children, attributes: { type: 'text', for: `${forLabel}` } });
+const Link = (children: Children, locationFrom: string, locationTo: string): HTMLAnchorElement =>
+  createElement({ tag: 'a', attributes: { href: `${locationFrom}${locationTo}` }, children });
 
-export { H1, H2, Main, Section, Div, Button, Input, Label };
+export { H1, H2, Main, Section, Div, Button, Input, Label, Link };
