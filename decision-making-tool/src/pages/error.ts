@@ -1,6 +1,6 @@
 import { Button, H1, Section } from '../utils/factory.ts';
 
-function drawErrorPage(): HTMLElement {
+function errorPage(): HTMLElement {
   return Section([drawHeading(), drawComebackButton()]);
 }
 
@@ -9,7 +9,9 @@ function drawHeading(): HTMLHeadingElement {
 }
 
 function drawComebackButton(): HTMLButtonElement {
-  return Button('Back to main');
+  const button = Button('Back to main');
+
+  return button;
 }
 
-export { drawErrorPage };
+export { errorPage };

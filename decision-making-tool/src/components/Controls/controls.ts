@@ -1,20 +1,4 @@
-import { Button, H1, Section } from '../utils/factory.ts';
-
-function mainPage(): HTMLElement {
-  return Section([
-    drawHeading(),
-    drawAddOptionButton(),
-    drawPasteListButton(),
-    drawClearListButton(),
-    drawSaveListButton(),
-    drawLoadFromListButton(),
-    drawStartButton(),
-  ]);
-}
-
-function drawHeading(): HTMLHeadingElement {
-  return H1('Decision Making Tool');
-}
+import { Button } from '../../utils/factory.ts';
 
 function drawAddOptionButton(): HTMLButtonElement {
   const button = Button('Add Options');
@@ -52,4 +36,11 @@ function drawStartButton(): HTMLButtonElement {
   return button;
 }
 
-export { mainPage };
+export {
+  drawStartButton,
+  drawPasteListButton,
+  drawSaveListButton,
+  drawClearListButton,
+  drawLoadFromListButton,
+  drawAddOptionButton,
+};
