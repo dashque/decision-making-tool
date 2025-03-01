@@ -55,24 +55,21 @@ function createElement(properties) {
   return element;
 }
 
-function assertIsNonNullable(value, ...infos) {
-  if (value === void 0 || value === null) {
-    throw new Error(`Nullish assertion Error: "${String(value)}"; ${infos?.join(" ")}`);
-  }
-}
-function assertIsInstanceOf(elementType, value, ...infos) {
-  assertIsNonNullable(value, `#${String(elementType)}`);
-  if (!(value instanceof elementType)) {
-    throw new TypeError(
-      `Not expected value: ${String(value)} of type: "${String(elementType)}"; ${infos?.join(" ")}'`
-    );
-  }
-}
-
-function randomFunction(min, max) {
-  return Math.ceil(Math.random() * (max - min) + min);
-}
-
+const H1 = (children) => createElement({
+  tag: "h1",
+  cssClasses: ["font-bold", "text-pink-500", "p-4", "text-center"],
+  children
+});
+const Main = (children) => createElement({
+  tag: "main",
+  cssClasses: ["flex", "flex-col", "justify-center", "items-center"],
+  children
+});
+const Section = (children) => createElement({
+  tag: "section",
+  cssClasses: ["flex", "flex-col", "justify-center", "items-center", "h-screen"],
+  children
+});
 const Button = (children) => {
   return createElement({
     tag: "button",
@@ -83,16 +80,47 @@ const Button = (children) => {
       "text-white",
       "rounded-lg",
       "hover:bg-blue-700",
-      "m-4"
+      "m-4",
+      "cursor-pointer"
     ],
     children
   });
 };
+const Input = (children, id) => createElement({
+  tag: "input",
+  children,
+  cssClasses: [
+    "w-full",
+    "px-4",
+    "py-2",
+    "border",
+    "border-gray-300",
+    "rounded-md",
+    "shadow-sm",
+    "focus:outline-none",
+    "focus:ring-2",
+    "focus:ring-blue-500",
+    "focus:border-blue-500",
+    "transition",
+    "duration-200"
+  ],
+  attributes: { id: `${id}` }
+});
+const Label = (children, forLabel) => createElement({ tag: "label", children, attributes: { type: "text", for: `${forLabel}` } });
 
-const CANVAS_SIZE = 600;
+function assertIsNonNullable(value, ...infos) {
+  if (value === void 0 || value === null) {
+    throw new Error(`Nullish assertion Error: "${String(value)}"; ${infos?.join(" ")}`);
+  }
+}
+
+function randomFunction(min, max) {
+  return Math.ceil(Math.random() * (max - min) + min);
+}
+
+const CANVAS_SIZE = 500;
 const WHEEL_CENTER = CANVAS_SIZE / 2;
 const WHEEL_RADIUS = CANVAS_SIZE / 2;
-const angle = randomFunction(1800, 2500);
 function getColors(sectors) {
   return sectors.map(
     () => `rgb(${randomFunction(0, 255)},${randomFunction(0, 255)},${randomFunction(0, 255)})`
@@ -104,7 +132,7 @@ function createCanvas() {
     attributes: { height: `${CANVAS_SIZE}`, width: `${CANVAS_SIZE}` }
   });
   const context = canvas.getContext("2d");
-  assertIsInstanceOf(CanvasRenderingContext2D, context);
+  assertIsNonNullable(context);
   return { canvas, context };
 }
 function drawSector(startAngle, sectorAngle, context, color) {
@@ -119,13 +147,13 @@ function drawSector(startAngle, sectorAngle, context, color) {
   context.fill();
   context.stroke();
 }
-function createWheel(sectors, context, colors) {
+function drawWheel(sectors, context, colors) {
   const sum = sectors.reduce((acc, element) => acc + element, 0);
   const sectorsAngles = sectors.map((element) => element / sum * 360);
   let startAngle = 0;
-  sectorsAngles.forEach((angle2, i) => {
-    drawSector(startAngle, angle2, context, colors[i]);
-    startAngle += angle2;
+  sectorsAngles.forEach((angle, i) => {
+    drawSector(startAngle, angle, context, colors[i]);
+    startAngle += angle;
   });
 }
 function easeInOutExpo(progress) {
@@ -140,12 +168,12 @@ function easeInOutExpo(progress) {
   }
   return (2 - Math.pow(2, -20 * progress + 10)) / 2;
 }
-function rotateWheel(angle2, duration, context, sectors, colors) {
+function rotateWheel(angle, duration, context, sectors, colors) {
   const start = performance.now();
   function animate(currentTime) {
     const progress = (currentTime - start) / duration;
     const easedProgress = easeInOutExpo(progress);
-    const currentRotation = angle2 * easedProgress;
+    const currentRotation = angle * easedProgress;
     clearAndDrawWheel(context, currentRotation, sectors, colors);
     if (progress < 1) {
       requestAnimationFrame(animate);
@@ -158,8 +186,8 @@ function clearAndDrawWheel(context, rotation, array, colors) {
   context.save();
   context.translate(WHEEL_CENTER, WHEEL_CENTER);
   context.rotate(rotation * Math.PI / 180);
-  context.translate(-300, -300);
-  createWheel(array, context, colors);
+  context.translate(-250, -250);
+  drawWheel(array, context, colors);
   context.restore();
 }
 function WheelModule() {
@@ -168,25 +196,39 @@ function WheelModule() {
   let sectors = [];
   return {
     canvas,
-    createWheel: (newSectors) => {
+    drawWheel: (newSectors) => {
       sectors = newSectors;
       colors = getColors(sectors);
-      createWheel(sectors, context, colors);
+      drawWheel(sectors, context, colors);
     },
-    rotateWheel: (angle2, duration) => {
-      rotateWheel(angle2, duration, context, sectors, colors);
+    rotateWheel: (angle, duration) => {
+      rotateWheel(angle, duration, context, sectors, colors);
     }
   };
 }
 const wheel = WheelModule();
-wheel.createWheel([1, 5, 6, 4, 2]);
+wheel.drawWheel([1, 5, 6, 4, 2]);
 function createRotationButton() {
   const button = Button("You spinning me around, my feet are off the ground");
   button.addEventListener("click", () => {
+    const angle = randomFunction(1800, 3e3);
     wheel.rotateWheel(angle, 3e3);
   });
   return button;
 }
 
-document.body.append(wheel.canvas, createRotationButton());
-//# sourceMappingURL=index-BoxNz6tA.js.map
+function decisionPickerPage() {
+  return Section([drawHeading(), drawTimerInput(), wheel.canvas, createRotationButton()]);
+}
+function drawHeading() {
+  return H1("Decision Making Tool");
+}
+function drawTimerInput() {
+  return Label(["Set duration", drawInput()], "timer");
+}
+function drawInput() {
+  return Input("Timer", "timer");
+}
+
+document.body.append(Main(decisionPickerPage()));
+//# sourceMappingURL=index-jHJBMkF-.js.map
