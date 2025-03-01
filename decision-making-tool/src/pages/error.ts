@@ -1,36 +1,15 @@
-import { createElement } from '../utils/create-element';
+import { Button, H1, Section } from '../utils/factory.ts';
 
 function drawErrorPage(): HTMLElement {
-  return createElement({
-    tag: 'main',
-    children: [drawHeading(), drawComebackButton()],
-    cssClasses: ['flex', 'flex-col', 'justify-center', 'items-center', 'h-screen'],
-  });
+  return Section([drawHeading(), drawComebackButton()]);
 }
 
 function drawHeading(): HTMLHeadingElement {
-  return createElement({
-    tag: 'h1',
-    children: 'Something went wrong',
-    cssClasses: ['font-bold', 'text-pink', 'p-4', 'text-center'],
-  });
+  return H1('Something went wrong');
 }
 
 function drawComebackButton(): HTMLButtonElement {
-  return createElement({
-    tag: 'button',
-    children: 'Back to main',
-    cssClasses: [
-      'px-4',
-      'py-2',
-      'bg-blue-500',
-      'text-white',
-      'rounded-lg',
-      'hover:bg-blue-700',
-      'm-4',
-      'cursor-pointer',
-    ],
-  });
+  return Button('Back to main');
 }
 
 export { drawErrorPage };
