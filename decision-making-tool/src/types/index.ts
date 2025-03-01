@@ -11,3 +11,9 @@ export type PopupProperties = {
   children: Children;
   onClose?: () => void;
 };
+
+export type WheelType = {
+  canvas: HTMLCanvasElement;
+  drawWheel: (sectors: number[]) => void;
+  rotateWheel: (angle: number, duration: number) => void;
+};

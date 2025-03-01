@@ -1,12 +1,12 @@
 import { createElement } from '../../utils/create-element.ts';
-import { assertIsInstanceOf } from '../../utils';
+import { assertIsNonNullable } from '../../utils';
 import { randomFunction } from '../../utils/random-function.ts';
 import { Button } from '../../utils/factory.ts';
+import type { WheelType } from '../../types';
 
-const CANVAS_SIZE = 600;
+const CANVAS_SIZE = 500;
 const WHEEL_CENTER = CANVAS_SIZE / 2;
 const WHEEL_RADIUS = CANVAS_SIZE / 2;
-const angle: number = randomFunction(1800, 2500);
 
 function getColors(sectors: number[]): string[] {
   return sectors.map(
@@ -20,7 +20,7 @@ function createCanvas(): { canvas: HTMLCanvasElement; context: CanvasRenderingCo
     attributes: { height: `${CANVAS_SIZE}`, width: `${CANVAS_SIZE}` },
   });
   const context = canvas.getContext('2d');
-  assertIsInstanceOf(CanvasRenderingContext2D, context);
+  assertIsNonNullable(context);
 
   return { canvas, context };
 }
@@ -44,7 +44,7 @@ function drawSector(
   context.stroke();
 }
 
-function createWheel(sectors: number[], context: CanvasRenderingContext2D, colors: string[]): void {
+function drawWheel(sectors: number[], context: CanvasRenderingContext2D, colors: string[]): void {
   const sum = sectors.reduce((acc, element) => acc + element, 0);
   const sectorsAngles = sectors.map((element) => (element / sum) * 360);
   let startAngle = 0;
@@ -102,15 +102,9 @@ function clearAndDrawWheel(
   context.translate(WHEEL_CENTER, WHEEL_CENTER);
   context.rotate((rotation * Math.PI) / 180);
   context.translate(-WHEEL_CENTER, -WHEEL_CENTER);
-  createWheel(array, context, colors);
+  drawWheel(array, context, colors);
   context.restore();
 }
-
-type WheelType = {
-  canvas: HTMLCanvasElement;
-  createWheel: (sectors: number[]) => void;
-  rotateWheel: (angle: number, duration: number) => void;
-};
 
 function WheelModule(): WheelType {
   const { canvas, context } = createCanvas();
@@ -119,10 +113,10 @@ function WheelModule(): WheelType {
 
   return {
     canvas,
-    createWheel: (newSectors: number[]): void => {
+    drawWheel: (newSectors: number[]): void => {
       sectors = newSectors;
       colors = getColors(sectors);
-      createWheel(sectors, context, colors);
+      drawWheel(sectors, context, colors);
     },
     rotateWheel: (angle: number, duration: number): void => {
       rotateWheel(angle, duration, context, sectors, colors);
@@ -131,11 +125,12 @@ function WheelModule(): WheelType {
 }
 
 const wheel = WheelModule();
-wheel.createWheel([1, 5, 6, 4, 2]);
+wheel.drawWheel([1, 5, 6, 4, 2]);
 
 function createRotationButton(): HTMLButtonElement {
   const button = Button('You spinning me around, my feet are off the ground');
   button.addEventListener('click', (): void => {
+    const angle: number = randomFunction(1800, 3000);
     wheel.rotateWheel(angle, 3000);
   });
   return button;
