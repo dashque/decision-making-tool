@@ -1,6 +1,8 @@
+import { Main } from './utils/factory.ts';
+import { decisionPickerPage } from './pages/decision-picker.ts';
+// import {mainPage} from "./pages";
 // import { drawErrorPage } from './pages/error';
-import { createRotationButton, wheel } from './components/Wheel/wheel.ts';
 
-document.body.append(wheel.canvas, createRotationButton());
-
-// document.body.append(drawErrorPage());
+document.body.append(Main(decisionPickerPage()));
+// document.body.append(Main(mainPage()));
+// document.body.append(Main(drawErrorPage()));
