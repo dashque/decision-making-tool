@@ -5,7 +5,7 @@ export type Properties<T extends keyof HTMLElementTagNameMap> = {
   children?: Children;
 };
 
-export type Children = string | Node | Node[];
+export type Children = string | HTMLElement | HTMLElement[];
 
 export type PopupProperties = {
   children: Children;

@@ -1,35 +1,28 @@
 import { createElement } from '../../utils/create-element.ts';
 import { assertIsInstanceOf } from '../../utils';
-import { getColor } from '../../utils/get-color.ts';
+import { randomFunction } from '../../utils/random-function.ts';
+import { Button } from '../../utils/factory.ts';
 
 const CANVAS_SIZE = 600;
 const WHEEL_CENTER = CANVAS_SIZE / 2;
 const WHEEL_RADIUS = CANVAS_SIZE / 2;
-let colors: string[] = []; // looks like govno
+const angle: number = randomFunction(1800, 2500);
 
-//TODO переписать все параметры на деструктуризацию или подумать как что передавать
+function getColors(sectors: number[]): string[] {
+  return sectors.map(
+    () => `rgb(${randomFunction(0, 255)},${randomFunction(0, 255)},${randomFunction(0, 255)})`,
+  );
+}
 
-const canvas = createElement({
-  tag: 'canvas',
-  attributes: { height: `${CANVAS_SIZE}`, width: `${CANVAS_SIZE}` },
-});
-
-const context = canvas.getContext('2d');
-assertIsInstanceOf(CanvasRenderingContext2D, context);
-
-function createWheel(array: number[], context: CanvasRenderingContext2D): void {
-  const sum = array.reduce((a, b) => a + b, 0);
-  const sectorsAngles = array.map((element) => (element / sum) * 360);
-  let startAngle = 0;
-
-  if (colors.length === 0) {
-    colors = array.map(() => `rgb(${getColor(0, 255)},${getColor(0, 255)},${getColor(0, 255)})`); // не нравится глобальная переменная в функции(((
-  }
-
-  sectorsAngles.forEach((angle, i) => {
-    drawSector(startAngle, angle, context, colors[i]);
-    startAngle += angle;
+function createCanvas(): { canvas: HTMLCanvasElement; context: CanvasRenderingContext2D } {
+  const canvas = createElement({
+    tag: 'canvas',
+    attributes: { height: `${CANVAS_SIZE}`, width: `${CANVAS_SIZE}` },
   });
+  const context = canvas.getContext('2d');
+  assertIsInstanceOf(CanvasRenderingContext2D, context);
+
+  return { canvas, context };
 }
 
 function drawSector(
@@ -51,39 +44,15 @@ function drawSector(
   context.stroke();
 }
 
-function rotateWheel(
-  angle: number,
-  duration: number,
-  context: CanvasRenderingContext2D,
-  array: number[],
-): void {
-  const start = performance.now();
+function createWheel(sectors: number[], context: CanvasRenderingContext2D, colors: string[]): void {
+  const sum = sectors.reduce((acc, element) => acc + element, 0);
+  const sectorsAngles = sectors.map((element) => (element / sum) * 360);
+  let startAngle = 0;
 
-  function animate(currentTime: number): void {
-    const progress = (currentTime - start) / duration;
-    const easedProgress = easeInOutExpo(progress);
-    const currentRotation = angle * easedProgress;
-    clearAndDrawWheel(context, currentRotation, array);
-
-    if (progress < 1) {
-      requestAnimationFrame(animate);
-    }
-  }
-  requestAnimationFrame(animate);
-}
-
-function clearAndDrawWheel(
-  context: CanvasRenderingContext2D,
-  rotation: number,
-  array: number[],
-): void {
-  context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-  context.save();
-  context.translate(WHEEL_CENTER, WHEEL_CENTER);
-  context.rotate((rotation * Math.PI) / 180);
-  context.translate(-WHEEL_CENTER, -WHEEL_CENTER);
-  createWheel(array, context);
-  context.restore();
+  sectorsAngles.forEach((angle, i) => {
+    drawSector(startAngle, angle, context, colors[i]);
+    startAngle += angle;
+  });
 }
 
 function easeInOutExpo(progress: number): number {
@@ -99,6 +68,77 @@ function easeInOutExpo(progress: number): number {
   return (2 - Math.pow(2, -20 * progress + 10)) / 2;
 }
 
-rotateWheel(500, 2000, context, [1, 3, 4, 5]);
+function rotateWheel(
+  angle: number,
+  duration: number,
+  context: CanvasRenderingContext2D,
+  sectors: number[],
+  colors: string[],
+): void {
+  const start = performance.now();
 
-export { canvas };
+  function animate(currentTime: number): void {
+    const progress = (currentTime - start) / duration;
+    const easedProgress = easeInOutExpo(progress);
+    const currentRotation = angle * easedProgress;
+
+    clearAndDrawWheel(context, currentRotation, sectors, colors);
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+function clearAndDrawWheel(
+  context: CanvasRenderingContext2D,
+  rotation: number,
+  array: number[],
+  colors: string[],
+): void {
+  context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  context.save();
+  context.translate(WHEEL_CENTER, WHEEL_CENTER);
+  context.rotate((rotation * Math.PI) / 180);
+  context.translate(-WHEEL_CENTER, -WHEEL_CENTER);
+  createWheel(array, context, colors);
+  context.restore();
+}
+
+type WheelType = {
+  canvas: HTMLCanvasElement;
+  createWheel: (sectors: number[]) => void;
+  rotateWheel: (angle: number, duration: number) => void;
+};
+
+function WheelModule(): WheelType {
+  const { canvas, context } = createCanvas();
+  let colors: string[] = [];
+  let sectors: number[] = [];
+
+  return {
+    canvas,
+    createWheel: (newSectors: number[]): void => {
+      sectors = newSectors;
+      colors = getColors(sectors);
+      createWheel(sectors, context, colors);
+    },
+    rotateWheel: (angle: number, duration: number): void => {
+      rotateWheel(angle, duration, context, sectors, colors);
+    },
+  };
+}
+
+const wheel = WheelModule();
+wheel.createWheel([1, 5, 6, 4, 2]);
+
+function createRotationButton(): HTMLButtonElement {
+  const button = Button('You spinning me around, my feet are off the ground');
+  button.addEventListener('click', (): void => {
+    wheel.rotateWheel(angle, 3000);
+  });
+  return button;
+}
+
+export { wheel, createRotationButton };
