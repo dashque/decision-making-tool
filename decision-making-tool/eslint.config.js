@@ -26,6 +26,7 @@ export default [
   ...tseslint.configs.stylistic,
   {
     rules: {
+      'unicorn/prefer-event-target': 'off',
       'unicorn/no-array-callback-reference': 'off',
       'unicorn/no-array-for-each': 'off',
       'unicorn/no-array-reduce': 'off',
@@ -43,6 +44,14 @@ export default [
             props: true,
             Props: true,
           },
+        },
+      ],
+      'padding-line-between-statements': [
+        'error',
+        {
+          blankLine: 'always',
+          prev: 'function',
+          next: '*',
         },
       ],
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
