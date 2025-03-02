@@ -74,14 +74,13 @@ const Label = (children: Children, forLabel: string): HTMLLabelElement =>
     children,
     attributes: { type: 'text', for: `${forLabel}` },
   });
-const Link = (
-  children: Children,
-  locationFrom: string,
-  locationTo: string,
-): HTMLAnchorElement =>
+const Link = (children: Children, url: string): HTMLAnchorElement =>
   createElement({
     tag: 'a',
-    attributes: { href: `${locationFrom}${locationTo}` },
+    attributes: {
+      'data-href': `${url}`,
+      href: `${url}`,
+    },
     children,
   });
 
