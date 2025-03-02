@@ -1,0 +1,66 @@
+import type {
+  EventCallback,
+  EventData,
+  EventsMap,
+  EventType,
+  IEventEmitter,
+} from './types.ts';
+
+export class EventEmitter<Events extends EventsMap>
+  implements IEventEmitter<Events>
+{
+  private listeners: {
+    [Event in keyof EventsMap]?: CallableFunction[];
+  } = {};
+
+  public on = <
+    Event extends EventType<Events>,
+    Callback extends EventCallback<EventData<Events, Event>>,
+  >(
+    event: Event,
+    callback: Callback,
+  ): void => {
+    if (!this.listeners[event]) {
+      this.listeners[event] = [];
+    }
+    this.listeners[event].push(callback);
+  };
+
+  public off = <
+    Event extends EventType<Events>,
+    Callback extends EventCallback<EventData<Events, Event>>,
+  >(
+    event: Event,
+    callback: Callback,
+  ): void => {
+    if (!this.listeners[event]) {
+      return;
+    }
+    this.listeners[event] = this.listeners[event].filter((f) => f !== callback);
+  };
+
+  public emit = <
+    Event extends EventType<Events>,
+    Data extends EventData<Events, Event>,
+  >(
+    event: Event,
+    data: Data,
+  ): void => {
+    if (!this.listeners[event]) {
+      return;
+    }
+    this.listeners[event].forEach((function_) => {
+      function_(data);
+    });
+  };
+
+  public hasListener = <Event extends EventType<Events>>(
+    event: Event,
+  ): boolean => {
+    return Boolean(this.listeners[event]);
+  };
+
+  public destroy = (): void => {
+    this.listeners = {};
+  };
+}
