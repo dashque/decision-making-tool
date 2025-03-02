@@ -2,24 +2,28 @@ import { mainPage } from '~/pages/main.ts';
 import { decisionPickerPage } from '~/pages/decision-picker.ts';
 import { errorPage } from '~/pages/error.ts';
 
-// function createRouter(paths){
-//   let currentLocation = window.location.pathname
-//
-// }
+const historyResolver = (page: string, url: string): void => {
+  // this.event.preventDefault();
 
-const paths = [
-  {
-    path: '/#',
-    component: mainPage,
-  },
-  {
-    path: '/decision-picker',
-    component: decisionPickerPage,
-  },
-  {
-    path: '/*',
-    component: errorPage,
-  },
-];
+  history.pushState({}, page, url);
 
-export { paths };
+  switch (url) {
+    case '#/': {
+      document.body.replaceChildren();
+      document.body.append(mainPage());
+      break;
+    }
+    case '#/decision-picker': {
+      document.body.replaceChildren();
+      document.body.append(decisionPickerPage());
+      break;
+    }
+    default: {
+      document.body.replaceChildren();
+      document.body.append(errorPage());
+      break;
+    }
+  }
+};
+
+export { historyResolver };

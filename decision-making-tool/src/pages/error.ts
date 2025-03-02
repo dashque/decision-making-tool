@@ -1,7 +1,8 @@
-import { Button, H1, Section } from '~/utils/factory.ts';
+import { Button, H1, Link, Main, Section } from '~/utils/factory.ts';
+import { historyResolver } from '~/router.ts';
 
 function errorPage(): HTMLElement {
-  return Section([drawHeading(), drawComebackButton()]);
+  return Main(Section([drawHeading(), drawComebackButton()]));
 }
 
 function drawHeading(): HTMLHeadingElement {
@@ -9,8 +10,11 @@ function drawHeading(): HTMLHeadingElement {
 }
 
 function drawComebackButton(): HTMLButtonElement {
-  const button = Button('Back to main');
-
+  const link = Link('Back to main', '#/');
+  const button = Button(link);
+  button.addEventListener('click', () =>
+    historyResolver('Main', link.dataset.href ?? ''),
+  );
   return button;
 }
 
