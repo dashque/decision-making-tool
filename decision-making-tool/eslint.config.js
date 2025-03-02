@@ -2,6 +2,7 @@ import globals from 'globals';
 import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -17,6 +18,7 @@ export default [
   {
     rules: {
       'unicorn/better-regex': 'warn',
+      semi: ['error', 'always'],
     },
   },
   pluginJs.configs.recommended,
@@ -57,4 +59,5 @@ export default [
       '@typescript-eslint/member-ordering': 'error',
     },
   },
+  eslintConfigPrettier,
 ];
