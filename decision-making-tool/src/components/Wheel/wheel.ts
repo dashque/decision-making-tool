@@ -1,20 +1,20 @@
-import { createElement } from '../../utils/create-element.ts';
-import { assertIsNonNullable } from '../../utils';
-import { randomFunction } from '../../utils/random-function.ts';
-import { Button } from '../../utils/factory.ts';
+import { randomFunction } from '~/utils/random-function.ts';
+import { createElement } from '~/utils/create-element.ts';
+import { assertIsNonNullable } from '~/utils';
 import type {
   ClearAndDrawProperties,
   RotationProperties,
   SectorProperties,
   WheelProperties,
   WheelType,
-} from '../../types';
+} from '~/types';
+import { Button } from '~/utils/factory.ts';
 
 const {
   CANVAS_SIZE,
   MAX_ROTATION,
-  MIN_ROTATION,
   WHEEL_CENTER,
+  MIN_ROTATION,
   WHEEL_RADIUS,
   STROKE_COLOR,
 } = {
@@ -147,7 +147,7 @@ function WheelModule(): WheelType {
     },
   };
 }
-
+//TODO think how to remove it
 const wheel = WheelModule();
 wheel.drawWheel([1, 5, 6, 4, 2]);
 

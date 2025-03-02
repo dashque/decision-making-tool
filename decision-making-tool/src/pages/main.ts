@@ -1,4 +1,5 @@
-import { H1, Main } from '../utils/factory.ts';
+// import { errorPage } from '~/pages/error.ts';
+// import { Section, H1 } from '~/utils/factory.ts';
 // import {
 //   drawAddOptionButton,
 //   drawClearListButton,
@@ -6,9 +7,9 @@ import { H1, Main } from '../utils/factory.ts';
 //   drawPasteListButton,
 //   drawSaveListButton,
 //   drawStartButton,
-// } from '../components/Controls/controls.ts';
-import { decisionPickerPage } from './decision-picker.ts';
-// import {errorPage} from "./error.ts";
+// } from '~/components/Controls/controls.ts';
+import { Main, H1 } from '~/utils/factory.ts';
+import { decisionPickerPage } from '~/pages/decision-picker.ts';
 
 function mainPage(): HTMLElement {
   return Main([drawHeading(), decisionPickerPage()]);
@@ -24,7 +25,7 @@ function mainPage(): HTMLElement {
   //   ]),
   // );
 
-  // return Main(errorPage())
+  // return Main(errorPage());
 }
 
 function drawHeading(): HTMLHeadingElement {

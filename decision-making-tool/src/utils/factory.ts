@@ -1,4 +1,4 @@
-import type { Children } from '../types';
+import type { Children } from '~/types';
 import { createElement } from './create-element.ts';
 
 const H1 = (children: Children): HTMLHeadingElement =>
@@ -85,4 +85,11 @@ const Link = (
     children,
   });
 
-export { H1, H2, Main, Section, Div, Button, Input, Label, Link };
+const Dialog = (children: Children): HTMLDialogElement =>
+  createElement({
+    tag: 'dialog',
+    cssClasses: [''],
+    children,
+  });
+
+export { H1, H2, Main, Section, Div, Button, Input, Label, Link, Dialog };

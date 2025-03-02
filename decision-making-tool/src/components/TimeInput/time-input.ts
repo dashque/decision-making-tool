@@ -1,4 +1,4 @@
-import { Input, Label } from '../../utils/factory.ts';
+import { Input, Label } from '~/utils/factory.ts';
 
 const DEFAULT_DURATION_MS = 10000 as const;
 let inputValue = DEFAULT_DURATION_MS;

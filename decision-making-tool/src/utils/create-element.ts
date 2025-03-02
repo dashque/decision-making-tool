@@ -1,4 +1,4 @@
-import type { Properties } from '../types';
+import type { Properties } from '~/types';
 
 function createElement<T extends keyof HTMLElementTagNameMap>(
   properties: Properties<T>,

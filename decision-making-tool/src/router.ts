@@ -1,6 +1,6 @@
-import { decisionPickerPage } from './pages/decision-picker.ts';
-import { mainPage } from './pages/main.ts';
-import { errorPage } from './pages/error.ts';
+import { mainPage } from '~/pages/main.ts';
+import { decisionPickerPage } from '~/pages/decision-picker.ts';
+import { errorPage } from '~/pages/error.ts';
 
 // function createRouter(paths){
 //   let currentLocation = window.location.pathname
@@ -10,15 +10,15 @@ import { errorPage } from './pages/error.ts';
 const paths = [
   {
     path: '/#',
-    component: mainPage(),
+    component: mainPage,
   },
   {
     path: '/decision-picker',
-    component: decisionPickerPage(),
+    component: decisionPickerPage,
   },
   {
     path: '/*',
-    component: errorPage(),
+    component: errorPage,
   },
 ];
 

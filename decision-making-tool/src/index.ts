@@ -1,3 +1,3 @@
-import { mainPage } from './pages/main.ts';
+import { mainPage } from '~/pages/main.ts';
 
 document.body.append(mainPage());

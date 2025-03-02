@@ -1,4 +1,4 @@
-import { Button } from '../../utils/factory.ts';
+import { Button } from '~/utils/factory.ts';
 
 function drawAddOptionButton(): HTMLButtonElement {
   const button = Button('Add Options');

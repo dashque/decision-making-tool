@@ -1,21 +1,13 @@
-import { createElement } from './create-element.ts';
-import type { PopupProperties } from '../types';
+import type { PopupProperties } from '~/types';
+import { Button, Dialog, Div } from './factory.ts';
 
-function createPopup({ children, onClose }: PopupProperties): HTMLDialogElement {
-  const dialog = createElement({
-    tag: 'dialog',
-    cssClasses: ['popup-dialog'],
-  });
-
-  const popupContainer = createElement({
-    tag: 'div',
-    cssClasses: ['popup-container'],
-  });
-
-  const closeButton = createElement({
-    tag: 'button',
-    cssClasses: ['popup-close-btn'],
-  });
+function createPopup({
+  children,
+  onClose,
+}: PopupProperties): HTMLDialogElement {
+  const closeButton = Button('X');
+  const popupContainer = Div(closeButton);
+  const dialog = Dialog(popupContainer);
 
   closeButton.addEventListener('click', () => {
     dialog.close();

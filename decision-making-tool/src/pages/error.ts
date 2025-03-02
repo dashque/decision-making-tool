@@ -1,4 +1,4 @@
-import { Button, H1, Section } from '../utils/factory.ts';
+import { Button, H1, Section } from '~/utils/factory.ts';
 
 function errorPage(): HTMLElement {
   return Section([drawHeading(), drawComebackButton()]);
