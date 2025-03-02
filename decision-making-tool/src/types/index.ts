@@ -5,7 +5,10 @@ export type Properties<T extends keyof HTMLElementTagNameMap> = {
   children?: Children;
 };
 
-export type Children = (string | HTMLElement) | HTMLElement[] | (string | HTMLElement)[];
+export type Children =
+  | (string | HTMLElement)
+  | HTMLElement[]
+  | (string | HTMLElement)[];
 
 export type PopupProperties = {
   children: Children;
@@ -16,4 +19,32 @@ export type WheelType = {
   canvas: HTMLCanvasElement;
   drawWheel: (sectors: number[]) => void;
   rotateWheel: (angle: number, duration: number) => void;
+};
+
+export type SectorProperties = {
+  startAngle: number;
+  sectorAngle: number;
+  context: CanvasRenderingContext2D;
+  color: string;
+};
+
+export type WheelProperties = {
+  sectors: number[];
+  context: CanvasRenderingContext2D;
+  colors: string[];
+};
+
+export type RotationProperties = {
+  angle: number;
+  duration: number;
+  context: CanvasRenderingContext2D;
+  sectors: number[];
+  colors: string[];
+};
+
+export type ClearAndDrawProperties = {
+  context: CanvasRenderingContext2D;
+  rotation: number;
+  sectors: number[];
+  colors: string[];
 };
