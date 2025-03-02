@@ -9,6 +9,7 @@ import type {
   WheelType,
 } from '~/types';
 import { Button } from '~/utils/factory.ts';
+import { inputValue } from '~/components/TimeInput/time-input.ts';
 
 const {
   CANVAS_SIZE,
@@ -155,7 +156,7 @@ function createRotationButton(): HTMLButtonElement {
   const button = Button('You spinning me around, my feet are off the ground');
   button.addEventListener('click', (): void => {
     const angle: number = randomFunction(MIN_ROTATION, MAX_ROTATION);
-    wheel.rotateWheel(angle, 7000); // TODO должно передавать время из инпута
+    wheel.rotateWheel(angle, inputValue); // TODO должно передавать время из инпута
   });
   return button;
 }

@@ -1,8 +1,8 @@
 import { Input, Label } from '~/utils/factory.ts';
 
 const DEFAULT_DURATION_MS = 10000 as const;
+//TODO подумать как не импортировать переменную
 let inputValue = DEFAULT_DURATION_MS;
-console.log(inputValue); // TODO remove it
 
 function drawTimerInput(): HTMLLabelElement {
   return Label(drawInput(), 'timer');
@@ -30,4 +30,4 @@ function getInputValue(input: HTMLInputElement): void {
   });
 }
 
-export { drawTimerInput };
+export { drawTimerInput, inputValue };
