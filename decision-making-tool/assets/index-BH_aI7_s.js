@@ -119,6 +119,14 @@ const Label = (children, forLabel) => createElement({
   children,
   attributes: { type: "text", for: `${forLabel}` }
 });
+const Link = (children, url) => createElement({
+  tag: "a",
+  attributes: {
+    "data-href": `${url}`,
+    href: `${url}`
+  },
+  children
+});
 
 const DEFAULT_DURATION_MS = 1e4;
 let inputValue = DEFAULT_DURATION_MS;
@@ -283,15 +291,112 @@ function createRotationButton() {
 }
 
 function decisionPickerPage() {
-  return Section([drawTimerInput(), wheel.canvas, createRotationButton()]);
+  return Main(
+    Section([
+      createComeBackButton(),
+      drawTimerInput(),
+      wheel.canvas,
+      createRotationButton()
+    ])
+  );
+}
+function createComeBackButton() {
+  const link = Link("Back to main", "#/");
+  const button = Button(link);
+  button.addEventListener(
+    "click",
+    () => historyResolver("Main", link.getAttribute("href") ?? "")
+  );
+  return button;
+}
+
+function errorPage() {
+  return Main(Section([drawHeading$1(), drawComebackButton()]));
+}
+function drawHeading$1() {
+  return H1("Something went wrong");
+}
+function drawComebackButton() {
+  const link = Link("Back to main", "#/");
+  const button = Button(link);
+  button.addEventListener(
+    "click",
+    () => historyResolver("Main", link.dataset.href ?? "")
+  );
+  return button;
+}
+
+const historyResolver = (page, url) => {
+  history.pushState({}, page, url);
+  switch (url) {
+    case "#/": {
+      document.body.replaceChildren();
+      document.body.append(mainPage());
+      break;
+    }
+    case "#/decision-picker": {
+      document.body.replaceChildren();
+      document.body.append(decisionPickerPage());
+      break;
+    }
+    default: {
+      document.body.replaceChildren();
+      document.body.append(errorPage());
+      break;
+    }
+  }
+};
+
+function drawAddOptionButton() {
+  const button = Button("Add Options");
+  return button;
+}
+function drawPasteListButton() {
+  const button = Button("Paste List");
+  return button;
+}
+function drawClearListButton() {
+  const button = Button("Clear List");
+  return button;
+}
+function drawSaveListButton() {
+  const button = Button("Save List to File");
+  return button;
+}
+function drawLoadFromListButton() {
+  const button = Button("Load List from File");
+  return button;
+}
+function drawStartButton() {
+  const link = Link("Start", "#/decision-picker");
+  const button = Button(link);
+  button.addEventListener(
+    "click",
+    () => historyResolver("Decision picker", link.getAttribute("href") ?? "")
+  );
+  return button;
 }
 
 function mainPage() {
-  return Main([drawHeading(), decisionPickerPage()]);
+  return Main(
+    Section([
+      drawHeading(),
+      drawAddOptionButton(),
+      drawPasteListButton(),
+      drawClearListButton(),
+      drawSaveListButton(),
+      drawLoadFromListButton(),
+      drawStartButton()
+    ])
+  );
 }
 function drawHeading() {
   return H1("Decision Making Tool");
 }
 
 document.body.append(mainPage());
-//# sourceMappingURL=index-TNOlUZIk.js.map
+globalThis.addEventListener("popstate", () => {
+  historyResolver(document.title, globalThis.location.hash);
+});
+historyResolver("Initial", globalThis.location.hash || "#/");
+//# sourceMappingURL=index-BH_aI7_s.js.map
