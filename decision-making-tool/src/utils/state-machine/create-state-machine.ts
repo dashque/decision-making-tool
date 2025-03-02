@@ -1,4 +1,5 @@
 console.log('');
+
 // import { EventEmitter } from './event-emitter/event-emitter.ts';
 // import type {
 //   IStateMachine,
@@ -17,7 +18,6 @@ console.log('');
 // > implements IStateMachine<State, Transitions, Context>
 // {
 //   private definition: StateMachineDefinition<State, Transitions, Context>;
-//   //TODO ESLint: Prefer `EventTarget` over `EventEmitter`. (unicorn/prefer-event-target)
 //   private emitter = new EventEmitter<
 //     StateMachineChangeEvents<Transitions, State, Context>
 //   >();
@@ -59,8 +59,7 @@ console.log('');
 //     return this.send({
 //       type: arguments_[0],
 //       //TODO ESLint: Do not use any type assertions. (@typescript-eslint/consistent-type-assertions)
-//       //TODO ESLint: Prefer using a logical operator over a ternary. (unicorn/prefer-logical-operator-over-ternary)
-//       data: <D>(arguments_[1] ? arguments_[1] : undefined),
+//       data: <D>(arguments_[1] ?? undefined),
 //     });
 //   }
 //
