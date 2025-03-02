@@ -10,10 +10,10 @@ export default defineConfig({
     },
   },
   build: {
-    minify: false,
+    minify: true,
     sourcemap: true,
     target: 'esnext',
-    compact: false,
+    compact: true,
   },
   css: {
     modules: {
