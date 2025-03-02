@@ -120,21 +120,46 @@ const Label = (children, forLabel) => createElement({
   attributes: { type: "text", for: `${forLabel}` }
 });
 
-function assertIsNonNullable(value, ...infos) {
-  if (value === void 0 || value === null) {
-    throw new Error(`Nullish assertion Error: "${String(value)}"; ${infos?.join(" ")}`);
-  }
+const DEFAULT_DURATION_MS = 1e4;
+let inputValue = DEFAULT_DURATION_MS;
+function drawTimerInput() {
+  return Label(drawInput(), "timer");
+}
+function drawInput() {
+  const input = Input("Timer", "timer");
+  setInput(input);
+  getInputValue(input);
+  return input;
+}
+function setInput(input) {
+  input.setAttribute("placeholder", "Set time");
+  input.value = "10";
+  input.type = "number";
+  input.min = "5";
+  input.max = "30";
+}
+function getInputValue(input) {
+  input.addEventListener("change", () => {
+    const secondInMS = 1e3;
+    inputValue = Number(input.value) * secondInMS;
+  });
 }
 
 function randomFunction(min, max) {
   return Math.ceil(Math.random() * (max - min) + min);
 }
 
+function assertIsNonNullable(value, ...infos) {
+  if (value === void 0 || value === null) {
+    throw new Error(`Nullish assertion Error: "${String(value)}"; ${infos?.join(" ")}`);
+  }
+}
+
 const {
   CANVAS_SIZE,
   MAX_ROTATION,
-  MIN_ROTATION,
   WHEEL_CENTER,
+  MIN_ROTATION,
   WHEEL_RADIUS,
   STROKE_COLOR
 } = {
@@ -252,35 +277,9 @@ function createRotationButton() {
   const button = Button("You spinning me around, my feet are off the ground");
   button.addEventListener("click", () => {
     const angle = randomFunction(MIN_ROTATION, MAX_ROTATION);
-    wheel.rotateWheel(angle, 7e3);
+    wheel.rotateWheel(angle, inputValue);
   });
   return button;
-}
-
-const DEFAULT_DURATION_MS = 1e4;
-let inputValue = DEFAULT_DURATION_MS;
-console.log(inputValue);
-function drawTimerInput() {
-  return Label(drawInput(), "timer");
-}
-function drawInput() {
-  const input = Input("Timer", "timer");
-  setInput(input);
-  getInputValue(input);
-  return input;
-}
-function setInput(input) {
-  input.setAttribute("placeholder", "Set time");
-  input.value = "10";
-  input.type = "number";
-  input.min = "5";
-  input.max = "30";
-}
-function getInputValue(input) {
-  input.addEventListener("change", () => {
-    const secondInMS = 1e3;
-    inputValue = Number(input.value) * secondInMS;
-  });
 }
 
 function decisionPickerPage() {
@@ -295,4 +294,4 @@ function drawHeading() {
 }
 
 document.body.append(mainPage());
-//# sourceMappingURL=index-BT-AON-Z.js.map
+//# sourceMappingURL=index-TNOlUZIk.js.map
