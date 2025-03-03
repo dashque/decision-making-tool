@@ -46,6 +46,7 @@ export default [
           },
         },
       ],
+      'no-magic-numbers':'warn',
       'padding-line-between-statements': [
         'error',
         {
