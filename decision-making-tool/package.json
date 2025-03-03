@@ -54,6 +54,8 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.8",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
     "modern-normalize": "^3.0.1"
   }
 }

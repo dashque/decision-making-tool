@@ -13,7 +13,19 @@ export default [
       reportUnusedDisableDirectives: true,
     },
   },
-  { languageOptions: { globals: globals.browser } },
+  ...tseslint.configs.recommendedTypeChecked,
+  {
+    ignores: ['commitlint.config.js', 'eslint.config.js', 'postcss.config.mjs', 'vite.config.js'],
+  },
+  {
+    languageOptions: {
+      globals: globals.browser,
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   eslintPluginUnicorn.configs.recommended,
   {
     rules: {
@@ -46,7 +58,7 @@ export default [
           },
         },
       ],
-      'no-magic-numbers':'warn',
+      'no-magic-numbers': 'warn',
       'padding-line-between-statements': [
         'error',
         {
@@ -58,10 +70,7 @@ export default [
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/explicit-function-return-type': 'error',
-      '@typescript-eslint/consistent-type-assertions': [
-        'error',
-        { assertionStyle: 'never' },
-      ],
+      '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
       '@typescript-eslint/explicit-member-accessibility': [
         'error',
         { accessibility: 'explicit', overrides: { constructors: 'off' } },
