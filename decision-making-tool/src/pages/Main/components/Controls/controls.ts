@@ -1,5 +1,5 @@
 import { Button, Link } from '~/utils/factory.ts';
-import { historyResolver } from '~/pages/router.ts';
+import { historyResolver } from '~/router.ts';
 
 function drawAddOptionButton(): HTMLButtonElement {
   const button = Button('Add Options');
@@ -35,7 +35,7 @@ function drawStartButton(): HTMLButtonElement {
   const link = Link('Start', '#/decision-picker');
   const button = Button(link);
   button.addEventListener('click', () =>
-    historyResolver('Decision picker', link.getAttribute('href') ?? ''),
+    historyResolver('Decision picker', link.getAttribute('href') ?? '#/decision-picker'),
   );
   return button;
 }

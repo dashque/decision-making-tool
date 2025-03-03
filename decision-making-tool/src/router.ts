@@ -3,27 +3,38 @@ import { decisionPickerPage } from '~/pages/DecisionPicker/decision-picker.ts';
 import { errorPage } from '~/pages/Error/error.ts';
 
 const historyResolver = (page: string, url: string): void => {
-  // this.event.preventDefault();
+  const targetHash = new URL(url, globalThis.location.href).hash || '#/';
 
-  history.pushState({}, page, url);
+  if (globalThis.location.hash !== targetHash) {
+    history.pushState({}, page, url);
+  }
 
-  switch (url) {
+  handleRouteChange(targetHash);
+};
+
+const handleRouteChange = (url: string): void => {
+  document.body.replaceChildren();
+
+  const formattedHash = url.startsWith('#') ? url : '#/';
+
+  switch (formattedHash) {
     case '#/': {
-      document.body.replaceChildren();
       document.body.append(mainPage());
       break;
     }
     case '#/decision-picker': {
-      document.body.replaceChildren();
       document.body.append(decisionPickerPage());
       break;
     }
     default: {
-      document.body.replaceChildren();
       document.body.append(errorPage());
       break;
     }
   }
 };
+
+globalThis.addEventListener('popstate', () => {
+  handleRouteChange(globalThis.location.hash || '#/');
+});
 
 export { historyResolver };

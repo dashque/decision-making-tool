@@ -1,14 +1,8 @@
-import { mainPage } from '~/pages/Main/main.ts';
-import { historyResolver } from '~/pages/router.ts';
+import { historyResolver } from '~/router.ts';
 
-function initApplication(): void {
-  document.body.append(mainPage());
+document.body.classList.add('bg-fuchsia-100');
 
-  globalThis.addEventListener('popstate', () => {
-    historyResolver(document.title, globalThis.location.hash);
-  });
-
-  historyResolver('Initial', globalThis.location.hash || '#/');
-}
-
-initApplication();
+globalThis.addEventListener('DOMContentLoaded', () => {
+  const url = globalThis.location.hash || '#/';
+  historyResolver('initial', url);
+});
