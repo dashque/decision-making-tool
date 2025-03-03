@@ -9,24 +9,23 @@ import type {
   WheelType,
 } from '~/types';
 import { Button } from '~/utils/factory.ts';
-import { inputValue } from '~/pages/DecisionPicker/components/TimeInput/time-input.ts';
-
-const { CANVAS_SIZE, MAX_ROTATION, WHEEL_CENTER, MIN_ROTATION, WHEEL_RADIUS, STROKE_COLOR } = {
-  CANVAS_SIZE: 400,
-  MAX_ROTATION: 4000,
-  MIN_ROTATION: 1800,
-  STROKE_COLOR: '#f542b3',
-  get WHEEL_CENTER() {
-    return CANVAS_SIZE / 2;
-  },
-  get WHEEL_RADIUS() {
-    return CANVAS_SIZE / 2;
-  },
-} as const;
+import {
+  DEGREES,
+  DIVIDER,
+  INITIAL_VALUE,
+  ROTATION,
+  STROKE_COLOR,
+  WHEEL,
+  ANIMATION,
+} from './constants';
+import { DEFAULT_DURATION_MS } from '../TimeInput/time-input';
 
 function getColors(sectors: number[]): string[] {
+  const min = 0;
+  const max = 255;
   return sectors.map(
-    () => `rgb(${randomFunction(0, 255)},${randomFunction(0, 255)},${randomFunction(0, 255)})`,
+    () =>
+      `rgb(${randomFunction(min, max)},${randomFunction(min, max)},${randomFunction(min, max)})`,
   );
 }
 
@@ -36,7 +35,7 @@ function createCanvas(): {
 } {
   const canvas = createElement({
     tag: 'canvas',
-    attributes: { height: `${CANVAS_SIZE}`, width: `${CANVAS_SIZE}` },
+    attributes: { height: `${WHEEL.SIZE}`, width: `${WHEEL.SIZE}` },
   });
   const context = canvas.getContext('2d');
   assertIsNonNullable(context);
@@ -47,12 +46,12 @@ function createCanvas(): {
 function drawSector(sectorProperties: SectorProperties): void {
   const { startAngle, sectorAngle, context, color } = sectorProperties;
   const anticlockwise = false;
-  const startAngleRad = (startAngle * Math.PI) / 180;
-  const endAngleRad = ((startAngle + sectorAngle) * Math.PI) / 180;
+  const startAngleRad = (startAngle * Math.PI) / DEGREES.HALH;
+  const endAngleRad = ((startAngle + sectorAngle) * Math.PI) / DEGREES.HALH;
 
   context.beginPath();
-  context.arc(WHEEL_CENTER, WHEEL_CENTER, WHEEL_RADIUS, startAngleRad, endAngleRad, anticlockwise);
-  context.lineTo(WHEEL_CENTER, WHEEL_CENTER);
+  context.arc(WHEEL.CENTER, WHEEL.CENTER, WHEEL.RADIUS, startAngleRad, endAngleRad, anticlockwise);
+  context.lineTo(WHEEL.CENTER, WHEEL.CENTER);
   context.closePath();
   context.fillStyle = color;
   context.fill();
@@ -62,8 +61,8 @@ function drawSector(sectorProperties: SectorProperties): void {
 
 function drawWheel(wheelProperties: WheelProperties): void {
   const { sectors, context, colors } = wheelProperties;
-  const sum = sectors.reduce((acc, element) => acc + element, 0);
-  const sectorsAngles = sectors.map((element) => (element / sum) * 360);
+  const sum = sectors.reduce((acc, element) => acc + element, INITIAL_VALUE);
+  const sectorsAngles = sectors.map((element) => (element / sum) * DEGREES.FULL);
   let startAngle = 0;
 
   sectorsAngles.forEach((angle, i) => {
@@ -73,16 +72,28 @@ function drawWheel(wheelProperties: WheelProperties): void {
 }
 
 function easeInOutExpo(progress: number): number {
-  if (progress === 0) {
-    return 0;
+  if (progress === ANIMATION.MIN_PROGRESS) {
+    return ANIMATION.MIN_PROGRESS;
   }
-  if (progress === 1) {
-    return 1;
+  if (progress === ANIMATION.MAX_PROGRESS) {
+    return ANIMATION.MAX_PROGRESS;
   }
-  if (progress < 0.5) {
-    return Math.pow(2, 20 * progress - 10) / 2;
+  if (progress < ANIMATION.MIDPOINT) {
+    return (
+      Math.pow(
+        ANIMATION.BASE_POWER,
+        ANIMATION.EXPONENTIAL_FACTOR * progress - ANIMATION.EXPONENTIAL_OFFSET,
+      ) / DIVIDER
+    );
   }
-  return (2 - Math.pow(2, -20 * progress + 10)) / 2;
+  return (
+    (ANIMATION.BASE_POWER -
+      Math.pow(
+        ANIMATION.BASE_POWER,
+        -ANIMATION.EXPONENTIAL_FACTOR * progress + ANIMATION.EXPONENTIAL_OFFSET,
+      )) /
+    DIVIDER
+  );
 }
 
 function rotateWheel(rotationProperties: RotationProperties): void {
@@ -96,7 +107,7 @@ function rotateWheel(rotationProperties: RotationProperties): void {
 
     clearAndDrawWheel({ context, rotation: currentRotation, sectors, colors });
 
-    if (progress < 1) {
+    if (progress < ANIMATION.MAX_PROGRESS) {
       requestAnimationFrame(animate);
     }
   }
@@ -106,11 +117,11 @@ function rotateWheel(rotationProperties: RotationProperties): void {
 
 function clearAndDrawWheel(clearAndDrawProperties: ClearAndDrawProperties): void {
   const { context, rotation, sectors, colors } = clearAndDrawProperties;
-  context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  context.clearRect(INITIAL_VALUE, INITIAL_VALUE, WHEEL.SIZE, WHEEL.SIZE);
   context.save();
-  context.translate(WHEEL_CENTER, WHEEL_CENTER);
-  context.rotate((rotation * Math.PI) / 180);
-  context.translate(-WHEEL_CENTER, -WHEEL_CENTER);
+  context.translate(WHEEL.CENTER, WHEEL.CENTER);
+  context.rotate((rotation * Math.PI) / DEGREES.HALH);
+  context.translate(-WHEEL.CENTER, -WHEEL.CENTER);
   drawWheel({ sectors, context, colors });
   context.restore();
 }
@@ -141,8 +152,8 @@ wheel.drawWheel([1, 5, 6, 4, 2]);
 function createRotationButton(): HTMLButtonElement {
   const button = Button('You spinning me around, my feet are off the ground');
   button.addEventListener('click', (): void => {
-    const angle: number = randomFunction(MIN_ROTATION, MAX_ROTATION);
-    wheel.rotateWheel(angle, inputValue); // TODO должно передавать время из инпута
+    const angle: number = randomFunction(ROTATION.MIN, ROTATION.MAX);
+    wheel.rotateWheel(angle, DEFAULT_DURATION_MS); // TODO должно передавать время из инпута
   });
   return button;
 }
