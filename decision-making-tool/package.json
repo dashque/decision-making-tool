@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "stylelint": "stylelint \"src/**/*.css\" --fix",
     "prepare": "cd .. && husky decision-making-tool/.husky",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "type-check": "tsc --noEmit"
   },
   "lint-staged": {
     "*.{js,ts}": [
