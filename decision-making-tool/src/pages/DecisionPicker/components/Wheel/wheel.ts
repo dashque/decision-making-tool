@@ -8,17 +8,7 @@ import type {
   WheelProperties,
   WheelType,
 } from '~/types';
-import { Button } from '~/utils/factory.ts';
-import {
-  DIVIDER,
-  INITIAL_VALUE,
-  ROTATION,
-  STROKE_COLOR,
-  WHEEL,
-  ANIMATION,
-  CIRCLE,
-} from './constants';
-import { DEFAULT_DURATION_MS } from '../TimeInput/time-input';
+import { ANIMATION, CIRCLE, DIVIDER, INITIAL_VALUE, STROKE_COLOR, WHEEL } from './constants';
 
 function getColors(sectors: number[]): string[] {
   const min = 0;
@@ -148,14 +138,4 @@ function WheelModule(): WheelType {
 const wheel = WheelModule();
 wheel.drawWheel([1, 5, 6, 4, 2]);
 
-//TODO перенести в контролы когда подключу машину
-function createRotationButton(): HTMLButtonElement {
-  const button = Button('You spinning me around, my feet are off the ground');
-  button.addEventListener('click', (): void => {
-    const angle: number = randomFunction(ROTATION.MIN, ROTATION.MAX);
-    wheel.rotateWheel(angle, DEFAULT_DURATION_MS); // TODO должно передавать время из инпута
-  });
-  return button;
-}
-
-export { wheel, createRotationButton };
+export { wheel };

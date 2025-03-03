@@ -28,6 +28,8 @@ const Button = (children: Children): HTMLButtonElement => {
       'w-96',
       'px-4',
       'py-2',
+      'border',
+      'border-gray-300',
       'bg-emerald-400',
       'text-white',
       'rounded-lg',
