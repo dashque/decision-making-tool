@@ -15,8 +15,8 @@ export const ROTATION = {
 
 export const STROKE_COLOR = '#f542b3';
 
-export const DEGREES = {
-  HALH: 180,
+export const CIRCLE = {
+  HALF: 180,
   FULL: 360,
 };
 

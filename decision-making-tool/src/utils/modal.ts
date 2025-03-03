@@ -1,10 +1,7 @@
 import type { PopupProperties } from '~/types';
 import { Button, Dialog, Div } from './factory.ts';
 
-function createPopup({
-  children,
-  onClose,
-}: PopupProperties): HTMLDialogElement {
+function createPopup({ children, onClose }: PopupProperties): HTMLDialogElement {
   const closeButton = Button('X');
   const popupContainer = Div(closeButton);
   const dialog = Dialog(popupContainer);

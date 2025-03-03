@@ -10,13 +10,13 @@ import type {
 } from '~/types';
 import { Button } from '~/utils/factory.ts';
 import {
-  DEGREES,
   DIVIDER,
   INITIAL_VALUE,
   ROTATION,
   STROKE_COLOR,
   WHEEL,
   ANIMATION,
+  CIRCLE,
 } from './constants';
 import { DEFAULT_DURATION_MS } from '../TimeInput/time-input';
 
@@ -46,8 +46,8 @@ function createCanvas(): {
 function drawSector(sectorProperties: SectorProperties): void {
   const { startAngle, sectorAngle, context, color } = sectorProperties;
   const anticlockwise = false;
-  const startAngleRad = (startAngle * Math.PI) / DEGREES.HALH;
-  const endAngleRad = ((startAngle + sectorAngle) * Math.PI) / DEGREES.HALH;
+  const startAngleRad = (startAngle * Math.PI) / CIRCLE.HALF;
+  const endAngleRad = ((startAngle + sectorAngle) * Math.PI) / CIRCLE.HALF;
 
   context.beginPath();
   context.arc(WHEEL.CENTER, WHEEL.CENTER, WHEEL.RADIUS, startAngleRad, endAngleRad, anticlockwise);
@@ -62,7 +62,7 @@ function drawSector(sectorProperties: SectorProperties): void {
 function drawWheel(wheelProperties: WheelProperties): void {
   const { sectors, context, colors } = wheelProperties;
   const sum = sectors.reduce((acc, element) => acc + element, INITIAL_VALUE);
-  const sectorsAngles = sectors.map((element) => (element / sum) * DEGREES.FULL);
+  const sectorsAngles = sectors.map((element) => (element / sum) * CIRCLE.FULL);
   let startAngle = 0;
 
   sectorsAngles.forEach((angle, i) => {
@@ -120,7 +120,7 @@ function clearAndDrawWheel(clearAndDrawProperties: ClearAndDrawProperties): void
   context.clearRect(INITIAL_VALUE, INITIAL_VALUE, WHEEL.SIZE, WHEEL.SIZE);
   context.save();
   context.translate(WHEEL.CENTER, WHEEL.CENTER);
-  context.rotate((rotation * Math.PI) / DEGREES.HALH);
+  context.rotate((rotation * Math.PI) / CIRCLE.HALF);
   context.translate(-WHEEL.CENTER, -WHEEL.CENTER);
   drawWheel({ sectors, context, colors });
   context.restore();
