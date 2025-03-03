@@ -4,17 +4,10 @@ import { createElement } from './create-element.ts';
 const H1 = (children: Children): HTMLHeadingElement =>
   createElement({
     tag: 'h1',
-    cssClasses: [
-      'text-2xl',
-      'font-bold',
-      'text-pink-600',
-      'p-3',
-      'text-center',
-    ],
+    cssClasses: ['text-2xl', 'font-bold', 'text-pink-600', 'p-3', 'text-center'],
     children,
   });
-const H2 = (children: Children): HTMLHeadingElement =>
-  createElement({ tag: 'h2', children });
+const H2 = (children: Children): HTMLHeadingElement => createElement({ tag: 'h2', children });
 const Main = (children: Children): HTMLElement =>
   createElement({
     tag: 'main',
@@ -27,8 +20,7 @@ const Section = (children: Children): HTMLElement =>
     cssClasses: ['flex', 'flex-col', 'justify-center', 'items-center'],
     children,
   });
-const Div = (children: Children): HTMLDivElement =>
-  createElement({ tag: 'div', children });
+const Div = (children: Children): HTMLDivElement => createElement({ tag: 'div', children });
 const Button = (children: Children): HTMLButtonElement => {
   return createElement({
     tag: 'button',
@@ -51,7 +43,6 @@ const Input = (children: Children, id: string): HTMLInputElement =>
     tag: 'input',
     children,
     cssClasses: [
-      'w-full',
       'px-4',
       'py-2',
       'm-1',

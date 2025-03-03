@@ -1,5 +1,5 @@
 import { Button, Link } from '~/utils/factory.ts';
-import { historyResolver } from '~/router.ts';
+import { historyResolver } from '~/pages/router.ts';
 
 function drawAddOptionButton(): HTMLButtonElement {
   const button = Button('Add Options');

@@ -1,6 +1,6 @@
-import { mainPage } from '~/pages/main.ts';
-import { decisionPickerPage } from '~/pages/decision-picker.ts';
-import { errorPage } from '~/pages/error.ts';
+import { mainPage } from '~/pages/Main/main.ts';
+import { decisionPickerPage } from '~/pages/DecisionPicker/decision-picker.ts';
+import { errorPage } from '~/pages/Error/error.ts';
 
 const historyResolver = (page: string, url: string): void => {
   // this.event.preventDefault();

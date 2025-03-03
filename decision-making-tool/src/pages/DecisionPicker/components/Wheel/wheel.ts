@@ -9,17 +9,10 @@ import type {
   WheelType,
 } from '~/types';
 import { Button } from '~/utils/factory.ts';
-import { inputValue } from '~/components/TimeInput/time-input.ts';
+import { inputValue } from '~/pages/DecisionPicker/components/TimeInput/time-input.ts';
 
-const {
-  CANVAS_SIZE,
-  MAX_ROTATION,
-  WHEEL_CENTER,
-  MIN_ROTATION,
-  WHEEL_RADIUS,
-  STROKE_COLOR,
-} = {
-  CANVAS_SIZE: 500,
+const { CANVAS_SIZE, MAX_ROTATION, WHEEL_CENTER, MIN_ROTATION, WHEEL_RADIUS, STROKE_COLOR } = {
+  CANVAS_SIZE: 400,
   MAX_ROTATION: 4000,
   MIN_ROTATION: 1800,
   STROKE_COLOR: '#f542b3',
@@ -33,8 +26,7 @@ const {
 
 function getColors(sectors: number[]): string[] {
   return sectors.map(
-    () =>
-      `rgb(${randomFunction(0, 255)},${randomFunction(0, 255)},${randomFunction(0, 255)})`,
+    () => `rgb(${randomFunction(0, 255)},${randomFunction(0, 255)},${randomFunction(0, 255)})`,
   );
 }
 
@@ -59,14 +51,7 @@ function drawSector(sectorProperties: SectorProperties): void {
   const endAngleRad = ((startAngle + sectorAngle) * Math.PI) / 180;
 
   context.beginPath();
-  context.arc(
-    WHEEL_CENTER,
-    WHEEL_CENTER,
-    WHEEL_RADIUS,
-    startAngleRad,
-    endAngleRad,
-    anticlockwise,
-  );
+  context.arc(WHEEL_CENTER, WHEEL_CENTER, WHEEL_RADIUS, startAngleRad, endAngleRad, anticlockwise);
   context.lineTo(WHEEL_CENTER, WHEEL_CENTER);
   context.closePath();
   context.fillStyle = color;
@@ -115,12 +100,11 @@ function rotateWheel(rotationProperties: RotationProperties): void {
       requestAnimationFrame(animate);
     }
   }
+
   requestAnimationFrame(animate);
 }
 
-function clearAndDrawWheel(
-  clearAndDrawProperties: ClearAndDrawProperties,
-): void {
+function clearAndDrawWheel(clearAndDrawProperties: ClearAndDrawProperties): void {
   const { context, rotation, sectors, colors } = clearAndDrawProperties;
   context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
   context.save();
@@ -148,10 +132,12 @@ function WheelModule(): WheelType {
     },
   };
 }
+
 //TODO think how to remove it
 const wheel = WheelModule();
 wheel.drawWheel([1, 5, 6, 4, 2]);
 
+//TODO перенести в контролы когда подключу машину
 function createRotationButton(): HTMLButtonElement {
   const button = Button('You spinning me around, my feet are off the ground');
   button.addEventListener('click', (): void => {

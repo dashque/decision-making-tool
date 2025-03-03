@@ -1,14 +1,6 @@
-import type {
-  EventCallback,
-  EventData,
-  EventsMap,
-  EventType,
-  IEventEmitter,
-} from './types.ts';
+import type { EventCallback, EventData, EventsMap, EventType, IEventEmitter } from './types.ts';
 
-export class EventEmitter<Events extends EventsMap>
-  implements IEventEmitter<Events>
-{
+export class EventEmitter<Events extends EventsMap> implements IEventEmitter<Events> {
   private listeners: {
     [Event in keyof EventsMap]?: CallableFunction[];
   } = {};
@@ -39,10 +31,7 @@ export class EventEmitter<Events extends EventsMap>
     this.listeners[event] = this.listeners[event].filter((f) => f !== callback);
   };
 
-  public emit = <
-    Event extends EventType<Events>,
-    Data extends EventData<Events, Event>,
-  >(
+  public emit = <Event extends EventType<Events>, Data extends EventData<Events, Event>>(
     event: Event,
     data: Data,
   ): void => {
@@ -54,9 +43,7 @@ export class EventEmitter<Events extends EventsMap>
     });
   };
 
-  public hasListener = <Event extends EventType<Events>>(
-    event: Event,
-  ): boolean => {
+  public hasListener = <Event extends EventType<Events>>(event: Event): boolean => {
     return Boolean(this.listeners[event]);
   };
 

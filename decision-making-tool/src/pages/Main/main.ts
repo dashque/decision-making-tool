@@ -6,7 +6,7 @@ import {
   drawPasteListButton,
   drawSaveListButton,
   drawStartButton,
-} from '~/components/Controls/controls.ts';
+} from '~/pages/Main/components/Controls/controls.ts';
 
 function mainPage(): HTMLElement {
   return Main(

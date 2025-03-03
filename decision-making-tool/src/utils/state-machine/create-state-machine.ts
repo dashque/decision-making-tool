@@ -1,4 +1,4 @@
-import { EventEmitter } from './event-emitter/event-emitter.ts';
+import { EventEmitter } from './event-emitter.ts';
 import type {
   IStateMachine,
   StateMachineChangeEvents,
@@ -8,7 +8,7 @@ import type {
   StateMachineTransitionActionType,
   StateMachineTransitionResult,
 } from './types.ts';
-import type { EventsMap, EventType } from './event-emitter/types.ts';
+import type { EventsMap, EventType } from './types.ts';
 
 export class StateMachine<
   State extends StateMachineState,

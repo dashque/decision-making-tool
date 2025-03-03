@@ -1,5 +1,3 @@
-import type { EventsMap, EventType } from './event-emitter/types.ts';
-
 export type StateMachineState = RecordKey;
 
 export type IStateMachine<
@@ -42,13 +40,7 @@ export type StateMachineDefinition<
         >;
       };
       transitions?: {
-        [T in EventType<Transitions>]?: StateMachineTransition<
-          Transitions,
-          S,
-          State,
-          T,
-          Context
-        >;
+        [T in EventType<Transitions>]?: StateMachineTransition<Transitions, S, State, T, Context>;
       };
     };
   };
@@ -62,13 +54,7 @@ export type StateMachineTransition<
   Context extends NonNullable<unknown>,
 > = {
   target: StateTo;
-  action?: StateMachineTransitionActionEffect<
-    Transitions,
-    StateFrom,
-    Context,
-    StateTo,
-    Transition
-  >;
+  action?: StateMachineTransitionActionEffect<Transitions, StateFrom, Context, StateTo, Transition>;
 };
 
 export type StateMachineTransitionResult<State extends StateMachineState> = {
@@ -82,19 +68,10 @@ export type StateMachineTransitionActionEffect<
   StateTo extends StateMachineState = State,
   Transition extends EventType<Transitions> = EventType<Transitions>,
 > = (
-  action: StateMachineTransitionAction<
-    Transitions,
-    State,
-    Context,
-    StateTo,
-    Transition
-  >,
+  action: StateMachineTransitionAction<Transitions, State, Context, StateTo, Transition>,
 ) => void;
 
-export type StateMachineTransitionActionType =
-  | 'stateExit'
-  | 'stateEnter'
-  | 'stateTransition';
+export type StateMachineTransitionActionType = 'stateExit' | 'stateEnter' | 'stateTransition';
 
 export type StateMachineTransitionAction<
   Transitions extends EventsMap,
@@ -124,3 +101,23 @@ export type StateMachineChangeEvents<
 };
 
 export type RecordKey = string | number | symbol;
+
+export type EventsMap = Record<string, unknown>;
+export type EventType<Events extends EventsMap> = string & keyof Events;
+export type EventData<Events extends EventsMap, Event extends EventType<Events>> = Events[Event];
+export type EventCallback<Data> = (data: Data) => void;
+
+export type IEventEmitter<Events extends EventsMap> = {
+  on: <Event extends EventType<Events>, Callback extends EventCallback<EventData<Events, Event>>>(
+    event: Event,
+    callback: Callback,
+  ) => void;
+  off: <Event extends EventType<Events>, Callback extends EventCallback<EventData<Events, Event>>>(
+    event: Event,
+    callback: Callback,
+  ) => void;
+  emit: <Event extends EventType<Events>, Parameters_ extends EventData<Events, Event>>(
+    event: Event,
+    parameters: Parameters_,
+  ) => void;
+};
