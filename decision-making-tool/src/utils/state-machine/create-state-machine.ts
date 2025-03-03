@@ -1,5 +1,7 @@
 import { EventEmitter } from './event-emitter.ts';
 import type {
+  EventsMap,
+  EventType,
   IStateMachine,
   StateMachineChangeEvents,
   StateMachineDefinition,
@@ -8,7 +10,6 @@ import type {
   StateMachineTransitionActionType,
   StateMachineTransitionResult,
 } from './types.ts';
-import type { EventsMap, EventType } from './types.ts';
 
 export class StateMachine<
   State extends StateMachineState,
@@ -42,20 +43,6 @@ export class StateMachine<
   public get context(): Context {
     return this.contextData;
   }
-
-  // public transition<
-  //   T extends EventType<Transitions>,
-  //   D extends Transitions[T],
-  //   Arguments extends [T, D],
-  // >(
-  //   ...arguments_: Arguments extends [T, undefined] ? [T] : Arguments
-  // ): StateMachineTransitionResult<State> {
-  //   return this.send({
-  //     type: arguments_[0],
-  //     //TODO ESLint: Do not use any type assertions. (@typescript-eslint/consistent-type-assertions)
-  //     data: <D>(arguments_[1] ?? undefined),
-  //   });
-  // }
 
   public send<T extends EventType<Transitions>, D extends Transitions[T]>(event: {
     type: T;

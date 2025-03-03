@@ -1,8 +1,9 @@
 import type { EventCallback, EventData, EventsMap, EventType, IEventEmitter } from './types.ts';
+import { hasSome } from '~/utils';
 
 export class EventEmitter<Events extends EventsMap> implements IEventEmitter<Events> {
   private listeners: {
-    [Event in keyof EventsMap]?: CallableFunction[];
+    [Event in keyof EventsMap]?: ((p: EventsMap[Event]) => void)[];
   } = {};
 
   public on = <
@@ -15,7 +16,8 @@ export class EventEmitter<Events extends EventsMap> implements IEventEmitter<Eve
     if (!this.listeners[event]) {
       this.listeners[event] = [];
     }
-    this.listeners[event].push(callback);
+    if (typeof event === 'string' && hasSome<(p: EventsMap[Event]) => void>(callback))
+      this.listeners[event].push(callback);
   };
 
   public off = <
