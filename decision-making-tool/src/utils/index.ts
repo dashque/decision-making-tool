@@ -34,7 +34,7 @@ export function assertIsInstanceOf<T>(
   assertIsNonNullable(value, `#${String(elementType)}`);
   if (!(value instanceof elementType)) {
     throw new TypeError(
-      `Not expected value: ${String(value)} of type: "${String(elementType)}"; ${infos?.join(' ')}'`,
+      `Not expected value: ${JSON.stringify(value)} of type: "${String(elementType)}"; ${infos?.join(' ')}'`,
     );
   }
 }
