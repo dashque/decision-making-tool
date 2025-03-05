@@ -121,3 +121,17 @@ export type IEventEmitter<Events extends EventsMap> = {
     parameters: Parameters_,
   ) => void;
 };
+
+export type MyStates = 'initialState' | 'decisionPickerState' | 'errorState';
+export type MyTransitions = {
+  addOption: unknown;
+  removeOption: unknown;
+  clearList: unknown;
+  pasteList: unknown;
+  saveToFile: unknown;
+  loadFromFile: unknown;
+  start: unknown;
+  returnToMain: unknown;
+  toggleSounds: unknown;
+  pick: unknown;
+};

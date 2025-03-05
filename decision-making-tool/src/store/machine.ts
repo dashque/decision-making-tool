@@ -1,12 +1,19 @@
 import { historyResolver } from '~/router.ts';
 import { getDataFromLS, setDataToLS } from '~/store/local-storage/local-storage-manager.ts';
+import { StateMachine } from '~/store/state-machine/create-state-machine.ts';
+import type {
+  MyStates,
+  MyTransitions,
+  StateMachineDefinition,
+} from '~/store/state-machine/types.ts';
+import type { DataLS } from '~/store/local-storage';
 
 export const context = {
   optionList: [{ list: { id: '#1', title: 'dasha', weight: '1' } }, { lastID: 1 }],
   sound: { on: true },
 };
 
-const stateMachineDefinition = {
+const stateMachineDefinition: StateMachineDefinition<MyStates, MyTransitions, DataLS> = {
   context: context,
   initialState: 'initialState',
   states: {
@@ -55,7 +62,7 @@ const stateMachineDefinition = {
           action: function (): void {
             // при нажатии на кнопку paste list
             // открывать модалку, в ней инпут текст, кнопка отмены, кнопка подтвердить,
-            // валидация ввода ( разделение по последней запятой)
+            // валидация ввода (разделение по последней запятой)
             // обновление LS
             // перерисовывать опции
             console.log('paste list');
@@ -136,7 +143,7 @@ const stateMachineDefinition = {
         toggleSounds: {
           target: 'decisionPickerState',
           action: function (): void {
-            // вызывать при нажатии кнопки sound:...
+            // вызывать при нажатии кнопки sound
             // обновлять LS
             console.log('toggle sounds');
           },
@@ -157,14 +164,5 @@ const stateMachineDefinition = {
 
 console.log(stateMachineDefinition);
 
-//<html>TS2345: Argument of type '{ context: { optionList: ({ list: { id: string; title: string; weight: string; };
-// lastID?: undefined; } | { lastID: number; list?: undefined; })[]; sound: { on: boolean; }; };
-// initialState: string; states: { initialState: { ...; }; errorState: { ...; }; decisionPickerState: { ...; }; }; }'
-// is not assignable to parameter of type 'StateMachineDefinition&lt;&quot;initialState&quot; | &quot;decisionPickerState&quot; |
-// &quot;errorState&quot;, { addOption: unknown; removeOption: unknown; saveOptionsToLSState: unknown;
-// loadOptionsFromLSState: unknown; start: unknown; }, { optionList: ({ list: { id: string; title: string; weight: string; };
-// lastID?: undefined; } | { ...; })[]; sou...'.<br/>Types of property 'initialState' are incompatible.<br/>Type
-// 'string' is not assignable to type '&quot;initialState&quot; | &quot;decisionPickerState&quot; | &quot;errorState&quot;'.
-
-// const machine = new StateMachine(stateMachineDefinition, null);
-// export { machine };
+const machine = new StateMachine(stateMachineDefinition, context);
+export { machine };
