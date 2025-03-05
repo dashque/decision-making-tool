@@ -1,5 +1,6 @@
 import { Button, Link } from '~/utils/factory.ts';
 import { historyResolver } from '~/router.ts';
+import { createBlob } from './blob';
 
 function drawAddOptionButton(): HTMLButtonElement {
   const button = Button('Add Options');
@@ -21,13 +22,22 @@ function drawClearListButton(): HTMLButtonElement {
 
 function drawSaveListButton(): HTMLButtonElement {
   const button = Button('Save List to File');
-  //add event listener
+  button.addEventListener('click', () => {
+    const link = createLinkForSaving();
+    link.click();
+    URL.revokeObjectURL(link.href);
+  });
   return button;
+}
+
+function createLinkForSaving(): HTMLAnchorElement {
+  const link = Link('', createBlob('')); // data
+  link.download = 'option-list.json';
+  return link;
 }
 
 function drawLoadFromListButton(): HTMLButtonElement {
   const button = Button('Load List from File');
-  //add event listener
   return button;
 }
 

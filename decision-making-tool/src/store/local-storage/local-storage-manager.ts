@@ -1,6 +1,5 @@
-import type { DataLS } from '~/utils/local-storage/index.ts';
-import { isOptionList, isSoundOption } from '~/utils/local-storage/index.ts';
 import { assertIsNonNullable } from '~/utils';
+import { isOptionList, isSoundOption, type DataLS } from '.';
 
 // const data = {
 //   optionList: [{ list: { id: '#1', title: 'dasha', weight: '1' } }, { lastID: 1 }],

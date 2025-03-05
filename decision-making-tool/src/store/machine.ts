@@ -1,7 +1,6 @@
-import { getDataFromLS } from '~/utils/local-storage/local-storage-manager.ts';
 import { historyResolver } from '~/router.ts';
 
-const context = {
+export const context = {
   optionList: [{ list: { id: '#1', title: 'dasha', weight: '1' } }, { lastID: 1 }],
   sound: { on: true },
 };
@@ -47,7 +46,7 @@ const stateMachineDefinition = {
     },
     loadOptionsFromLSState: {
       actions(): void {
-        getDataFromLS();
+        //getDataFromLS();
       },
       transitions: {},
     },
