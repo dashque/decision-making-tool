@@ -1,6 +1,6 @@
 export type OptionList = ({ list: List[] } | { lastID: number })[];
 
-type List = {
+export type List = {
   id: string;
   title: string;
   weight: string;

@@ -1,6 +1,6 @@
 import { randomFunction } from '~/utils/random-function.ts';
 import { createElement } from '~/utils/create-element.ts';
-import { assertIsNonNullable } from '~/utils';
+import { assertIsNonNullable } from '~/utils/helpers.ts';
 import type {
   ClearAndDrawProperties,
   RotationProperties,

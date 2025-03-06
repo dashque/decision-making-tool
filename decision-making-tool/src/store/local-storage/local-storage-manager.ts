@@ -1,5 +1,5 @@
-import { assertIsNonNullable } from '~/utils';
-import { type DataLS, isOptionList, isSoundOption } from '.';
+import { assertIsNonNullable } from '~/utils/helpers.ts';
+import { type DataLS, isOptionList, isSoundOption } from './index.ts';
 
 const PREFIX = 'zagorky:';
 

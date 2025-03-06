@@ -1,11 +1,11 @@
-import { Input, Label } from '~/utils/factory.ts';
+import { Div, Input, Label } from '~/utils/factory.ts';
 
 const DEFAULT_DURATION_MS = 10000;
 //TODO подумать как не импортировать переменную
 //let inputValue = DEFAULT_DURATION_MS;
 
-function drawTimerInput(): HTMLLabelElement {
-  return Label(drawInput(), 'timer');
+function drawTimerInput(): HTMLDivElement {
+  return Div([Label('Timer', 'timer'), drawInput()]);
 }
 
 function drawInput(): HTMLInputElement {

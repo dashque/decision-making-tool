@@ -1,6 +1,5 @@
 import { H1, Main, Section } from '~/utils/factory.ts';
 import {
-  createLinkForSaving,
   drawAddOptionButton,
   drawClearListButton,
   drawLoadFromListButton,
@@ -8,11 +7,13 @@ import {
   drawSaveListButton,
   drawStartButton,
 } from '~/pages/Main/components/Controls/controls.ts';
-import { machine } from '~/store/machine.ts';
+import { drawForm } from '~/pages/Main/components/Form/form.ts';
 
 function mainPage(): HTMLElement {
-  return Main(Section([heading, addOption, pasteList, clearList, saveList, loadList, start]));
+  return Main(Section([heading, form, addOption, pasteList, clearList, saveList, loadList, start]));
 }
+
+const form = drawForm();
 
 const heading = drawHeading();
 const addOption = drawAddOptionButton();
@@ -26,31 +27,20 @@ function drawHeading(): HTMLHeadingElement {
   return H1('Decision Making Tool');
 }
 
-addOption.addEventListener('click', () => {
-  machine.send({ type: 'addOption', data: null });
-});
+// addOption.addEventListener('click', () => {});
 
-pasteList.addEventListener('click', () => {
-  machine.send({ type: 'pasteList', data: null });
-});
+// pasteList.addEventListener('click', () => {});
 
-clearList.addEventListener('click', () => {
-  machine.send({ type: 'clearList', data: null });
-});
+// clearList.addEventListener('click', () => {});
 
-saveList.addEventListener('click', () => {
-  const link = createLinkForSaving();
-  link.click();
-  URL.revokeObjectURL(link.href);
-  machine.send({ type: 'saveToFile', data: null });
-});
+// saveList.addEventListener('click', () => {
+//   const link = createLinkForSaving();
+//   link.click();
+//   URL.revokeObjectURL(link.href);
+// });
 
-loadList.addEventListener('click', () => {
-  machine.send({ type: 'loadFromFile', data: null });
-});
+// loadList.addEventListener('click', () => {});
 
-start.addEventListener('click', () => {
-  machine.send({ type: 'start', data: null });
-});
+// start.addEventListener('click', () => {});
 
 export { mainPage };
