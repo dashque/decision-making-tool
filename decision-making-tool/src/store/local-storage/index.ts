@@ -1,4 +1,4 @@
-export type OptionList = ({ list: List } | { lastID: number })[];
+export type OptionList = ({ list: List[] } | { lastID: number })[];
 
 type List = {
   id: string;
@@ -26,7 +26,7 @@ export function isOptionList(object: unknown): object is OptionList {
     }
 
     if ('list' in item) {
-      return isList(item.list);
+      return Array.isArray(item.list) && item.list.every(isList);
     }
 
     if ('lastID' in item) {
@@ -38,13 +38,8 @@ export function isOptionList(object: unknown): object is OptionList {
 }
 
 export function isList(object: unknown): object is List {
-  if (!isObject(object)) {
-    return false;
-  }
   return (
-    'id' in object &&
-    'title' in object &&
-    'weight' in object &&
+    isObject(object) &&
     typeof object.id === 'string' &&
     typeof object.title === 'string' &&
     typeof object.weight === 'string'
