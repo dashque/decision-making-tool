@@ -15,7 +15,14 @@ export default [
   },
   ...tseslint.configs.recommendedTypeChecked,
   {
-    ignores: ['commitlint.config.js', 'eslint.config.js', 'postcss.config.mjs', 'vite.config.js'],
+    ignores: [
+      'commitlint.config.js',
+      'eslint.config.js',
+      'postcss.config.mjs',
+      'vite.config.js',
+      'tailwind.config.js',
+      'dist/', // ошибка js файла из сборки
+    ],
   },
   {
     languageOptions: {
