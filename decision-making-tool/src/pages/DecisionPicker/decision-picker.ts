@@ -12,12 +12,13 @@ import {
 import { machine } from '~/store/machine.ts';
 import { randomFunction } from '~/utils/random-function.ts';
 import { ROTATION } from '~/pages/DecisionPicker/components/Wheel/constants.ts';
+import { createAudio } from '~/pages/DecisionPicker/components/Audio/audio.ts';
 
 function decisionPickerPage(): HTMLElement {
   return Main(
     Section([
       drawHeading(),
-      Div([comeBackButton, rotationButton, soundButton]),
+      Div([audio, comeBackButton, rotationButton, soundButton]),
       drawTimerInput(),
       wheel.canvas,
     ]),
@@ -28,6 +29,7 @@ function drawHeading(): HTMLHeadingElement {
   return H1('Decision Making Tool');
 }
 
+const audio = createAudio();
 const comeBackButton = createComeBackButton();
 const rotationButton = createRotationButton();
 const soundButton = createSoundToggler();

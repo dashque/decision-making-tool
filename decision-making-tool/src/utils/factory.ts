@@ -84,4 +84,7 @@ const Dialog = (children: Children): HTMLDialogElement =>
     children,
   });
 
-export { H1, H2, Main, Section, Div, Button, Input, Label, Link, Dialog };
+const Audio = (source: string): HTMLAudioElement =>
+  createElement({ tag: 'audio', attributes: { preload: 'auto', src: source } });
+
+export { H1, H2, Main, Section, Div, Button, Input, Label, Link, Dialog, Audio };
