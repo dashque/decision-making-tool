@@ -26,7 +26,7 @@ function createAppStore(data: StoreDataType, emitter: EventEmitterType): StoreOb
   }
 
   function add(data: Omit<Option, 'id'>): void {
-    const newID = `#${Math.max(storeData.optionList.lastID)}`;
+    const newID = `#${Math.max(storeData.optionList.lastID + 1)}`;
     update({
       optionList: {
         list: [...storeData.optionList.list, { id: newID, ...data }],
