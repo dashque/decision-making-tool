@@ -45,3 +45,13 @@ export type ClearAndDrawProperties = {
   sectors: number[];
   colors: string[];
 };
+
+export type EventEmitterType = {
+  eventMap: Map<EmitterEvents, EmitterCallback[]>;
+  on(event: EmitterEvents, callback: EmitterCallback): void;
+  remove(event: EmitterEvents, callback: EmitterCallback): void;
+  emit(event: EmitterEvents, ...data: unknown[]): void;
+};
+
+export type EmitterEvents = string | number | symbol;
+export type EmitterCallback = (...arguments_: unknown[]) => void;
