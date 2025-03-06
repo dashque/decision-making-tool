@@ -1,5 +1,5 @@
 import { historyResolver } from '~/router.ts';
-import { setDataToLS } from '~/store/local-storage/local-storage-manager.ts';
+import { getDataFromLS } from '~/store/local-storage/local-storage-manager.ts';
 import { StateMachine } from '~/store/state-machine/create-state-machine.ts';
 import type {
   MyStates,
@@ -9,10 +9,21 @@ import type {
 import type { DataLS } from '~/store/local-storage';
 
 export const context = {
-  optionList: [{ list: { id: '#1', title: 'dasha', weight: '1' } }, { lastID: 1 }],
+  optionList: [
+    {
+      list: [
+        { id: '#1', title: 'dasha', weight: '1' },
+        { id: '#2', title: 'dima', weight: '2' },
+      ],
+    },
+    { lastID: 2 },
+  ],
   sound: { on: true },
 };
-// TODO добавить время из инпута в колесе в LS и в контекст
+
+// setDataToLS(context);
+
+const newContext = getDataFromLS();
 const stateMachineDefinition: StateMachineDefinition<MyStates, MyTransitions, DataLS> = {
   context: context,
   initialState: 'initialState',
@@ -22,9 +33,10 @@ const stateMachineDefinition: StateMachineDefinition<MyStates, MyTransitions, Da
         onEnter: function (): void {
           // вызывается при загрузке приложения
           // берутся данные из LS
-          // const data = getDataFromLS();
+          const data = getDataFromLS();
           // перерисовываются опции
           // рисуется главная страница
+          console.log(data);
           historyResolver('main', globalThis.location.hash || '#/');
         },
       },
@@ -35,7 +47,7 @@ const stateMachineDefinition: StateMachineDefinition<MyStates, MyTransitions, Da
             // вызывать при нажатии на кнопку add option
             // добавлять данные в LS
             // перерисовывать страницу
-            setDataToLS(context);
+            // setDataToLS(context);
             console.log('add option');
           },
         },
@@ -148,6 +160,9 @@ const stateMachineDefinition: StateMachineDefinition<MyStates, MyTransitions, Da
           action: function (): void {
             // вызывать при нажатии кнопки sound
             // обновлять LS
+            // context.sound.on = !context?.sound?.on;
+            // setDataToLS(context);
+
             console.log('toggle sounds');
           },
         },
@@ -165,7 +180,5 @@ const stateMachineDefinition: StateMachineDefinition<MyStates, MyTransitions, Da
   },
 };
 
-console.log(stateMachineDefinition);
-
-const machine = new StateMachine(stateMachineDefinition, context);
+const machine = new StateMachine(stateMachineDefinition, newContext);
 export { machine };
