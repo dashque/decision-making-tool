@@ -46,12 +46,39 @@ export type ClearAndDrawProperties = {
   colors: string[];
 };
 
-export type EventEmitterType = {
-  eventMap: Map<EmitterEvents, EmitterCallback[]>;
-  on(event: EmitterEvents, callback: EmitterCallback): void;
-  remove(event: EmitterEvents, callback: EmitterCallback): void;
-  emit(event: EmitterEvents, ...data: unknown[]): void;
+export type Option = {
+  id: string;
+  title: string;
+  weight: string;
 };
 
-export type EmitterEvents = string | number | symbol;
-export type EmitterCallback = (...arguments_: unknown[]) => void;
+type List = Option[];
+
+type OptionList = {
+  list: List;
+  lastID: number;
+};
+
+export type StoreDataType = {
+  isSoundOn: boolean;
+  optionList: OptionList;
+};
+
+export type StoreEvents = {
+  update: StoreDataType;
+  reset: StoreDataType;
+};
+
+export type EventEmitterType = {
+  on<E extends keyof StoreEvents>(event: E, callback: (data: StoreEvents[E]) => void): void;
+  remove<E extends keyof StoreEvents>(event: E, callback: (data: StoreEvents[E]) => void): void;
+  emit<E extends keyof StoreEvents>(event: E, data: StoreEvents[E]): void;
+};
+
+export type StoreObject = {
+  getData: () => StoreDataType;
+  update: (data: Partial<StoreDataType>) => void;
+  add: (data: Omit<Option, 'id'>) => void;
+  clear: () => void;
+  remove: (id: string) => void;
+};

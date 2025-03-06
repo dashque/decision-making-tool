@@ -1,28 +1,26 @@
-import type { EmitterCallback, EmitterEvents, EventEmitterType } from '~/types';
-import { assertIsNonNullable } from '~/utils/helpers.ts';
+import type { EventEmitterType, StoreEvents } from '~/types';
 
 function createEventEmitter(): EventEmitterType {
-  const eventMap = new Map<EmitterEvents, EmitterCallback[]>();
+  const eventMap = new Map<keyof StoreEvents, ((data: StoreEvents[keyof StoreEvents]) => void)[]>();
+
   return {
-    eventMap,
-    on(event: EmitterEvents, callback: EmitterCallback): void {
-      if (!this.eventMap.has(event)) {
-        this.eventMap.set(event, []);
-      }
-      this.eventMap.get(event)?.push(callback);
+    on: (event, callback): void => {
+      const handlers = eventMap.get(event) || [];
+      handlers.push(callback);
+      eventMap.set(event, handlers);
     },
 
-    remove(event: EmitterEvents, callback: EmitterCallback): void {
-      if (this.eventMap.has(event)) {
-        const callbacks = this.eventMap.get(event)?.filter((callback_) => callback_ !== callback);
-        assertIsNonNullable(callbacks);
-        this.eventMap.set(event, callbacks);
+    remove: (event, callback): void => {
+      const handlers = eventMap.get(event)?.filter((handler) => handler !== callback);
+      if (handlers) {
+        eventMap.set(event, handlers);
       }
     },
 
-    emit(event: EmitterEvents, ...data: unknown[]): void {
-      if (this.eventMap.has(event)) {
-        this.eventMap.get(event)?.forEach((callback) => callback(...data));
+    emit: (event, data): void => {
+      const handlers = eventMap.get(event);
+      if (handlers) {
+        handlers.forEach((handler) => handler(data));
       }
     },
   };
