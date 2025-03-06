@@ -1,5 +1,5 @@
 import { historyResolver } from '~/router.ts';
-import { getDataFromLS, setDataToLS } from '~/store/local-storage/local-storage-manager.ts';
+import { setDataToLS } from '~/store/local-storage/local-storage-manager.ts';
 import { StateMachine } from '~/store/state-machine/create-state-machine.ts';
 import type {
   MyStates,
@@ -12,7 +12,7 @@ export const context = {
   optionList: [{ list: { id: '#1', title: 'dasha', weight: '1' } }, { lastID: 1 }],
   sound: { on: true },
 };
-
+// TODO добавить время из инпута в колесе в LS и в контекст
 const stateMachineDefinition: StateMachineDefinition<MyStates, MyTransitions, DataLS> = {
   context: context,
   initialState: 'initialState',
@@ -21,11 +21,11 @@ const stateMachineDefinition: StateMachineDefinition<MyStates, MyTransitions, Da
       actions: {
         onEnter: function (): void {
           // вызывается при загрузке приложения
-          //рисуется главная страница
           // берутся данные из LS
+          // const data = getDataFromLS();
           // перерисовываются опции
+          // рисуется главная страница
           historyResolver('main', globalThis.location.hash || '#/');
-          getDataFromLS();
         },
       },
       transitions: {
@@ -99,17 +99,20 @@ const stateMachineDefinition: StateMachineDefinition<MyStates, MyTransitions, Da
             // и кнопкной закрыть
             // иначе
             // переход на страницу с колесом
-            historyResolver('decisionPicker', globalThis.location.hash || '#/decision-picker');
+            historyResolver('decisionPicker', '#/decision-picker');
+
+            // historyResolver('decisionPicker', globalThis.location.hash || '#/decision-picker');
           },
         },
       },
     },
+    // как сюда попасть?
     errorState: {
       actions: {
         onEnter: function (): void {
           // вызывается при переходе по неверному URL
           // рисуется страница error
-          historyResolver('main', globalThis.location.hash || '#/');
+          historyResolver('error', globalThis.location.hash);
         },
       },
       transitions: {
@@ -137,7 +140,7 @@ const stateMachineDefinition: StateMachineDefinition<MyStates, MyTransitions, Da
           target: 'initialState',
           action: function (): void {
             // вызывать при нажатии кнопки back to main
-            historyResolver('main', globalThis.location.hash || '#/');
+            historyResolver('main', '#/');
           },
         },
         toggleSounds: {

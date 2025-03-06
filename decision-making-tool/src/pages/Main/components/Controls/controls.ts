@@ -1,33 +1,20 @@
 import { Button, Link } from '~/utils/factory.ts';
-import { historyResolver } from '~/router.ts';
 import { createBlob } from './blob';
 
 function drawAddOptionButton(): HTMLButtonElement {
-  const button = Button('Add Options');
-  //add event listener
-  return button;
+  return Button('Add Options');
 }
 
 function drawPasteListButton(): HTMLButtonElement {
-  const button = Button('Paste List');
-  //add event listener
-  return button;
+  return Button('Paste List');
 }
 
 function drawClearListButton(): HTMLButtonElement {
-  const button = Button('Clear List');
-  //add event listener
-  return button;
+  return Button('Clear List');
 }
 
 function drawSaveListButton(): HTMLButtonElement {
-  const button = Button('Save List to File');
-  button.addEventListener('click', () => {
-    const link = createLinkForSaving();
-    link.click();
-    URL.revokeObjectURL(link.href);
-  });
-  return button;
+  return Button('Save List to File');
 }
 
 function createLinkForSaving(): HTMLAnchorElement {
@@ -37,17 +24,12 @@ function createLinkForSaving(): HTMLAnchorElement {
 }
 
 function drawLoadFromListButton(): HTMLButtonElement {
-  const button = Button('Load List from File');
-  return button;
+  return Button('Load List from File');
 }
 
 function drawStartButton(): HTMLButtonElement {
   const link = Link('Start', '#/decision-picker');
-  const button = Button(link);
-  button.addEventListener('click', () =>
-    historyResolver('Decision picker', link.getAttribute('href') ?? '#/decision-picker'),
-  );
-  return button;
+  return Button(link);
 }
 
 export {
@@ -57,4 +39,5 @@ export {
   drawClearListButton,
   drawLoadFromListButton,
   drawAddOptionButton,
+  createLinkForSaving,
 };
