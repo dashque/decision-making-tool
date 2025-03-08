@@ -1,42 +1,31 @@
-import { assertIsNonNullable } from '~/utils/helpers.ts';
-import { type DataLS, isOptionList, isSoundOption } from './index.ts';
+import type { StoreDataType } from '~/types';
+import { isStoredData } from '~/store/local-storage/index.ts';
 
 const PREFIX = 'zagorky:';
 
-function setDataToLS(data: DataLS): void {
-  Object.keys(data).forEach((key: string) => {
-    const storageKey = `${PREFIX}${key}`;
-    localStorage.setItem(storageKey, JSON.stringify(data[key]));
-  });
+function setDataToLS(data: StoreDataType): void {
+  localStorage.setItem(`${PREFIX}`, JSON.stringify(data));
 }
 
-function getDataFromLS(): DataLS {
-  const result: Partial<DataLS> = {
-    optionList: [{ list: [] }, { lastID: 0 }],
-    sound: { on: true },
+function getDataFromLS(): StoreDataType {
+  const defaultData: StoreDataType = {
+    optionList: { list: [], lastID: 0 },
+    isSoundOn: true,
   };
-  const dataKeys = Object.keys(localStorage).filter((key) => key.startsWith(PREFIX));
 
-  for (const key of dataKeys) {
-    const data = localStorage.getItem(key);
-    assertIsNonNullable(data);
-
-    const parsedData: unknown = JSON.parse(data);
-    const formattedKey = key.replace(PREFIX, '').trim();
-
-    if (formattedKey === 'sound' && isSoundOption(parsedData)) {
-      result.sound = parsedData;
-    } else if (formattedKey === 'optionList' && isOptionList(parsedData)) {
-      result.optionList = parsedData;
-    } else {
-      console.log(parsedData);
-      throw new Error('Error getting data from storage');
+  try {
+    const dataFromLS = localStorage.getItem(`${PREFIX}`);
+    if (!dataFromLS) {
+      return defaultData;
     }
+    const parsedData: unknown = JSON.parse(dataFromLS);
+    if (!isStoredData(parsedData)) {
+      return defaultData;
+    }
+    return parsedData;
+  } catch {
+    return defaultData;
   }
-  return {
-    optionList: result.optionList ?? [{ list: [] }, { lastID: 0 }],
-    sound: result.sound ?? { on: true },
-  };
 }
 
 export { setDataToLS, getDataFromLS };
