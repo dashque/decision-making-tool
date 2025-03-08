@@ -47,9 +47,20 @@ export function hasSome<T>(value: unknown): value is NonNullable<T> {
   return value !== null && value !== undefined;
 }
 
-export function replaceCssClass(element: unknown, cssClass: string, newCssClass: string): void {
+export function replaceCssClass(
+  element: unknown,
+  cssClass: string | string[],
+  newCssClass: string | string[],
+): void {
   if (element instanceof HTMLElement) {
-    element.classList.add(newCssClass);
-    element.classList.remove(cssClass);
+    element.classList.add(...newCssClass);
+    element.classList.remove(...cssClass);
   }
+}
+
+export function isActionKey<T extends string>(
+  value: unknown,
+  object: Record<T, () => void>,
+): value is T {
+  return typeof value === 'string' && value in object;
 }

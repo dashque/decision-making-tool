@@ -10,7 +10,7 @@ function createEventEmitter(): EventEmitterType {
       eventMap.set(event, handlers);
     },
 
-    remove: (event, callback): void => {
+    off: (event, callback): void => {
       const handlers = eventMap.get(event)?.filter((handler) => handler !== callback);
       if (handlers) {
         eventMap.set(event, handlers);

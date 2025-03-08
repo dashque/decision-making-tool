@@ -71,14 +71,18 @@ export type StoreEvents = {
 
 export type EventEmitterType = {
   on<E extends keyof StoreEvents>(event: E, callback: (data: StoreEvents[E]) => void): void;
-  remove<E extends keyof StoreEvents>(event: E, callback: (data: StoreEvents[E]) => void): void;
+  off<E extends keyof StoreEvents>(event: E, callback: (data: StoreEvents[E]) => void): void;
   emit<E extends keyof StoreEvents>(event: E, data: StoreEvents[E]): void;
 };
 
-export type StoreObject = {
+export type StoreObject = Pick<EventEmitterType, 'on' | 'off'> & {
   getData: () => StoreDataType;
   update: (data: Partial<StoreDataType>) => void;
   add: (data: Omit<Option, 'id'>) => void;
   clear: () => void;
   remove: (id: string) => void;
 };
+
+export type MainActionKey = 'addOption' | 'clearList' | 'saveList' | 'start';
+
+export type PickerActinKey = 'comeBack' | 'switchSound' | 'setTimer' | 'rotateWheel';

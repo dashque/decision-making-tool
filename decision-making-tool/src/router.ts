@@ -2,6 +2,8 @@ import { mainPage } from '~/pages/Main/main.ts';
 import { decisionPickerPage } from '~/pages/DecisionPicker/decision-picker.ts';
 import { errorPage } from '~/pages/Error/error.ts';
 
+let abortController: AbortController | null = null;
+
 const historyResolver = (page: string, url: string): void => {
   const targetHash = new URL(url, globalThis.location.href).hash || '#/';
 
@@ -13,21 +15,27 @@ const historyResolver = (page: string, url: string): void => {
 };
 
 const handleRouteChange = (url: string): void => {
+  if (abortController) {
+    abortController.abort();
+  }
+  abortController = new AbortController();
+  const { signal } = abortController;
+
   document.body.replaceChildren();
 
   const formattedHash = url.startsWith('#') ? url : '#/';
 
   switch (formattedHash) {
     case '#/': {
-      document.body.append(mainPage());
+      document.body.append(mainPage(signal));
       break;
     }
     case '#/decision-picker': {
-      document.body.append(decisionPickerPage());
+      document.body.append(decisionPickerPage(signal));
       break;
     }
     default: {
-      document.body.append(errorPage());
+      document.body.append(errorPage(signal));
       break;
     }
   }

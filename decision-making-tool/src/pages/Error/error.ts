@@ -3,18 +3,18 @@ import { historyResolver } from '~/router.ts';
 
 // import { machine } from '~/store/machine.ts';
 
-function errorPage(): HTMLElement {
-  return Main(Section([drawHeading(), drawComebackButton()]));
+function errorPage(signal: AbortSignal): HTMLElement {
+  return Main(Section([drawHeading(), drawComebackButton(signal)]));
 }
 
 function drawHeading(): HTMLHeadingElement {
   return H1('Something went wrong');
 }
 
-function drawComebackButton(): HTMLButtonElement {
+function drawComebackButton(signal: AbortSignal): HTMLButtonElement {
   const link = Link('Back to main', '#/');
   const button = Button(link);
-  button.addEventListener('click', () => historyResolver('main', globalThis.location.hash || '#/'));
+  button.addEventListener('click', () => historyResolver('main', '#/'), { signal });
   return button;
 }
 

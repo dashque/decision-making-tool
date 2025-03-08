@@ -1,9 +1,10 @@
-import type { EventEmitterType, Option, StoreDataType, StoreObject } from '~/types';
+import type { Option, StoreDataType, StoreObject } from '~/types';
 import { createEventEmitter } from '~/utils/event-emitter.ts';
 import { getDataFromLS } from '~/store/local-storage/local-storage-manager.ts';
 
-function createAppStore(data: StoreDataType, emitter: EventEmitterType): StoreObject {
+function createAppStore(data: StoreDataType): StoreObject {
   let storeData = structuredClone(data);
+  const emitter = createEventEmitter();
 
   const update = (newData: Partial<StoreDataType>): void => {
     storeData = { ...storeData, ...newData };
@@ -12,6 +13,8 @@ function createAppStore(data: StoreDataType, emitter: EventEmitterType): StoreOb
 
   return {
     getData: (): StoreDataType => storeData,
+    on: (event, callback) => emitter.on(event, callback),
+    off: (event, callback) => emitter.off(event, callback),
     update,
     clear: (): void => update({ ...storeData, optionList: { list: [], lastID: 1 } }),
     remove: (id: string): void =>
@@ -35,7 +38,6 @@ function createAppStore(data: StoreDataType, emitter: EventEmitterType): StoreOb
 }
 
 const context = getDataFromLS();
-const emitter = createEventEmitter();
-const store = createAppStore(context, emitter);
-
+const store = createAppStore(context);
+console.log(context);
 export { store };
