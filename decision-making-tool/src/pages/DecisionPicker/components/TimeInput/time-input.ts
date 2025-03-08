@@ -21,7 +21,7 @@ function setInput(input: HTMLInputElement): void {
   input.type = 'number';
   input.min = '5';
   input.max = '30';
-  input.classList.add('w-30');
+  input.classList.add('w-32');
 }
 
 function getInputValue(input: HTMLInputElement): void {

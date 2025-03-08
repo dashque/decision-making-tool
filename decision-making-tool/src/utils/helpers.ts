@@ -46,3 +46,10 @@ export function isNil<T>(value: Nullable<T>): value is Nil {
 export function hasSome<T>(value: unknown): value is NonNullable<T> {
   return value !== null && value !== undefined;
 }
+
+export function replaceCssClass(element: unknown, cssClass: string, newCssClass: string): void {
+  if (element instanceof HTMLElement) {
+    element.classList.add(newCssClass);
+    element.classList.remove(cssClass);
+  }
+}

@@ -1,4 +1,5 @@
 import { Button, H1, Link, Main, Section } from '~/utils/factory.ts';
+import { historyResolver } from '~/router.ts';
 
 // import { machine } from '~/store/machine.ts';
 
@@ -13,7 +14,7 @@ function drawHeading(): HTMLHeadingElement {
 function drawComebackButton(): HTMLButtonElement {
   const link = Link('Back to main', '#/');
   const button = Button(link);
-  // button.addEventListener('click', () => machine.send({ type: 'returnToMain', data: null }));
+  button.addEventListener('click', () => historyResolver('main', globalThis.location.hash || '#/'));
   return button;
 }
 

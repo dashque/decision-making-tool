@@ -7,7 +7,6 @@ const H1 = (children: Children): HTMLHeadingElement =>
     cssClasses: ['text-2xl', 'font-bold', 'text-pink-600', 'p-3', 'text-center'],
     children,
   });
-const H2 = (children: Children): HTMLHeadingElement => createElement({ tag: 'h2', children });
 const Main = (children: Children): HTMLElement =>
   createElement({
     tag: 'main',
@@ -20,12 +19,17 @@ const Section = (children: Children): HTMLElement =>
     cssClasses: ['flex', 'flex-col', 'justify-center', 'items-center'],
     children,
   });
-const Div = (children: Children): HTMLDivElement => createElement({ tag: 'div', children });
+const Div = (children: Children): HTMLDivElement =>
+  createElement({
+    tag: 'div',
+    children,
+    cssClasses: ['flex', 'flex-col', 'justify-center', 'items-center'],
+  });
 const Button = (children: Children): HTMLButtonElement => {
   return createElement({
     tag: 'button',
     cssClasses: [
-      'w-96',
+      'w-108',
       'px-4',
       'py-2',
       'border',
@@ -84,10 +88,10 @@ const Dialog = (children: Children): HTMLDialogElement =>
     children,
   });
 
-const Audio = (source: string): HTMLAudioElement =>
+const AudioElement = (source: string): HTMLAudioElement =>
   createElement({ tag: 'audio', attributes: { preload: 'auto', src: source } });
 
 const Ul = (children: Children): HTMLUListElement => createElement({ tag: 'ul', children });
 const Li = (children: Children): HTMLLIElement => createElement({ tag: 'li', children });
 
-export { H1, H2, Main, Section, Div, Button, Input, Label, Link, Dialog, Audio, Ul, Li };
+export { H1, Main, Section, Div, Button, Input, Label, Link, Dialog, AudioElement, Ul, Li };

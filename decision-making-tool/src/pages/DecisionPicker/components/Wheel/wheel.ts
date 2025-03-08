@@ -134,8 +134,4 @@ function WheelModule(): WheelType {
   };
 }
 
-//TODO think how to remove it
-const wheel = WheelModule();
-wheel.drawWheel([1, 5, 6, 4, 2]);
-
-export { wheel };
+export { WheelModule };

@@ -54,7 +54,7 @@ export type Option = {
 
 type List = Option[];
 
-type OptionList = {
+export type OptionList = {
   list: List;
   lastID: number;
 };

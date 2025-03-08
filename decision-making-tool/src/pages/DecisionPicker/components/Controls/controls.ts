@@ -1,24 +1,22 @@
 import { Button, Link } from '~/utils/factory.ts';
+import { replaceCssClass } from '~/utils/helpers.ts';
 
 function createComeBackButton(): HTMLButtonElement {
   const link = Link('Back to main', '#/');
   const button = Button(link);
-  button.classList.add('w-32');
-  button.classList.remove('w-96');
+  replaceCssClass(button, 'w-108', 'w-32');
   return button;
 }
 
 function createSoundToggler(): HTMLButtonElement {
   const button = Button('Sound: On');
-  button.classList.add('w-32');
-  button.classList.remove('w-96');
+  replaceCssClass(button, 'w-108', 'w-32');
   return button;
 }
 
 function createRotationButton(): HTMLButtonElement {
   const button = Button('Pick');
-  button.classList.add('w-32');
-  button.classList.remove('w-96');
+  replaceCssClass(button, 'w-108', 'w-32');
   return button;
 }
 

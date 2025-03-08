@@ -1,14 +1,22 @@
 import { Button, Input, Label, Li, Ul } from '~/utils/factory.ts';
-import type { List } from 'src/store/local-storage';
+import type { Option } from '~/types';
+import { replaceCssClass } from '~/utils/helpers.ts';
 
-function createOption(list: List): HTMLUListElement {
+function createOption(list: Option): HTMLLIElement {
   const dataId = `#${list.id}`;
   const forId = `option-${dataId}`;
   const deleteButton = Button('delete');
   const titleInput = Input(list.title, forId);
   const weigthInput = Input(list.weight, forId);
   const label = Label(dataId, forId);
-  return Ul(Li([label, titleInput, weigthInput, deleteButton]));
+  replaceCssClass(deleteButton, 'w-108', 'w-32');
+  replaceCssClass(titleInput, 'w-108', 'w-32');
+  replaceCssClass(weigthInput, 'w-108', 'w-32');
+  return Li([label, titleInput, weigthInput, deleteButton]);
 }
 
-export { createOption };
+function createOptionList(optionList: HTMLLIElement[]): HTMLUListElement {
+  return Ul([...optionList]);
+}
+
+export { createOption, createOptionList };
