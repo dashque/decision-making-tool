@@ -1,8 +1,6 @@
 import { Button, H1, Link, Main, Section } from '~/utils/factory.ts';
 import { historyResolver } from '~/router.ts';
 
-// import { machine } from '~/store/machine.ts';
-
 function errorPage(signal: AbortSignal): HTMLElement {
   return Main(Section([drawHeading(), drawComebackButton(signal)]));
 }

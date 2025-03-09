@@ -1,7 +1,7 @@
 import type { StoreDataType } from '~/types';
 import { isStoredData } from '~/store/local-storage/index.ts';
 
-const PREFIX = 'zagorky:';
+const PREFIX = 'zagorky: decision-making-tool';
 
 function setDataToLS(data: StoreDataType): void {
   localStorage.setItem(`${PREFIX}`, JSON.stringify(data));
@@ -9,12 +9,13 @@ function setDataToLS(data: StoreDataType): void {
 
 function getDataFromLS(): StoreDataType {
   const defaultData: StoreDataType = {
-    optionList: { list: [], lastID: 0 },
+    optionList: { list: [], lastID: 1 },
     isSoundOn: true,
   };
 
   try {
     const dataFromLS = localStorage.getItem(`${PREFIX}`);
+    console.log(dataFromLS);
     if (!dataFromLS) {
       return defaultData;
     }

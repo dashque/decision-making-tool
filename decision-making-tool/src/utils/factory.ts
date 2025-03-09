@@ -91,7 +91,9 @@ const Dialog = (children: Children): HTMLDialogElement =>
 const AudioElement = (source: string): HTMLAudioElement =>
   createElement({ tag: 'audio', attributes: { preload: 'auto', src: source } });
 
-const Ul = (children: Children): HTMLUListElement => createElement({ tag: 'ul', children });
+const Ul = (children: Children): HTMLUListElement =>
+  createElement({ tag: 'ul', children, cssClasses: ['flex', 'flex-col'] });
 const Li = (children: Children): HTMLLIElement => createElement({ tag: 'li', children });
+const Span = (children: Children): HTMLSpanElement => createElement({ tag: 'span', children });
 
-export { H1, Main, Section, Div, Button, Input, Label, Link, Dialog, AudioElement, Ul, Li };
+export { H1, Main, Section, Div, Button, Input, Label, Link, Dialog, AudioElement, Ul, Li, Span };

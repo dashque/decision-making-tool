@@ -86,3 +86,12 @@ export type StoreObject = Pick<EventEmitterType, 'on' | 'off'> & {
 export type MainActionKey = 'addOption' | 'clearList' | 'saveList' | 'start';
 
 export type PickerActinKey = 'comeBack' | 'switchSound' | 'setTimer' | 'rotateWheel';
+
+export type MainModelType = {
+  addOption: () => void;
+  clearOptions: () => void;
+  getOptions: () => HTMLUListElement;
+  saveToFile: () => void;
+  loadFromFile: (file: File) => void;
+  pasteOptions: (text: string[]) => void;
+};
