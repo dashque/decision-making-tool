@@ -15,7 +15,6 @@ function getDataFromLS(): StoreDataType {
 
   try {
     const dataFromLS = localStorage.getItem(`${PREFIX}`);
-    console.log(dataFromLS);
     if (!dataFromLS) {
       return defaultData;
     }

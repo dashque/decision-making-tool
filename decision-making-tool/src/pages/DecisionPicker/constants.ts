@@ -8,6 +8,13 @@ export const WHEEL = {
   },
 };
 
+export const DURATION = {
+  MIN: 5,
+  MAX: 30,
+};
+
+export const MS = 1000;
+
 export const ROTATION = {
   MIN: 1800,
   MAX: 4000,
@@ -31,3 +38,8 @@ export const ANIMATION = {
 
 export const DIVIDER = 2;
 export const INITIAL_VALUE = 0;
+
+export const TITLE = {
+  FILL_STYLE: 'white',
+  TEXT_ALIGN: 'center',
+};

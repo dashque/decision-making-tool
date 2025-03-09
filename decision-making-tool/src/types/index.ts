@@ -85,7 +85,7 @@ export type StoreObject = Pick<EventEmitterType, 'on' | 'off'> & {
 
 export type MainActionKey = 'addOption' | 'clearList' | 'saveList' | 'start';
 
-export type PickerActinKey = 'comeBack' | 'switchSound' | 'setTimer' | 'rotateWheel';
+export type PickerActionKey = 'comeBack' | 'switchSound' | 'rotateWheel';
 
 export type MainModelType = {
   addOption: () => void;
@@ -94,4 +94,11 @@ export type MainModelType = {
   saveToFile: () => void;
   loadFromFile: (file: File) => void;
   pasteOptions: (text: string[]) => void;
+};
+
+export type PickerModelType = {
+  toggleSound: () => void;
+  rotateWheel: (duration: number) => void;
+  comeBack: () => void;
+  getCanvas: () => HTMLCanvasElement;
 };

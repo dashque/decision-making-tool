@@ -10,7 +10,7 @@ function createOptionModel(): MainModelType {
 
   //TODO перерисовка при блюре на инпутах, не сохраняются значения в инпутах
   store.on('update', (data) => {
-    console.log(options);
+    // console.log(options);
     options.replaceChildren();
     data.optionList.list.forEach((option) => {
       drawOption(option, options, store);

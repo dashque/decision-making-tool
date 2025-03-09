@@ -8,7 +8,14 @@ import type {
   WheelProperties,
   WheelType,
 } from '~/types';
-import { ANIMATION, CIRCLE, DIVIDER, INITIAL_VALUE, STROKE_COLOR, WHEEL } from './constants';
+import {
+  ANIMATION,
+  CIRCLE,
+  DIVIDER,
+  INITIAL_VALUE,
+  STROKE_COLOR,
+  WHEEL,
+} from '../../../constants.ts';
 
 function getColors(sectors: number[]): string[] {
   const min = 0;

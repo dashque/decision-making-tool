@@ -1,12 +1,10 @@
 import { H1, Main, Section } from '~/utils/factory.ts';
-import { drawContainer } from '~/pages/DecisionPicker/components/Conteiner/container.ts';
+import { wheelContainer } from '~/pages/DecisionPicker/components/Conteiner/container-view.ts';
+import { setupWheelContainerEventListeners } from '~/pages/DecisionPicker/components/Conteiner/container-controller.ts';
 
 function decisionPickerPage(signal: AbortSignal): HTMLElement {
-  return Main(Section([drawHeading(), drawContainer(signal)]));
-}
-
-function drawHeading(): HTMLHeadingElement {
-  return H1('Decision Making Tool');
+  setupWheelContainerEventListeners(signal, wheelContainer);
+  return Main(Section([H1('Decision Making Tool'), wheelContainer]));
 }
 
 export { decisionPickerPage };
