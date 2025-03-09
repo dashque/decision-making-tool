@@ -80,7 +80,8 @@ function drawContainer(signal: AbortSignal): HTMLDivElement {
   return wheelContainer;
 }
 
-const sectors = getDataFromLS();
-console.log(sectors);
+const data = getDataFromLS();
+console.log(data);
+// const sectors = data.optionList.list.map((option) => {});
 
 export { drawContainer };

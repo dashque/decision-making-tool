@@ -92,7 +92,7 @@ const AudioElement = (source: string): HTMLAudioElement =>
   createElement({ tag: 'audio', attributes: { preload: 'auto', src: source } });
 
 const Ul = (children: Children): HTMLUListElement =>
-  createElement({ tag: 'ul', children, cssClasses: ['flex', 'flex-col'] });
+  createElement({ tag: 'ul', children, cssClasses: ['flex', 'flex-col', 'items-end'] });
 const Li = (children: Children): HTMLLIElement => createElement({ tag: 'li', children });
 const Span = (children: Children): HTMLSpanElement => createElement({ tag: 'span', children });
 
