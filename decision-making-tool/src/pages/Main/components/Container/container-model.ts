@@ -8,57 +8,87 @@ import { getDataFromLS } from '~/store/local-storage/local-storage-manager.ts';
 function createOptionModel(): MainModelType {
   const options = createOptionList([]);
 
-  const removeOption = (id: string): void =>
-    store.update({
-      ...store.getData(),
-      optionList: {
-        lastID: store.getData().optionList.lastID,
-        list: store.getData().optionList.list.filter((option) => option.id !== id),
-      },
-    });
-
-  //TODO перерисовка при блюре на инпутах, не сохраняются значения в инпутах
   store.on('update', (data) => {
-    // console.log(options);
     options.replaceChildren();
     data.optionList.list.forEach((option) => {
-      drawOption(option, options, removeOption);
+      drawOption(options, option, removeOption);
     });
   });
 
   return {
     addOption: (): void => {
-      store.add({ title: '', weight: '' });
+      const currentOptions = store.getData().optionList.list.map((option) => ({
+        ...option,
+        title: option.title,
+        weight: option.weight,
+      }));
+
+      const newOption = {
+        id: `#${String(store.getData().optionList.lastID++)}`,
+        title: '',
+        weight: '',
+      };
+
+      store.update({
+        ...store.getData(),
+        optionList: {
+          lastID: store.getData().optionList.lastID,
+          list: [...currentOptions, newOption],
+        },
+      });
     },
+
     clearOptions: (): void =>
       store.update({ ...store.getData(), optionList: { list: [], lastID: 1 } }),
+
     getOptions: () => options,
+
     saveToFile: (): void => save(getDataFromLS()),
+
     loadFromFile: (file: File): void => {
       console.log(file);
     },
+
     pasteOptions: (text: string[]): void => {
       const data = paste(text);
-      data.forEach((option) => store.add(option));
-      options.append(...text);
+
+      data.forEach((option) => {
+        const newOption = {
+          ...option,
+          id: `${store.getData().optionList.lastID++}`,
+        };
+
+        store.update({
+          ...store.getData(),
+          optionList: {
+            lastID: ++store.getData().optionList.lastID,
+            list: [...store.getData().optionList.list, newOption],
+          },
+        });
+      });
     },
   };
 }
 
 function save(data: StoreDataType): void {
   const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+
   const link = Link('', URL.createObjectURL(blob));
+
   link.download = 'option-list.json';
   link.click();
   URL.revokeObjectURL(link.href);
 }
-//TODO че написала вообще
 
+//TODO че написала вообще
 function paste(text: string[]): Omit<Option, 'id'>[] {
   return text.map((element) => {
     const lastComma = element.lastIndexOf(',');
+
     const title = element.slice(lastComma).trim();
+
     const weight = element.slice(lastComma + 1).trim();
+
     return {
       title: title,
       weight: weight,
@@ -66,25 +96,35 @@ function paste(text: string[]): Omit<Option, 'id'>[] {
   });
 }
 
-//TODO подумать куда и как перенести/переписать
 function drawOption(
-  option: Option,
   options: HTMLUListElement,
+  option: Option,
   onDelete: (id: string) => void,
 ): void {
   const { idContainer, titleInput, weightInput, dataId } = createOption(option);
+
   const optionElement = Li([idContainer, titleInput, weightInput]);
+
   const deleteButton = Button('Delete');
+
   replaceCssClass(deleteButton, ['w-108'], ['w-20']);
   deleteButton.addEventListener('click', () => {
     onDelete(option.id);
   });
+  let localTitle = option.title;
 
-  titleInput.addEventListener('blur', () => {
+  titleInput.value = localTitle;
+
+  let localWeight = option.weight;
+
+  weightInput.value = localWeight;
+  titleInput.addEventListener('change', () => {
+    localTitle = titleInput.value;
     updateOptionField(dataId, 'title', titleInput.value);
   });
 
-  weightInput.addEventListener('blur', () => {
+  weightInput.addEventListener('change', () => {
+    localWeight = weightInput.value;
     updateOptionField(dataId, 'weight', weightInput.value);
   });
 
@@ -92,8 +132,19 @@ function drawOption(
   options.append(optionElement);
 }
 
+function removeOption(id: string): void {
+  store.update({
+    ...store.getData(),
+    optionList: {
+      lastID: store.getData().optionList.lastID,
+      list: store.getData().optionList.list.filter((option) => option.id !== id),
+    },
+  });
+}
+
 function updateOptionField(id: string, field: 'title' | 'weight', value: string): void {
   store.update({
+    ...store.getData(),
     optionList: {
       list: store
         .getData()

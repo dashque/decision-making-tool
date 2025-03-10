@@ -22,6 +22,10 @@ function setupEventListeners(signal: AbortSignal, container: HTMLDivElement): vo
       assertIsInstanceOf(HTMLElement, target);
       const actionElement = target.closest('[data-action]');
 
+      if (!actionElement) {
+        return;
+      }
+
       assertIsInstanceOf(HTMLElement, actionElement);
       const action = actionElement.dataset.action;
 
