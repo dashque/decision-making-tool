@@ -19,7 +19,9 @@ import {
 
 function getColors(sectors: number[]): string[] {
   const min = 0;
+
   const max = 255;
+
   return sectors.map(
     () =>
       `rgb(${randomFunction(min, max)},${randomFunction(min, max)},${randomFunction(min, max)})`,
@@ -34,7 +36,9 @@ function createCanvas(): {
     tag: 'canvas',
     attributes: { height: `${WHEEL.SIZE}`, width: `${WHEEL.SIZE}` },
   });
+
   const context = canvas.getContext('2d');
+
   assertIsNonNullable(context);
 
   return { canvas, context };
@@ -42,8 +46,11 @@ function createCanvas(): {
 
 function drawSector(sectorProperties: SectorProperties): void {
   const { startAngle, sectorAngle, context, color } = sectorProperties;
+
   const anticlockwise = false;
+
   const startAngleRad = (startAngle * Math.PI) / CIRCLE.HALF;
+
   const endAngleRad = ((startAngle + sectorAngle) * Math.PI) / CIRCLE.HALF;
 
   context.beginPath();
@@ -58,8 +65,11 @@ function drawSector(sectorProperties: SectorProperties): void {
 
 function drawWheel(wheelProperties: WheelProperties): void {
   const { sectors, context, colors } = wheelProperties;
+
   const sum = sectors.reduce((acc, element) => acc + element, INITIAL_VALUE);
+
   const sectorsAngles = sectors.map((element) => (element / sum) * CIRCLE.FULL);
+
   let startAngle = 0;
 
   sectorsAngles.forEach((angle, i) => {
@@ -95,11 +105,14 @@ function easeInOutExpo(progress: number): number {
 
 function rotateWheel(rotationProperties: RotationProperties): void {
   const { angle, duration, context, sectors, colors } = rotationProperties;
+
   const start = performance.now();
 
   function animate(currentTime: number): void {
     const progress = (currentTime - start) / duration;
+
     const easedProgress = easeInOutExpo(progress);
+
     const currentRotation = angle * easedProgress;
 
     clearAndDrawWheel({ context, rotation: currentRotation, sectors, colors });
@@ -114,6 +127,7 @@ function rotateWheel(rotationProperties: RotationProperties): void {
 
 function clearAndDrawWheel(clearAndDrawProperties: ClearAndDrawProperties): void {
   const { context, rotation, sectors, colors } = clearAndDrawProperties;
+
   context.clearRect(INITIAL_VALUE, INITIAL_VALUE, WHEEL.SIZE, WHEEL.SIZE);
   context.save();
   context.translate(WHEEL.CENTER, WHEEL.CENTER);
@@ -125,7 +139,9 @@ function clearAndDrawWheel(clearAndDrawProperties: ClearAndDrawProperties): void
 
 function WheelModule(): WheelType {
   const { canvas, context } = createCanvas();
+
   let colors: string[] = [];
+
   let sectors: number[] = [];
 
   return {

@@ -15,10 +15,12 @@ function getDataFromLS(): StoreDataType {
 
   try {
     const dataFromLS = localStorage.getItem(`${PREFIX}`);
+
     if (!dataFromLS) {
       return defaultData;
     }
     const parsedData: unknown = JSON.parse(dataFromLS);
+
     if (!isStoredData(parsedData)) {
       return defaultData;
     }

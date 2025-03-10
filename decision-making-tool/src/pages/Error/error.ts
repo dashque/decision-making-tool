@@ -11,7 +11,9 @@ function drawHeading(): HTMLHeadingElement {
 
 function drawComebackButton(signal: AbortSignal): HTMLButtonElement {
   const link = Link('Back to main', '#/');
+
   const button = Button(link);
+
   button.addEventListener('click', () => historyResolver('main', '#/'), { signal });
   return button;
 }

@@ -7,24 +7,28 @@ const H1 = (children: Children): HTMLHeadingElement =>
     cssClasses: ['text-2xl', 'font-bold', 'text-pink-600', 'p-3', 'text-center'],
     children,
   });
+
 const Main = (children: Children): HTMLElement =>
   createElement({
     tag: 'main',
     cssClasses: ['flex', 'flex-col', 'justify-center', 'items-center'],
     children,
   });
+
 const Section = (children: Children): HTMLElement =>
   createElement({
     tag: 'section',
     cssClasses: ['flex', 'flex-col', 'justify-center', 'items-center'],
     children,
   });
+
 const Div = (children: Children): HTMLDivElement =>
   createElement({
     tag: 'div',
     children,
     cssClasses: ['flex', 'flex-col', 'justify-center', 'items-center'],
   });
+
 const Button = (children: Children): HTMLButtonElement => {
   return createElement({
     tag: 'button',
@@ -44,6 +48,7 @@ const Button = (children: Children): HTMLButtonElement => {
     children,
   });
 };
+
 const Input = (children: Children, id: string): HTMLInputElement =>
   createElement({
     tag: 'input',
@@ -65,12 +70,14 @@ const Input = (children: Children, id: string): HTMLInputElement =>
     ],
     attributes: { id: `${id}` },
   });
+
 const Label = (children: Children, forLabel: string): HTMLLabelElement =>
   createElement({
     tag: 'label',
     children,
     attributes: { type: 'text', for: `${forLabel}` },
   });
+
 const Link = (children: Children, url: string): HTMLAnchorElement =>
   createElement({
     tag: 'a',
@@ -93,7 +100,9 @@ const AudioElement = (source: string): HTMLAudioElement =>
 
 const Ul = (children: Children): HTMLUListElement =>
   createElement({ tag: 'ul', children, cssClasses: ['flex', 'flex-col', 'items-end'] });
+
 const Li = (children: Children): HTMLLIElement => createElement({ tag: 'li', children });
+
 const Span = (children: Children): HTMLSpanElement => createElement({ tag: 'span', children });
 
 export { H1, Main, Section, Div, Button, Input, Label, Link, Dialog, AudioElement, Ul, Li, Span };

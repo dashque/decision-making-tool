@@ -4,7 +4,9 @@ function createElement<T extends keyof HTMLElementTagNameMap>(
   properties: Properties<T>,
 ): HTMLElementTagNameMap[T] {
   const { tag, cssClasses = [], attributes = {}, children = [] } = properties;
+
   const element = document.createElement(tag);
+
   element.classList.add(...cssClasses);
 
   for (const [key, value] of Object.entries(attributes)) {

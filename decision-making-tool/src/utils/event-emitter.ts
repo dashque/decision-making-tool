@@ -6,12 +6,14 @@ function createEventEmitter(): EventEmitterType {
   return {
     on: (event, callback): void => {
       const handlers = eventMap.get(event) || [];
+
       handlers.push(callback);
       eventMap.set(event, handlers);
     },
 
     off: (event, callback): void => {
       const handlers = eventMap.get(event)?.filter((handler) => handler !== callback);
+
       if (handlers) {
         eventMap.set(event, handlers);
       }
@@ -19,6 +21,7 @@ function createEventEmitter(): EventEmitterType {
 
     emit: (event, data): void => {
       const handlers = eventMap.get(event);
+
       if (handlers) {
         handlers.forEach((handler) => handler(data));
       }

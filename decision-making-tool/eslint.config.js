@@ -38,7 +38,7 @@ export default [
     rules: {
       'unicorn/better-regex': 'warn',
       semi: ['error', 'always'],
-      'max-lines-per-function': ['error', 40],
+      'max-lines-per-function': ['error', 60],
     },
   },
   pluginJs.configs.recommended,
@@ -72,7 +72,7 @@ export default [
         'error',
         {
           blankLine: 'always',
-          prev: 'function',
+          prev: ['function', 'const', 'let'],
           next: '*',
         },
       ],

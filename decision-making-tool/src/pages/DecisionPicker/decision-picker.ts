@@ -4,6 +4,7 @@ import { setupWheelContainerEventListeners } from '~/pages/DecisionPicker/compon
 
 function decisionPickerPage(signal: AbortSignal): HTMLElement {
   setupWheelContainerEventListeners(signal, wheelContainer);
+
   return Main(Section([H1('Decision Making Tool'), wheelContainer]));
 }
 

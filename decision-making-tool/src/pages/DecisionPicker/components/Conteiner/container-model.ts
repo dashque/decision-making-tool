@@ -8,12 +8,14 @@ import type { PickerModelType } from '~/types';
 
 function createPickerModel(): PickerModelType {
   const audio = createAudio();
+
   const wheel = WheelModule();
 
   function drawWheel(): void {
     const sectors = store
       .getData()
       .optionList.list.map((option) => Number.parseFloat(option.weight));
+
     wheel.drawWheel(sectors);
   }
 
@@ -26,7 +28,9 @@ function createPickerModel(): PickerModelType {
   return {
     toggleSound: (): void => {
       const currentSoundState = store.getData().isSoundOn;
+
       const mewSoundState = !currentSoundState;
+
       store.update({ isSoundOn: mewSoundState });
       audio.muted = !mewSoundState;
     },
@@ -34,6 +38,7 @@ function createPickerModel(): PickerModelType {
       const sectors = store
         .getData()
         .optionList.list.map((option) => Number.parseFloat(option.weight));
+
       console.log(sectors);
       wheel.rotateWheel(randomFunction(ROTATION.MIN, ROTATION.MAX), duration);
     },

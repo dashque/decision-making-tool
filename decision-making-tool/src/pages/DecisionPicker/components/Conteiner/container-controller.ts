@@ -20,6 +20,7 @@ const actions: Record<PickerActionKey, () => void> = {
 
 function getDuration(): number {
   const duration = Number.parseInt(input.value, 10);
+
   if (Number.isNaN(duration || duration < DURATION.MIN || duration > DURATION.MAX)) {
     throw new TypeError('Invalid duration value');
   }
@@ -33,10 +34,13 @@ function setupWheelContainerEventListeners(signal: AbortSignal, container: HTMLD
     (event) => {
       event.preventDefault();
       const target = event.target;
+
       assertIsInstanceOf(HTMLElement, target);
       const actionElement = target.closest('[data-action]');
+
       assertIsInstanceOf(HTMLElement, actionElement);
       const action = actionElement.dataset.action;
+
       if (isActionKey<PickerActionKey>(action, actions)) {
         actions[action]();
       }

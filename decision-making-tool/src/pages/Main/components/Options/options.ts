@@ -9,10 +9,15 @@ function createOption(list: Option): {
   dataId: string;
 } {
   const dataId = `${list.id}`;
+
   const forId = `option-${dataId}`;
+
   const titleInput = Input(list.title, forId);
+
   const weightInput = Input(list.weight, forId);
+
   const idContainer = Span(Label(dataId, forId));
+
   replaceCssClass(titleInput, ['w-108'], ['w-54']);
   replaceCssClass(weightInput, ['w-108'], ['w-20']);
   replaceCssClass(idContainer, ['w-108'], ['w-10']);

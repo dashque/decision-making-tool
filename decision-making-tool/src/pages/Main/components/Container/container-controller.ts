@@ -18,10 +18,13 @@ function setupEventListeners(signal: AbortSignal, container: HTMLDivElement): vo
     (event) => {
       event.preventDefault();
       const target = event.target;
+
       assertIsInstanceOf(HTMLElement, target);
       const actionElement = target.closest('[data-action]');
+
       assertIsInstanceOf(HTMLElement, actionElement);
       const action = actionElement.dataset.action;
+
       if (isActionKey<MainActionKey>(action, actions)) {
         actions[action]();
       }
