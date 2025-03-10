@@ -1,25 +1,37 @@
 import { Button, Li, Link } from '~/utils/factory.ts';
 import { replaceCssClass } from '~/utils/helpers.ts';
 import { createOption, createOptionList } from '~/pages/Main/components/Options/options.ts';
-import type { MainModelType, Option, StoreDataType, StoreObject } from '~/types';
+import type { MainModelType, Option, StoreDataType } from '~/types';
 import { store } from '~/store/store.ts';
 import { getDataFromLS } from '~/store/local-storage/local-storage-manager.ts';
 
 function createOptionModel(): MainModelType {
   const options = createOptionList([]);
 
+  const removeOption = (id: string): void =>
+    store.update({
+      ...store.getData(),
+      optionList: {
+        lastID: store.getData().optionList.lastID,
+        list: store.getData().optionList.list.filter((option) => option.id !== id),
+      },
+    });
+
   //TODO перерисовка при блюре на инпутах, не сохраняются значения в инпутах
   store.on('update', (data) => {
     // console.log(options);
     options.replaceChildren();
     data.optionList.list.forEach((option) => {
-      drawOption(option, options, store);
+      drawOption(option, options, removeOption);
     });
   });
 
   return {
-    addOption: (): void => store.add({ title: '', weight: '' }),
-    clearOptions: (): void => store.clear(),
+    addOption: (): void => {
+      store.add({ title: '', weight: '' });
+    },
+    clearOptions: (): void =>
+      store.update({ ...store.getData(), optionList: { list: [], lastID: 1 } }),
     getOptions: () => options,
     saveToFile: (): void => save(getDataFromLS()),
     loadFromFile: (file: File): void => {
@@ -40,6 +52,7 @@ function save(data: StoreDataType): void {
   link.click();
   URL.revokeObjectURL(link.href);
 }
+//TODO че написала вообще
 
 function paste(text: string[]): Omit<Option, 'id'>[] {
   return text.map((element) => {
@@ -54,13 +67,17 @@ function paste(text: string[]): Omit<Option, 'id'>[] {
 }
 
 //TODO подумать куда и как перенести/переписать
-function drawOption(option: Option, options: HTMLUListElement, store: StoreObject): void {
+function drawOption(
+  option: Option,
+  options: HTMLUListElement,
+  onDelete: (id: string) => void,
+): void {
   const { idContainer, titleInput, weightInput, dataId } = createOption(option);
   const optionElement = Li([idContainer, titleInput, weightInput]);
   const deleteButton = Button('Delete');
   replaceCssClass(deleteButton, ['w-108'], ['w-20']);
   deleteButton.addEventListener('click', () => {
-    store.remove(option.id);
+    onDelete(option.id);
   });
 
   titleInput.addEventListener('blur', () => {

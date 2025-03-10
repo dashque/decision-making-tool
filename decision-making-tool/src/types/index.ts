@@ -79,8 +79,6 @@ export type StoreObject = Pick<EventEmitterType, 'on' | 'off'> & {
   getData: () => StoreDataType;
   update: (data: Partial<StoreDataType>) => void;
   add: (data: Omit<Option, 'id'>) => void;
-  clear: () => void;
-  remove: (id: string) => void;
 };
 
 export type MainActionKey = 'addOption' | 'clearList' | 'saveList' | 'start';

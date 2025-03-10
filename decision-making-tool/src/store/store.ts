@@ -17,15 +17,6 @@ function createAppStore(data: StoreDataType): StoreObject {
     on: (event, callback) => emitter.on(event, callback),
     off: (event, callback) => emitter.off(event, callback),
     update,
-    clear: (): void => update({ ...storeData, optionList: { list: [], lastID: 1 } }),
-    remove: (id: string): void =>
-      update({
-        ...storeData,
-        optionList: {
-          lastID: storeData.optionList.lastID,
-          list: storeData.optionList.list.filter((option) => option.id !== id),
-        },
-      }),
     add: (data: Omit<Option, 'id'>): void => {
       const newID = `#${storeData.optionList.lastID}`;
       update({
