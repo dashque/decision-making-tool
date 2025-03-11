@@ -89,7 +89,7 @@ export type MainModelType = {
   clearOptions: () => void;
   getOptions: () => HTMLUListElement;
   saveToFile: () => void;
-  loadFromFile: () => void;
+  loadFromFile: (data: StoreDataType) => void;
   pasteOptions: (text: string[]) => void;
 };
 
