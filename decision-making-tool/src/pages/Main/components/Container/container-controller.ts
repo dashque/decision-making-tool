@@ -5,15 +5,12 @@ import { model } from '~/pages/Main/components/Container/container-model.ts';
 import { inputFile } from '~/pages/Main/components/Container/container-view.ts';
 import { isStoredData } from '~/store/local-storage';
 
-const actions: Record<MainActionKey, (data?: StoreDataType) => void> = {
+const actions: Record<MainActionKey, () => void> = {
   addOption: (): void => model.addOption(),
   clearList: (): void => model.clearOptions(),
   saveList: (): void => model.saveToFile(),
-  loadList: (data?: StoreDataType): void => {
+  loadList: (): void => {
     inputFile.click();
-    if (data) {
-      model.loadFromFile(data);
-    }
   },
   start: (): void => {
     historyResolver('decisionPicker', '#/decision-picker');
@@ -59,7 +56,7 @@ function setupEventListeners(signal: AbortSignal, container: HTMLDivElement): vo
       readFile(file)
         .then((data) => {
           if (isStoredData(data)) {
-            actions.loadList(data);
+            model.loadFromFile(data);
           }
         })
         .catch(() => {

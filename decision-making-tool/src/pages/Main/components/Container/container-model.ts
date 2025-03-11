@@ -8,12 +8,32 @@ import { getDataFromLS } from '~/store/local-storage/local-storage-manager.ts';
 function createOptionModel(): MainModelType {
   const options = createOptionList([]);
 
+  const initialData = {
+    optionList: {
+      list: [
+        {
+          id: '#1',
+          title: '',
+          weight: '',
+        },
+      ],
+      lastID: 2,
+    },
+  };
+
   store.on('update', (data) => {
     options.replaceChildren();
     data.optionList.list.forEach((option) => {
       drawOption(options, option, removeOption);
     });
   });
+  if (store.getData().optionList.list.length === 0) {
+    store.update(initialData);
+  } else {
+    store.getData().optionList.list.forEach((option) => {
+      drawOption(options, option, removeOption);
+    });
+  }
 
   return {
     addOption: (): void => {
@@ -47,7 +67,6 @@ function createOptionModel(): MainModelType {
 
     loadFromFile: (data: StoreDataType): void => {
       model.clearOptions();
-      console.log(data, 'model');
       store.update(data);
     },
 
@@ -127,8 +146,15 @@ function drawOption(
   });
 
   weightInput.addEventListener('change', () => {
-    localWeight = weightInput.value;
-    updateOptionField(dataId, 'weight', weightInput.value);
+    const isValid = /^\d*\.?\d*$/.test(weightInput.value);
+
+    if (isValid) {
+      localWeight = weightInput.value;
+      updateOptionField(dataId, 'weight', weightInput.value);
+    }
+    if (!isValid) {
+      weightInput.value = '';
+    }
   });
 
   optionElement.append(deleteButton);
