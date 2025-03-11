@@ -7,6 +7,7 @@ const actions: Record<MainActionKey, () => void> = {
   addOption: (): void => model.addOption(),
   clearList: (): void => model.clearOptions(),
   saveList: (): void => model.saveToFile(),
+  loadList: (): void => model.loadFromFile(),
   start: (): void => {
     historyResolver('decisionPicker', '#/decision-picker');
   },

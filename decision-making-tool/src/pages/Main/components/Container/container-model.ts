@@ -45,8 +45,8 @@ function createOptionModel(): MainModelType {
 
     saveToFile: (): void => save(getDataFromLS()),
 
-    loadFromFile: (file: File): void => {
-      console.log(file);
+    loadFromFile: (): void => {
+      console.log();
     },
 
     pasteOptions: (text: string[]): void => {
@@ -96,6 +96,7 @@ function paste(text: string[]): Omit<Option, 'id'>[] {
   });
 }
 
+// TODO подумать как поделитьи и куда переместить
 function drawOption(
   options: HTMLUListElement,
   option: Option,
