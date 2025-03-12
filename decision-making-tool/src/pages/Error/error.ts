@@ -1,4 +1,4 @@
-import { Button, H1, Link, Main, Section } from '~/utils/factory.ts';
+import { Button, H1, Main, Section } from '~/utils/factory.ts';
 import { historyResolver } from '~/router.ts';
 
 function errorPage(signal: AbortSignal): HTMLElement {
@@ -10,9 +10,7 @@ function drawHeading(): HTMLHeadingElement {
 }
 
 function drawComebackButton(signal: AbortSignal): HTMLButtonElement {
-  const link = Link('Back to main', '#/');
-
-  const button = Button(link);
+  const button = Button('Back to main');
 
   button.addEventListener('click', () => historyResolver('main', '#/'), { signal });
   return button;

@@ -70,10 +70,8 @@ async function readFile(file: File): Promise<StoreDataType> {
   const data: unknown = JSON.parse(dataFromFile);
 
   if (isStoredData(data)) {
-    console.log(data);
     return data;
   } else {
-    console.log(data);
     throw new Error('invalid data');
   }
 }
