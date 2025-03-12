@@ -1,5 +1,5 @@
 import { createPopup } from '~/utils/modal.ts';
-import { Div } from '~/utils/factory.ts';
+import { Div, Form, TextArea } from '~/utils/factory.ts';
 import { replaceCssClass } from '~/utils/helpers.ts';
 
 function startModal(): HTMLDialogElement {
@@ -18,4 +18,14 @@ function startModal(): HTMLDialogElement {
   return modal;
 }
 
-export { startModal };
+function pasteModal(): HTMLDialogElement {
+  const textarea = TextArea([]);
+
+  const form = Form(textarea);
+
+  const modal = createPopup({ children: form });
+
+  return modal;
+}
+
+export { startModal, pasteModal };

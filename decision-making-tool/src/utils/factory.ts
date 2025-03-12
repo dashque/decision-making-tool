@@ -114,4 +114,30 @@ const Li = (children: Children): HTMLLIElement => createElement({ tag: 'li', chi
 
 const Span = (children: Children): HTMLSpanElement => createElement({ tag: 'span', children });
 
-export { H1, Main, Section, Div, Button, Input, Label, Link, Dialog, AudioElement, Ul, Li, Span };
+const Form = (children: Children): HTMLFormElement =>
+  createElement({
+    tag: 'form',
+    children,
+    cssClasses: ['grid', 'grid-cols-2', 'grid-rows-[min-content_min-content]', 'gap-4'],
+  });
+
+const TextArea = (children: Children): HTMLTextAreaElement =>
+  createElement({ tag: 'textarea', children });
+
+export {
+  H1,
+  Main,
+  Section,
+  Div,
+  Button,
+  Input,
+  Label,
+  Link,
+  Dialog,
+  AudioElement,
+  Ul,
+  Li,
+  Span,
+  Form,
+  TextArea,
+};
