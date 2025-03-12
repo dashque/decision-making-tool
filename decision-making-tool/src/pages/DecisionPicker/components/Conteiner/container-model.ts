@@ -11,9 +11,7 @@ function createPickerModel(): PickerModelType {
   const wheel = WheelModule();
 
   function drawWheel(): void {
-    const sectors = store
-      .getData()
-      .optionList.list.map((option) => Number.parseFloat(option.weight));
+    const sectors = store.getData().optionList.list.map((option) => Number(option.weight));
 
     wheel.drawWheel(sectors);
   }
@@ -34,9 +32,7 @@ function createPickerModel(): PickerModelType {
       audio.muted = !mewSoundState;
     },
     rotateWheel: (duration: number): void => {
-      const sectors = store
-        .getData()
-        .optionList.list.map((option) => Number.parseFloat(option.weight));
+      const sectors = store.getData().optionList.list.map((option) => Number(option.weight));
 
       console.log(sectors);
       wheel.rotateWheel(randomFunction(ROTATION.MIN, ROTATION.MAX), duration);

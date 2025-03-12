@@ -144,9 +144,9 @@ function paste(text: string): Omit<Option, 'id'>[] {
 
       const title = element.slice(0, lastComma).trim();
 
-      const weight = Number.parseFloat(element.slice(lastComma + 1).trim());
+      const weight = Number(element.slice(lastComma + 1).trim());
 
-      if (!title || Number.isNaN(weight) || weight <= 1) {
+      if (!title || Number.isNaN(weight) || Number(weight) < 0) {
         return null;
       }
 
