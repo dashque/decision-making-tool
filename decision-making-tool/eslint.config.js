@@ -71,7 +71,7 @@ export default [
         'warn',
         {
           ignoreArrayIndexes: true,
-          ignore: [1],
+          ignore: [1, -1, 0],
           ignoreDefaultValues: true,
           ignoreClassFieldInitialValues: true,
         },

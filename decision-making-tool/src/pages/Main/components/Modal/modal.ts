@@ -22,15 +22,16 @@ function createPasteModal(pasteFunction: (value: string) => void): HTMLDialogEle
   const textarea = TextArea([]);
 
   assertIsInstanceOf(HTMLTextAreaElement, textarea);
-  textarea.placeholder = `
-  Paste a list of new options in a CSV-like format:
-title,1                 -> | title                 | 1 |
-title with whitespace,2 -> | title with whitespace | 2 |
-title , with , commas,3 -> | title , with , commas | 3 |
-title with &quot;quotes&quot;,4   -> | title with &quot;quotes&quot;   | 4 |`;
 
-  textarea.rows = 12;
-  textarea.cols = 64;
+  textarea.placeholder =
+    'Paste a list of new options in a CSV-like format:\n' +
+    'title,1                            → | title                            | 1 |\n' +
+    'title with whitespace,2 → | title with whitespace | 2 |\n' +
+    'title , with , commas,3 →  | title , with , commas  | 3 |\n' +
+    'title with "quotes",4   →   | title with "quotes"     | 4 |';
+
+  textarea.rows = 10;
+  textarea.cols = 70;
   textarea.name = 'table';
 
   const confirmButton = Button('Confirm');

@@ -125,7 +125,7 @@ const TextArea = (children: Children): HTMLTextAreaElement =>
   createElement({
     tag: 'textarea',
     children,
-    cssClasses: ['bg-white', 'p-6', 'rounded-2xl', 'shadow-xl', 'w-136'],
+    cssClasses: ['bg-white', 'p-6', 'rounded-2xl', 'shadow-xl'],
   });
 
 export {

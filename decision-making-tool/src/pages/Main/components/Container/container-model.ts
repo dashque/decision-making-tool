@@ -91,7 +91,7 @@ function createOptionModel(): MainModelType {
       });
     },
     openPasteModal: (): void => {
-      const modal = createPasteModal(model.pasteOptions);
+      const modal: HTMLDialogElement = createPasteModal(model.pasteOptions);
 
       document.body.append(modal);
       modal.showModal();
@@ -126,20 +126,36 @@ function save(data: StoreDataType): void {
   URL.revokeObjectURL(link.href);
 }
 
-//TODO че написала вообще
 function paste(text: string): Omit<Option, 'id'>[] {
-  return text.split('\n').map((element) => {
-    const lastComma = element.lastIndexOf(',');
+  return text
+    .split('\n')
+    .map((element) => {
+      element = element.trim();
 
-    const title = element.slice(lastComma).trim();
+      if (!element) {
+        return null;
+      }
 
-    const weight = element.slice(lastComma + 1).trim();
+      const lastComma = element.lastIndexOf(',');
 
-    return {
-      title: title,
-      weight: weight,
-    };
-  });
+      if (lastComma === -1) {
+        return null;
+      }
+
+      const title = element.slice(0, lastComma).trim();
+
+      const weight = Number.parseFloat(element.slice(lastComma + 1).trim());
+
+      if (!title || Number.isNaN(weight) || weight <= 1) {
+        return null;
+      }
+
+      return {
+        title: title,
+        weight: String(weight),
+      };
+    })
+    .filter((element) => element !== null);
 }
 
 // TODO подумать как поделить и и куда переместить
