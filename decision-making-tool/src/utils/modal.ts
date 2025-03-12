@@ -13,7 +13,6 @@ function createPopup({ children, onClose }: PopupProperties): HTMLDialogElement 
     if (onClose) {
       onClose();
     }
-    dialog.remove();
   });
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) {
@@ -21,13 +20,23 @@ function createPopup({ children, onClose }: PopupProperties): HTMLDialogElement 
       if (onClose) {
         onClose();
       }
-      dialog.remove();
     }
   });
 
-  if (children && (typeof children === 'string' || children instanceof Node)) {
-    popupContainer.append(children);
+  dialog.addEventListener('close', () => {
+    dialog.remove();
+  });
+
+  if (children) {
+    if (typeof children === 'string' || children instanceof Node) {
+      popupContainer.append(children);
+    } else if (Array.isArray(children)) {
+      for (const childElement of children) {
+        popupContainer.append(childElement);
+      }
+    }
   }
+
   popupContainer.append(closeButton);
   dialog.append(popupContainer);
 

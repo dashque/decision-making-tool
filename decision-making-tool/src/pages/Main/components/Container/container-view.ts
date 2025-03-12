@@ -33,6 +33,7 @@ const optionContainer = Div([
 addOption.dataset.action = 'addOption';
 clearList.dataset.action = 'clearList';
 saveList.dataset.action = 'saveList';
+pasteList.dataset.action = 'pasteList';
 start.dataset.action = 'start';
 loadList.dataset.action = 'loadList';
 

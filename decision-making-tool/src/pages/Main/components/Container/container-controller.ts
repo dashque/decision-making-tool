@@ -8,9 +8,8 @@ const actions: Record<MainActionKey, () => void> = {
   addOption: (): void => model.addOption(),
   clearList: (): void => model.clearOptions(),
   saveList: (): void => model.saveToFile(),
-  loadList: (): void => {
-    inputFile.click();
-  },
+  loadList: (): void => inputFile.click(),
+  pasteList: (): void => model.openPasteModal(),
   start: (): void => model.redirectToWheel(),
 };
 

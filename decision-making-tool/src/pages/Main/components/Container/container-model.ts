@@ -5,7 +5,7 @@ import type { MainModelType, Option, StoreDataType } from '~/types';
 import { store } from '~/store/store.ts';
 import { getDataFromLS } from '~/store/local-storage/local-storage-manager.ts';
 import { historyResolver } from '~/router.ts';
-import { startModal } from '~/pages/Main/components/Modal/modal.ts';
+import { createPasteModal, createStartModal } from '~/pages/Main/components/Modal/modal.ts';
 
 function createOptionModel(): MainModelType {
   const options = createOptionList([]);
@@ -72,13 +72,13 @@ function createOptionModel(): MainModelType {
       store.update(data);
     },
 
-    pasteOptions: (text: string[]): void => {
+    pasteOptions: (text: string): void => {
       const data = paste(text);
 
       data.forEach((option) => {
         const newOption = {
           ...option,
-          id: `${store.getData().optionList.lastID++}`,
+          id: `#${store.getData().optionList.lastID++}`,
         };
 
         store.update({
@@ -90,7 +90,12 @@ function createOptionModel(): MainModelType {
         });
       });
     },
+    openPasteModal: (): void => {
+      const modal = createPasteModal(model.pasteOptions);
 
+      document.body.append(modal);
+      modal.showModal();
+    },
     redirectToWheel: (): void => {
       if (
         store.getData().optionList.list.length > 1 &&
@@ -102,7 +107,10 @@ function createOptionModel(): MainModelType {
       ) {
         historyResolver('decisionPicker', '#/decision-picker');
       } else {
-        document.body.append(startModal());
+        const modal = createStartModal();
+
+        document.body.append(modal);
+        modal.showModal();
       }
     },
   };
@@ -119,8 +127,8 @@ function save(data: StoreDataType): void {
 }
 
 //TODO че написала вообще
-function paste(text: string[]): Omit<Option, 'id'>[] {
-  return text.map((element) => {
+function paste(text: string): Omit<Option, 'id'>[] {
+  return text.split('\n').map((element) => {
     const lastComma = element.lastIndexOf(',');
 
     const title = element.slice(lastComma).trim();

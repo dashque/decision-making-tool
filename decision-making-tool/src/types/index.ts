@@ -80,7 +80,14 @@ export type StoreObject = Pick<EventEmitterType, 'on' | 'off'> & {
   update: (data: Partial<StoreDataType>) => void;
 };
 
-export type MainActionKey = 'addOption' | 'clearList' | 'saveList' | 'start' | 'loadList';
+export type MainActionKey =
+  | 'addOption'
+  | 'pasteList'
+  | 'clearList'
+  | 'saveList'
+  | 'start'
+  | 'openPasteModal'
+  | 'loadList';
 
 export type PickerActionKey = 'comeBack' | 'switchSound' | 'rotateWheel';
 
@@ -90,7 +97,8 @@ export type MainModelType = {
   getOptions: () => HTMLUListElement;
   saveToFile: () => void;
   loadFromFile: (data: StoreDataType) => void;
-  pasteOptions: (text: string[]) => void;
+  pasteOptions: (text: string) => void;
+  openPasteModal: () => void;
   redirectToWheel: () => void;
 };
 

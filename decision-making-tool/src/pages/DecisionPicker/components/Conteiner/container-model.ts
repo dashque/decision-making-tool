@@ -29,8 +29,8 @@ function createPickerModel(): PickerModelType {
     store.getData().optionList.list.length > 1 &&
     store.getData().optionList.list.filter((option) => Number(option.weight) >= 1).length > 1
   ) {
-    historyResolver('main', '#/');
-    //queueMicrotask(() => historyResolver('main', '#/'));
+    //historyResolver('main', '#/');
+    queueMicrotask(() => historyResolver('main', '#/'));
   }
 
   return {
