@@ -94,7 +94,11 @@ function createOptionModel(): MainModelType {
     redirectToWheel: (): void => {
       if (
         store.getData().optionList.list.length > 1 &&
-        store.getData().optionList.list.filter((option) => Number(option.weight) >= 1).length > 1
+        store
+          .getData()
+          .optionList.list.filter(
+            (option) => !Number.isNaN(Number(option.weight)) && Number(option.weight) >= 1,
+          ).length > 1
       ) {
         historyResolver('decisionPicker', '#/decision-picker');
       } else {

@@ -19,11 +19,18 @@ function createPickerModel(): PickerModelType {
     wheel.drawWheel(sectors);
   }
 
+  drawWheel();
+
   store.on('update', () => {
     drawWheel();
   });
 
-  drawWheel();
+  if (
+    store.getData().optionList.list.length > 1 &&
+    store.getData().optionList.list.filter((option) => Number(option.weight) >= 1).length > 1
+  ) {
+    queueMicrotask(() => historyResolver('main', '#/'));
+  }
 
   return {
     toggleSound: (): void => {
