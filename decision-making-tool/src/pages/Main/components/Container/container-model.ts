@@ -90,12 +90,14 @@ function createOptionModel(): MainModelType {
         });
       });
     },
+
     openPasteModal: (): void => {
       const modal: HTMLDialogElement = createPasteModal(model.pasteOptions);
 
       document.body.append(modal);
       modal.showModal();
     },
+
     redirectToWheel: (): void => {
       if (
         store.getData().optionList.list.length > 1 &&
@@ -192,10 +194,10 @@ function drawOption(
     if (isValid) {
       localWeight = weightInput.value;
       updateOptionField(dataId, 'weight', weightInput.value);
+      return;
     }
-    if (!isValid) {
-      weightInput.value = '';
-    }
+
+    weightInput.value = '';
   });
 
   optionElement.append(deleteButton);

@@ -19,20 +19,17 @@ function createStartModal(): HTMLDialogElement {
 }
 
 function createPasteModal(pasteFunction: (value: string) => void): HTMLDialogElement {
-  const textarea = TextArea([]);
+  const textarea = TextArea([], { rows: '12', cols: '64', name: 'table' });
 
   assertIsInstanceOf(HTMLTextAreaElement, textarea);
 
   textarea.placeholder =
     'Paste a list of new options in a CSV-like format:\n' +
-    'title,1                            → | title                            | 1 |\n' +
-    'title with whitespace,2 → | title with whitespace | 2 |\n' +
-    'title , with , commas,3 →  | title , with , commas  | 3 |\n' +
-    'title with "quotes",4   →   | title with "quotes"     | 4 |';
-
-  textarea.rows = 10;
-  textarea.cols = 70;
-  textarea.name = 'table';
+    '\n' +
+    'title,1                 -> | title                 | 1 |\n' +
+    'title with whitespace,2 -> | title with whitespace | 2 |\n' +
+    'title , with , commas,3 -> | title , with , commas | 3 |\n' +
+    'title with "quotes",4   -> | title with "quotes"   | 4 |';
 
   const confirmButton = Button('Confirm');
 

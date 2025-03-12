@@ -121,11 +121,12 @@ const Form = (children: Children): HTMLFormElement =>
     cssClasses: ['flex', 'items-center', 'justify-center', 'flex-col'],
   });
 
-const TextArea = (children: Children): HTMLTextAreaElement =>
+const TextArea = (children: Children, attributes?: Record<string, string>): HTMLTextAreaElement =>
   createElement({
     tag: 'textarea',
     children,
     cssClasses: ['bg-white', 'p-6', 'rounded-2xl', 'shadow-xl'],
+    attributes: { ...attributes },
   });
 
 export {
