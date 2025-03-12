@@ -1,6 +1,5 @@
 import { createAudio } from '~/pages/DecisionPicker/components/Audio/audio.ts';
 import { store } from '~/store/store.ts';
-import { historyResolver } from '~/router.ts';
 import { WheelModule } from '~/pages/DecisionPicker/components/Conteiner/Wheel/wheel.ts';
 import { ROTATION } from '~/pages/DecisionPicker/constants.ts';
 import { randomFunction } from '~/utils/random-function.ts';
@@ -25,14 +24,6 @@ function createPickerModel(): PickerModelType {
     drawWheel();
   });
 
-  if (
-    store.getData().optionList.list.length > 1 &&
-    store.getData().optionList.list.filter((option) => Number(option.weight) >= 1).length > 1
-  ) {
-    //historyResolver('main', '#/');
-    queueMicrotask(() => historyResolver('main', '#/'));
-  }
-
   return {
     toggleSound: (): void => {
       const currentSoundState = store.getData().isSoundOn;
@@ -51,7 +42,9 @@ function createPickerModel(): PickerModelType {
       wheel.rotateWheel(randomFunction(ROTATION.MIN, ROTATION.MAX), duration);
     },
     comeBack: (): void => {
-      historyResolver('main', '#/');
+      //historyResolver('main', '#/');
+
+      history.back();
     },
     getCanvas: (): HTMLCanvasElement => wheel.canvas,
   };
