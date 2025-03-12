@@ -9,7 +9,8 @@ const actions: Record<MainActionKey, () => void> = {
   clearList: (): void => model.clearOptions(),
   saveList: (): void => model.saveToFile(),
   loadList: (): void => inputFile.click(),
-  pasteList: (): void => model.openPasteModal(),
+  openPasteModal: (): void => model.openPasteModal(),
+  pasteList: (): void => actions.openPasteModal(),
   start: (): void => model.redirectToWheel(),
 };
 
