@@ -1,6 +1,5 @@
 import type { MainActionKey, StoreDataType } from '~/types';
 import { assertIsInstanceOf, isActionKey } from '~/utils/helpers.ts';
-import { historyResolver } from '~/router.ts';
 import { model } from '~/pages/Main/components/Container/container-model.ts';
 import { inputFile } from '~/pages/Main/components/Container/container-view.ts';
 import { isStoredData } from '~/store/local-storage';
@@ -12,9 +11,7 @@ const actions: Record<MainActionKey, () => void> = {
   loadList: (): void => {
     inputFile.click();
   },
-  start: (): void => {
-    historyResolver('decisionPicker', '#/decision-picker');
-  },
+  start: (): void => model.redirectToWheel(),
 };
 
 function setupEventListeners(signal: AbortSignal, container: HTMLDivElement): void {

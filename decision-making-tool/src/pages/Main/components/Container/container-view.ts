@@ -1,4 +1,4 @@
-import { Button, Div, Input, Link } from '~/utils/factory.ts';
+import { Button, Div, Input } from '~/utils/factory.ts';
 import { model } from '~/pages/Main/components/Container/container-model.ts';
 
 const addOption = Button('Add Options');
@@ -18,7 +18,7 @@ inputFile.style.display = 'none';
 
 const loadList = Button(['Load List from File', inputFile]);
 
-const start = Button(Link('Start', '#/decision-picker'));
+const start = Button('Start');
 
 const optionContainer = Div([
   model.getOptions(),

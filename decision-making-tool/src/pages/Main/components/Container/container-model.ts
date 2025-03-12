@@ -4,6 +4,8 @@ import { createOption, createOptionList } from '~/pages/Main/components/Options/
 import type { MainModelType, Option, StoreDataType } from '~/types';
 import { store } from '~/store/store.ts';
 import { getDataFromLS } from '~/store/local-storage/local-storage-manager.ts';
+import { historyResolver } from '~/router.ts';
+import { startModal } from '~/pages/Main/components/Modal/modal.ts';
 
 function createOptionModel(): MainModelType {
   const options = createOptionList([]);
@@ -87,6 +89,16 @@ function createOptionModel(): MainModelType {
           },
         });
       });
+    },
+
+    redirectToWheel: (): void => {
+      if (
+        store.getData().optionList.list.length > 1 ||
+        store.getData().optionList.list.filter((option) => Number(option.weight) > 1).length > 2
+      ) {
+        historyResolver('decisionPicker', '#/decision-picker');
+      }
+      document.body.append(startModal());
     },
   };
 }

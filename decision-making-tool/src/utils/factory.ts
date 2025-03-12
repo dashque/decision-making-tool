@@ -85,13 +85,22 @@ const Link = (children: Children, url: string): HTMLAnchorElement =>
       'data-href': `${url}`,
       href: `${url}`,
     },
+    cssClasses: ['w-full'],
     children,
   });
 
 const Dialog = (children: Children): HTMLDialogElement =>
   createElement({
     tag: 'dialog',
-    cssClasses: [''],
+    cssClasses: [
+      'fixed',
+      'inset-0',
+      'bg-black/50',
+      'flex',
+      'items-center',
+      'justify-center',
+      'backdrop:backdrop-blur-sm',
+    ],
     children,
   });
 

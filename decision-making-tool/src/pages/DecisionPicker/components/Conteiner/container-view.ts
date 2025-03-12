@@ -1,8 +1,8 @@
-import { Button, Div, Input, Label, Link } from '~/utils/factory.ts';
+import { Button, Div, Input, Label } from '~/utils/factory.ts';
 import { replaceCssClass } from '~/utils/helpers.ts';
 import { modelPickerPage } from '~/pages/DecisionPicker/components/Conteiner/container-model.ts';
 
-const comeBackButton = Button(Link('Back to main', '#/'));
+const comeBackButton = Button('Back to main');
 
 replaceCssClass(comeBackButton, ['w-108'], ['w-32']);
 

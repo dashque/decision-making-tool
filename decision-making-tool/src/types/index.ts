@@ -91,6 +91,7 @@ export type MainModelType = {
   saveToFile: () => void;
   loadFromFile: (data: StoreDataType) => void;
   pasteOptions: (text: string[]) => void;
+  redirectToWheel: () => void;
 };
 
 export type PickerModelType = {
