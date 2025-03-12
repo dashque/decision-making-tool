@@ -67,7 +67,15 @@ export default [
           },
         },
       ],
-      'no-magic-numbers': 'warn',
+      'no-magic-numbers': [
+        'warn',
+        {
+          ignoreArrayIndexes: true,
+          ignore: [1],
+          ignoreDefaultValues: true,
+          ignoreClassFieldInitialValues: true,
+        },
+      ],
       'padding-line-between-statements': [
         'error',
         {
