@@ -4,6 +4,7 @@ import { WheelModule } from '~/pages/DecisionPicker/components/Conteiner/Wheel/w
 import { ROTATION } from '~/pages/DecisionPicker/constants.ts';
 import { randomFunction } from '~/utils/random-function.ts';
 import type { PickerModelType } from '~/types';
+import { selectors } from '~/store/selectors.ts';
 
 function createPickerModel(): PickerModelType {
   const audio = createAudio();
@@ -11,7 +12,7 @@ function createPickerModel(): PickerModelType {
   const wheel = WheelModule();
 
   function drawWheel(): void {
-    const sectors = store.getData().optionList.list.map((option) => Number(option.weight));
+    const sectors = store.useSelector(selectors.getSectors);
 
     wheel.drawWheel(sectors);
   }
@@ -32,7 +33,7 @@ function createPickerModel(): PickerModelType {
       audio.muted = !mewSoundState;
     },
     rotateWheel: (duration: number): void => {
-      const sectors = store.getData().optionList.list.map((option) => Number(option.weight));
+      const sectors = store.useSelector(selectors.getSectors);
 
       console.log(sectors);
       wheel.rotateWheel(randomFunction(ROTATION.MIN, ROTATION.MAX), duration);

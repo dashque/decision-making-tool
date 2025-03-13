@@ -38,10 +38,10 @@ const Button = (children: Children): HTMLButtonElement => {
       'py-2',
       'border',
       'border-gray-300',
-      'bg-emerald-400',
+      'bg-emerald-500',
       'text-white',
       'rounded-lg',
-      'hover:bg-emerald-700',
+      'hover:bg-emerald-900',
       'm-2',
       'cursor-pointer',
     ],
@@ -68,7 +68,10 @@ const Input = (children: Children, id: string): HTMLInputElement =>
       'transition',
       'duration-200',
     ],
-    attributes: { id: `${id}` },
+    attributes: {
+      id: `${id}`,
+      // type: 'number', TODO for
+    },
   });
 
 const Label = (children: Children, forLabel: string): HTMLLabelElement =>
@@ -100,6 +103,7 @@ const Dialog = (children: Children): HTMLDialogElement =>
       'items-center',
       'justify-center',
       'backdrop:backdrop-blur-sm',
+      'm',
     ],
     children,
   });
@@ -125,10 +129,11 @@ const TextArea = (children: Children, attributes?: Record<string, string>): HTML
   createElement({
     tag: 'textarea',
     children,
-    cssClasses: ['bg-white', 'p-6', 'rounded-2xl', 'shadow-xl'],
+    cssClasses: ['bg-white', 'p-6', 'rounded-2xl', 'shadow-xl', 'font-mono'],
     attributes: { ...attributes },
   });
 
+//"Victor Mono", "Courier New", Courier, monospace
 export {
   H1,
   Main,

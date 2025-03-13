@@ -76,6 +76,7 @@ export type EventEmitterType = {
 };
 
 export type StoreObject = Pick<EventEmitterType, 'on' | 'off'> & {
+  useSelector: <R>(selector: (s: StoreDataType) => R) => R;
   getData: () => StoreDataType;
   update: (data: Partial<StoreDataType>) => void;
 };

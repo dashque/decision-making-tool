@@ -14,6 +14,7 @@ function createAppStore(data: StoreDataType): StoreObject {
   };
 
   return {
+    useSelector: <R>(selector: (s: StoreDataType) => R) => selector(storeData),
     getData: (): StoreDataType => storeData,
     on: (event, callback) => emitter.on(event, callback),
     off: (event, callback) => emitter.off(event, callback),

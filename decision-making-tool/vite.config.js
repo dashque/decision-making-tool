@@ -11,7 +11,6 @@ export default defineConfig({
   },
   build: {
     minify: true,
-    sourcemap: true,
     target: 'esnext',
     compact: true,
   },
