@@ -4,11 +4,11 @@ import { errorPage } from '~/pages/Error/error.ts';
 
 let abortController: AbortController | null = null;
 
-const historyResolver = (page: string, url: string): void => {
+const historyResolver = (url: string): void => {
   const targetHash = new URL(url, globalThis.location.href).hash || '#/';
 
   if (globalThis.location.hash !== targetHash) {
-    history.pushState({}, page, url);
+    history.pushState({}, '', url);
   }
 
   handleRouteChange(targetHash);
@@ -45,4 +45,8 @@ globalThis.addEventListener('popstate', () => {
   handleRouteChange(globalThis.location.hash || '#/');
 });
 
-export { historyResolver };
+const Router = {
+  navigate: historyResolver,
+};
+
+export { Router };

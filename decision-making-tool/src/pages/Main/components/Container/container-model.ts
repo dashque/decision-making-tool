@@ -4,7 +4,7 @@ import { createOption, createOptionList } from '~/pages/Main/components/Options/
 import type { MainModelType, Option, StoreDataType } from '~/types';
 import { store } from '~/store/store.ts';
 import { getDataFromLS } from '~/store/local-storage/local-storage-manager.ts';
-import { historyResolver } from '~/router.ts';
+import { Router } from '~/router.ts';
 import { createPasteModal, createStartModal } from '~/pages/Main/components/Modal/modal.ts';
 
 function createOptionModel(): MainModelType {
@@ -107,7 +107,7 @@ function createOptionModel(): MainModelType {
             (option) => !Number.isNaN(Number(option.weight)) && Number(option.weight) >= 1,
           ).length > 1
       ) {
-        historyResolver('decisionPicker', '#/decision-picker');
+        Router.navigate('#/decision-picker');
       } else {
         const modal = createStartModal();
 
