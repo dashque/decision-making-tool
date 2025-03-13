@@ -1,8 +1,9 @@
 import { Router } from '~/router.ts';
 import { store } from './store/store';
 import { selectors } from '~/store/selectors.ts';
+import { replaceCssClass } from './utils/helpers';
 
-document.body.classList.add('bg-fuchsia-100');
+replaceCssClass(document.body, [], ['bg-fuchsia-100']);
 
 globalThis.addEventListener('DOMContentLoaded', () => {
   if (store.useSelector(selectors.hasDataForStart)) {

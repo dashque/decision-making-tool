@@ -96,16 +96,7 @@ const Link = (children: Children, url: string): HTMLAnchorElement =>
 const Dialog = (children: Children): HTMLDialogElement =>
   createElement({
     tag: 'dialog',
-    cssClasses: [
-      'fixed',
-      'inset-0',
-      'bg-black/50',
-      'flex',
-      'items-center',
-      'justify-center',
-      'backdrop:backdrop-blur-sm',
-      'm',
-    ],
+
     children,
   });
 
