@@ -52,7 +52,7 @@ export type Option = {
   weight: string;
 };
 
-type List = Option[];
+export type List = Option[];
 
 export type OptionList = {
   list: List;

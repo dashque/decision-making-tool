@@ -49,8 +49,7 @@ const Button = (children: Children): HTMLButtonElement => {
   });
 };
 
-//TODO add atributes to arguments
-const Input = (children: Children, id: string): HTMLInputElement =>
+const Input = (children: Children, attributes?: Record<string, string>): HTMLInputElement =>
   createElement({
     tag: 'input',
     children,
@@ -69,10 +68,7 @@ const Input = (children: Children, id: string): HTMLInputElement =>
       'transition',
       'duration-200',
     ],
-    attributes: {
-      id: `${id}`,
-      // type: 'number', TODO for
-    },
+    attributes: attributes,
   });
 
 const Label = (children: Children, forLabel: string): HTMLLabelElement =>
@@ -125,7 +121,6 @@ const TextArea = (children: Children, attributes?: Record<string, string>): HTML
     attributes: { ...attributes },
   });
 
-//"Victor Mono", "Courier New", Courier, monospace
 export {
   H1,
   Main,

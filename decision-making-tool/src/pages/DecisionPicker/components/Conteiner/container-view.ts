@@ -14,13 +14,16 @@ const soundButton = Button('Sound: On');
 
 replaceCssClass(soundButton, ['w-108'], ['w-32']);
 
-const input = Input('Timer', 'timer');
+const timerAttributes = {
+  type: 'number',
+  min: '5',
+  max: '30',
+  step: '1',
+  value: '10',
+};
 
-input.setAttribute('placeholder', 'Set time');
-input.value = '10';
-input.type = 'number';
-input.min = '5';
-input.max = '30';
+const input = Input('Timer', timerAttributes);
+
 input.classList.add('w-32');
 
 const label = Label('Timer', 'timer');

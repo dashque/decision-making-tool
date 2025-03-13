@@ -39,12 +39,14 @@ function createPasteModal(pasteFunction: (value: string) => void): HTMLDialogEle
 
   const modal = Dialog([form]);
 
-  confirmButton.addEventListener('click', () => {
+  confirmButton.addEventListener('click', (event) => {
+    event.preventDefault();
     pasteFunction(textarea.value);
     modal.close();
   });
 
-  closeButton.addEventListener('click', () => {
+  closeButton.addEventListener('click', (event) => {
+    event.preventDefault();
     modal.close();
   });
 
@@ -58,6 +60,7 @@ function createPasteModal(pasteFunction: (value: string) => void): HTMLDialogEle
     modal.remove();
   });
 
+  form.addEventListener('submit', (event) => event.preventDefault());
   replaceCssClass(modal, [], ['w-full', 'h-full']);
 
   return modal;

@@ -9,11 +9,15 @@ const clearList = Button('Clear List');
 
 const saveList = Button('Save List to File');
 
-const inputFile = Input('', 'load');
+const loadAttributes = {
+  type: 'file',
+  id: 'load',
+  name: 'load',
+  accept: 'application/json',
+};
 
-inputFile.type = 'file';
-inputFile.name = inputFile.id;
-inputFile.accept = 'application/json';
+const inputFile = Input('', loadAttributes);
+
 inputFile.style.display = 'none';
 
 const loadList = Button(['Load List from File', inputFile]);

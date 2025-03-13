@@ -1,11 +1,11 @@
-import { Button, Li, Link } from '~/utils/factory.ts';
-import { replaceCssClass } from '~/utils/helpers.ts';
-import { createOption, createOptionList } from '~/pages/Main/components/Options/options.ts';
+import { Link } from '~/utils/factory.ts';
+import { createOptionList, drawOption } from '~/pages/Main/components/Options/options.ts';
 import type { MainModelType, Option, StoreDataType } from '~/types';
 import { store } from '~/store/store.ts';
 import { getDataFromLS } from '~/store/local-storage/local-storage-manager.ts';
 import { Router } from '~/router.ts';
 import { createPasteModal, createStartModal } from '~/pages/Main/components/Modal/modal.ts';
+import { selectors } from '~/store/selectors';
 
 function createOptionModel(): MainModelType {
   const options = createOptionList([]);
@@ -29,32 +29,33 @@ function createOptionModel(): MainModelType {
       drawOption(options, option, removeOption);
     });
   });
-  if (store.getData().optionList.list.length === 0) {
+  if (store.useSelector(selectors.isDataEmpty)) {
     store.update(initialData);
-  } else {
-    store.getData().optionList.list.forEach((option) => {
-      drawOption(options, option, removeOption);
-    });
   }
+  store.getData().optionList.list.forEach((option) => {
+    drawOption(options, option, removeOption);
+  });
 
   return {
     addOption: (): void => {
-      const currentOptions = store.getData().optionList.list.map((option) => ({
+      const data = store.getData();
+
+      const currentOptions = data.optionList.list.map((option) => ({
         ...option,
         title: option.title,
         weight: option.weight,
       }));
 
       const newOption = {
-        id: `#${String(store.getData().optionList.lastID++)}`,
+        id: `#${String(data.optionList.lastID++)}`,
         title: '',
         weight: '',
       };
 
       store.update({
-        ...store.getData(),
+        ...data,
         optionList: {
-          lastID: store.getData().optionList.lastID,
+          lastID: data.optionList.lastID,
           list: [...currentOptions, newOption],
         },
       });
@@ -99,15 +100,7 @@ function createOptionModel(): MainModelType {
     },
 
     redirectToWheel: (): void => {
-      if (
-        store.getData().optionList.list.length > 1 &&
-        store
-          .getData()
-          .optionList.list.filter(
-            (option) =>
-              !Number.isNaN(Number(option.weight)) && Number(option.weight) > 0 && option.title,
-          ).length > 1
-      ) {
+      if (store.useSelector(selectors.hasDataForStart)) {
         Router.navigate('#/decision-picker');
       } else {
         const modal = createStartModal();
@@ -161,63 +154,14 @@ function paste(text: string): Omit<Option, 'id'>[] {
     .filter((element) => element !== null);
 }
 
-// TODO подумать как поделить и и куда переместить
-function drawOption(
-  options: HTMLUListElement,
-  option: Option,
-  onDelete: (id: string) => void,
-): void {
-  const { idContainer, titleInput, weightInput, dataId } = createOption(option);
-
-  const optionElement = Li([idContainer, titleInput, weightInput]);
-
-  const deleteButton = Button('Delete');
-
-  replaceCssClass(deleteButton, ['w-108'], ['w-20']);
-  deleteButton.addEventListener('click', () => {
-    onDelete(option.id);
-  });
-  let localTitle = option.title;
-
-  titleInput.value = localTitle;
-
-  let localWeight = option.weight;
-
-  weightInput.value = localWeight;
-  titleInput.addEventListener('change', () => {
-    localTitle = titleInput.value;
-    updateOptionField(dataId, 'title', titleInput.value);
-  });
-
-  weightInput.addEventListener('change', () => {
-    localWeight = weightInput.value;
-    updateOptionField(dataId, 'weight', weightInput.value);
-  });
-
-  optionElement.append(deleteButton);
-  options.append(optionElement);
-}
-
 function removeOption(id: string): void {
-  store.update({
-    ...store.getData(),
-    optionList: {
-      lastID: store.getData().optionList.lastID,
-      list: store.getData().optionList.list.filter((option) => option.id !== id),
-    },
-  });
-}
+  const data = store.getData();
 
-function updateOptionField(id: string, field: 'title' | 'weight', value: string): void {
   store.update({
-    ...store.getData(),
+    ...data,
     optionList: {
-      list: store
-        .getData()
-        .optionList.list.map((option) =>
-          option.id === id ? { ...option, [field]: value } : option,
-        ),
-      lastID: store.getData().optionList.lastID,
+      lastID: data.optionList.lastID,
+      list: data.optionList.list.filter((option) => option.id !== id),
     },
   });
 }
