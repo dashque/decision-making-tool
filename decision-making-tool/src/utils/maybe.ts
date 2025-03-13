@@ -1,3 +1,4 @@
+import { ERROR } from '~/pages/DecisionPicker/constants';
 import { hasSome, type Nullable } from '~/utils/helpers.ts';
 
 type MaybeWrapper<T> = { maybe: 'some'; value: NonNullable<T> } | { maybe: 'none' };
@@ -7,7 +8,7 @@ export class Maybe<T> {
 
   public static some<T>(value: T): Maybe<NonNullable<T>> {
     if (!hasSome(value)) {
-      throw new Error('Provided value must not be empty');
+      throw new Error(ERROR.VALUE_MUSTNT_BE_EMPTY);
     }
     return new Maybe(value);
   }

@@ -43,3 +43,11 @@ export const TITLE = {
   FILL_STYLE: 'white',
   TEXT_ALIGN: 'center',
 };
+
+export const ERROR = {
+  INVALID_DATA: 'Invalid data',
+  INVALID_DURATION: 'Invalid duration value',
+  VALUE_MUSTNT_BE_EMPTY: 'Provided value must not be empty',
+  NULLISH_ASSERTION_ERROR: 'Nullish assertion Error: ',
+  TRY_CATCH: 'The error',
+};

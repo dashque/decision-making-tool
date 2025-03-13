@@ -11,7 +11,7 @@ import {
 } from '~/utils/helpers.ts';
 import { input, soundButton } from '~/pages/DecisionPicker/components/Conteiner/container-view.ts';
 import { modelPickerPage } from '~/pages/DecisionPicker/components/Conteiner/container-model.ts';
-import { DURATION, MS } from '~/pages/DecisionPicker/constants.ts';
+import { DURATION, ERROR, MS } from '~/pages/DecisionPicker/constants.ts';
 import { Maybe } from '~/utils/maybe.ts';
 import { flow } from '~/utils/flow.ts';
 
@@ -33,7 +33,7 @@ function getDuration(): number {
   const duration = Number.parseInt(input.value, 10);
 
   if (Number.isNaN(duration || duration < DURATION.MIN || duration > DURATION.MAX)) {
-    throw new TypeError('Invalid duration value');
+    throw new TypeError(ERROR.INVALID_DURATION);
   }
 
   return duration * MS;

@@ -3,6 +3,7 @@ import { assertIsInstanceOf, isActionKey } from '~/utils/helpers.ts';
 import { model } from '~/pages/Main/components/Container/container-model.ts';
 import { inputFile } from '~/pages/Main/components/Container/container-view.ts';
 import { isStoredData } from '~/store/local-storage';
+import { ERROR } from '~/pages/DecisionPicker/constants';
 
 const actions: Record<MainActionKey, () => void> = {
   addOption: (): void => model.addOption(),
@@ -20,7 +21,6 @@ function setupEventListeners(signal: AbortSignal, container: HTMLDivElement): vo
   container.addEventListener(
     'click',
     (event) => {
-      // event.preventDefault();
       const target = event.target;
 
       assertIsInstanceOf(HTMLElement, target);
@@ -59,7 +59,7 @@ function setupEventListeners(signal: AbortSignal, container: HTMLDivElement): vo
           }
         })
         .catch(() => {
-          throw new Error('invalid data');
+          throw new Error(ERROR.INVALID_DATA);
         });
     },
     { signal },
@@ -74,7 +74,7 @@ async function readFile(file: File): Promise<StoreDataType> {
   if (isStoredData(data)) {
     return data;
   } else {
-    throw new Error('invalid data');
+    throw new Error(ERROR.INVALID_DATA);
   }
 }
 

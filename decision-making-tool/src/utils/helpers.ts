@@ -1,3 +1,4 @@
+import { ERROR } from '~/pages/DecisionPicker/constants';
 import { Maybe } from '~/utils/maybe.ts';
 
 export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
@@ -20,7 +21,7 @@ export function assertIsNonNullable<T>(
   ...infos: unknown[]
 ): asserts value is NonNullable<T> {
   if (value === undefined || value === null) {
-    throw new Error(`Nullish assertion Error: "${String(value)}"; ${infos?.join(' ')}`);
+    throw new Error(`${ERROR.NULLISH_ASSERTION_ERROR}"${String(value)}"; ${infos?.join(' ')}`);
   }
 }
 

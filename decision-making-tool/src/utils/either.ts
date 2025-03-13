@@ -1,3 +1,5 @@
+import { ERROR } from '~/pages/DecisionPicker/constants';
+
 type EitherWrapper<Left, Right> =
   | { either: 'left'; value: Left }
   | { either: 'right'; value: Right };
@@ -29,7 +31,7 @@ export class Either<Left, Right> {
     try {
       return Either.Right(f());
     } catch (error) {
-      return Either.Left(error instanceof Error ? error : new Error('The error'));
+      return Either.Left(error instanceof Error ? error : new Error(ERROR.TRY_CATCH));
     }
   }
 
