@@ -1,8 +1,19 @@
 import type { PickerActionKey } from '~/types';
-import { assertIsInstanceOf, assertIsNonNullable, isActionKey } from '~/utils/helpers.ts';
+import {
+  assertIsNonNullable,
+  getClosestByDataAttribute,
+  getDataAttributeValue,
+  getEventTarget,
+  maybeInstanceOf,
+  maybeKeyOf,
+  noop,
+  preventDefault,
+} from '~/utils/helpers.ts';
 import { input, soundButton } from '~/pages/DecisionPicker/components/Conteiner/container-view.ts';
 import { modelPickerPage } from '~/pages/DecisionPicker/components/Conteiner/container-model.ts';
 import { DURATION, MS } from '~/pages/DecisionPicker/constants.ts';
+import { Maybe } from '~/utils/maybe.ts';
+import { flow } from '~/utils/flow.ts';
 
 const actions: Record<PickerActionKey, () => void> = {
   rotateWheel: (): void => {
@@ -31,20 +42,15 @@ function getDuration(): number {
 function setupWheelContainerEventListeners(signal: AbortSignal, container: HTMLDivElement): void {
   container.addEventListener(
     'click',
-    (event) => {
-      event.preventDefault();
-      const target = event.target;
-
-      assertIsInstanceOf(HTMLElement, target);
-      const actionElement = target.closest('[data-action]');
-
-      assertIsInstanceOf(HTMLElement, actionElement);
-      const action = actionElement.dataset.action;
-
-      if (isActionKey<PickerActionKey>(action, actions)) {
-        actions[action]();
-      }
-    },
+    flow(preventDefault, getEventTarget, (target) => {
+      Maybe.of(target)
+        .flatMap(maybeInstanceOf(Element))
+        .map(getClosestByDataAttribute('action'))
+        .flatMap(maybeInstanceOf(HTMLElement))
+        .map(getDataAttributeValue('action'))
+        .flatMap(maybeKeyOf(actions))
+        .unwrap((a) => actions[a](), noop);
+    }),
     { signal },
   );
 }
