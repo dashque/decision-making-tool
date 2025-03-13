@@ -104,7 +104,8 @@ function createOptionModel(): MainModelType {
         store
           .getData()
           .optionList.list.filter(
-            (option) => !Number.isNaN(Number(option.weight)) && Number(option.weight) >= 1,
+            (option) =>
+              !Number.isNaN(Number(option.weight)) && Number(option.weight) > 0 && option.title,
           ).length > 1
       ) {
         Router.navigate('#/decision-picker');
@@ -189,15 +190,8 @@ function drawOption(
   });
 
   weightInput.addEventListener('change', () => {
-    const isValid = /^\d*\.?\d*$/.test(weightInput.value);
-
-    if (isValid) {
-      localWeight = weightInput.value;
-      updateOptionField(dataId, 'weight', weightInput.value);
-      return;
-    }
-
-    weightInput.value = '';
+    localWeight = weightInput.value;
+    updateOptionField(dataId, 'weight', weightInput.value);
   });
 
   optionElement.append(deleteButton);

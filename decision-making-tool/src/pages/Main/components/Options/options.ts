@@ -16,6 +16,8 @@ function createOption(list: Option): {
 
   const weightInput = Input(list.weight, forId);
 
+  weightInput.type = 'number';
+
   const idContainer = Span(Label(dataId, forId));
 
   replaceCssClass(titleInput, ['w-108'], ['w-54']);
