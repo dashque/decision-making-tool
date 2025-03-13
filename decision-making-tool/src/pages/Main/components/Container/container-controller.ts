@@ -14,6 +14,8 @@ const actions: Record<MainActionKey, () => void> = {
   start: (): void => model.redirectToWheel(),
 };
 
+//TODO use Maybe
+
 function setupEventListeners(signal: AbortSignal, container: HTMLDivElement): void {
   container.addEventListener(
     'click',

@@ -49,6 +49,7 @@ const Button = (children: Children): HTMLButtonElement => {
   });
 };
 
+//TODO add atributes to arguments
 const Input = (children: Children, id: string): HTMLInputElement =>
   createElement({
     tag: 'input',

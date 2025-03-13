@@ -14,6 +14,7 @@ const historyResolver = (url: string): void => {
   handleRouteChange(targetHash);
 };
 
+//TODO add config and rewrite func
 const handleRouteChange = (url: string): void => {
   if (abortController) {
     abortController.abort();

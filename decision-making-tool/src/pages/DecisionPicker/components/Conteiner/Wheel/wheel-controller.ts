@@ -1,4 +1,8 @@
 console.log('');
+//TODO model:
+// init: randomize sectors
+// rotate: picking option
+// finish : play sound
 
 // import type { PickerActionKey } from '~/types';
 // import { modelPickerPage } from '~/pages/DecisionPicker/components/Conteiner/container-model.ts';
@@ -25,3 +29,4 @@ console.log('');
 // function setupWheelEventListener(signal: AbortSignal, container: HTMLDivElement): void {}
 //
 // export { setupWheelEventListener };
+// //
