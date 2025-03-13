@@ -1,10 +1,10 @@
 export const WHEEL = {
   SIZE: 400,
   get CENTER(): number {
-    return this.SIZE / DIVIDER;
+    return (this.SIZE - 1) / DIVIDER;
   },
   get RADIUS(): number {
-    return this.SIZE / DIVIDER;
+    return (this.SIZE - 1) / DIVIDER;
   },
 };
 
@@ -23,7 +23,9 @@ export const ROTATION = {
 export const STROKE_COLOR = '#f542b3';
 
 export const CIRCLE = {
-  HALF: 180,
+  QUARTER: 90,
+  SEMICIRCLE: 180,
+  THREE_QUARTERS: 270,
   FULL: 360,
 };
 

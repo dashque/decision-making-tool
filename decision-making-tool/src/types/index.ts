@@ -12,9 +12,11 @@ export type PopupProperties = {
   onClose?: () => void;
 };
 
+export type SectorsData = [string, number];
+
 export type WheelType = {
   canvas: HTMLCanvasElement;
-  drawWheel: (sectors: number[]) => void;
+  drawWheel: (sectors: SectorsData[]) => void;
   rotateWheel: (angle: number, duration: number) => void;
 };
 
@@ -25,8 +27,16 @@ export type SectorProperties = {
   color: string;
 };
 
+export type TitleProperties = {
+  startAngle: number;
+  angle: number;
+  sectors: SectorsData[];
+  index: number;
+  context: CanvasRenderingContext2D;
+};
+
 export type WheelProperties = {
-  sectors: number[];
+  sectors: SectorsData[];
   context: CanvasRenderingContext2D;
   colors: string[];
 };
@@ -35,14 +45,14 @@ export type RotationProperties = {
   angle: number;
   duration: number;
   context: CanvasRenderingContext2D;
-  sectors: number[];
+  sectors: SectorsData[];
   colors: string[];
 };
 
 export type ClearAndDrawProperties = {
   context: CanvasRenderingContext2D;
   rotation: number;
-  sectors: number[];
+  sectors: SectorsData[];
   colors: string[];
 };
 

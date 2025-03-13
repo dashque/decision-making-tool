@@ -1,10 +1,12 @@
-import { randomFunction } from '~/utils/random-function.ts';
+import { randomFunction, shuffleArray } from '~/utils/random-function.ts';
 import { createElement } from '~/utils/create-element.ts';
 import { assertIsNonNullable } from '~/utils/helpers.ts';
 import type {
   ClearAndDrawProperties,
   RotationProperties,
   SectorProperties,
+  SectorsData,
+  TitleProperties,
   WheelProperties,
   WheelType,
 } from '~/types';
@@ -17,10 +19,10 @@ import {
   WHEEL,
 } from '../../../constants.ts';
 
-function getColors(sectors: number[]): string[] {
+function getColors(sectors: SectorsData[]): string[] {
   const min = 0;
 
-  const max = 255;
+  const max = 170;
 
   return sectors.map(
     () =>
@@ -49,9 +51,14 @@ function drawSector(sectorProperties: SectorProperties): void {
 
   const anticlockwise = false;
 
-  const startAngleRad = (startAngle * Math.PI) / CIRCLE.HALF;
+  const startAngleRad = (startAngle * Math.PI) / CIRCLE.SEMICIRCLE;
 
-  const endAngleRad = ((startAngle + sectorAngle) * Math.PI) / CIRCLE.HALF;
+  const endAngleRad = ((startAngle + sectorAngle) * Math.PI) / CIRCLE.SEMICIRCLE;
+
+  context.shadowColor = 'rgba(0,0,0,0.68)';
+  context.shadowBlur = 1;
+  context.shadowOffsetX = 0;
+  context.shadowOffsetY = 0;
 
   context.beginPath();
   context.arc(WHEEL.CENTER, WHEEL.CENTER, WHEEL.RADIUS, startAngleRad, endAngleRad, anticlockwise);
@@ -66,16 +73,57 @@ function drawSector(sectorProperties: SectorProperties): void {
 function drawWheel(wheelProperties: WheelProperties): void {
   const { sectors, context, colors } = wheelProperties;
 
-  const sum = sectors.reduce((acc, element) => acc + element, INITIAL_VALUE);
+  const randomizedSectors = shuffleArray(sectors);
 
-  const sectorsAngles = sectors.map((element) => (element / sum) * CIRCLE.FULL);
+  const sum = randomizedSectors.reduce((acc, element) => acc + element[1], INITIAL_VALUE);
+
+  const sectorsAngles = randomizedSectors.map((element) => (element[1] / sum) * CIRCLE.FULL);
 
   let startAngle = 0;
 
-  sectorsAngles.forEach((angle, i) => {
-    drawSector({ startAngle, sectorAngle: angle, context, color: colors[i] });
+  sectorsAngles.forEach((angle, index) => {
+    drawSector({ startAngle, sectorAngle: angle, context, color: colors[index] });
+    drawTitle({ startAngle, angle, sectors: randomizedSectors, index, context });
+
+    context.shadowColor = 'transparent';
+    context.shadowBlur = 0;
+    context.shadowOffsetX = 0;
+    context.shadowOffsetY = 0;
+
     startAngle += angle;
   });
+}
+
+function drawTitle(titleProperties: TitleProperties): void {
+  const { startAngle, angle, sectors, index, context } = titleProperties;
+
+  const sectorsMiddleAngle = startAngle + angle / DIVIDER;
+
+  const sectorsMiddleRad = (sectorsMiddleAngle * Math.PI) / CIRCLE.SEMICIRCLE;
+
+  const title = sectors[index][0];
+
+  const titleX = WHEEL.CENTER + Math.cos(sectorsMiddleRad) * (WHEEL.RADIUS / DIVIDER);
+
+  const titleY = WHEEL.CENTER + Math.sin(sectorsMiddleRad) * (WHEEL.RADIUS / DIVIDER);
+
+  const rotation =
+    sectorsMiddleAngle > CIRCLE.QUARTER && sectorsMiddleAngle < CIRCLE.THREE_QUARTERS
+      ? sectorsMiddleRad + Math.PI
+      : sectorsMiddleRad;
+
+  context.save();
+  context.translate(titleX, titleY);
+  context.rotate(rotation);
+  context.fillStyle = 'rgb(255,255,255)';
+  context.strokeStyle = 'rgba(255,131,172,0.19)';
+  context.lineWidth = 1;
+  context.font = ' bold 16px monospace';
+  context.textAlign = 'center';
+  context.textBaseline = 'top';
+  context.fillText(title, 0, 0);
+  context.strokeText(title, 0, 0);
+  context.restore();
 }
 
 function easeInOutExpo(progress: number): number {
@@ -131,7 +179,7 @@ function clearAndDrawWheel(clearAndDrawProperties: ClearAndDrawProperties): void
   context.clearRect(INITIAL_VALUE, INITIAL_VALUE, WHEEL.SIZE, WHEEL.SIZE);
   context.save();
   context.translate(WHEEL.CENTER, WHEEL.CENTER);
-  context.rotate((rotation * Math.PI) / CIRCLE.HALF);
+  context.rotate((rotation * Math.PI) / CIRCLE.SEMICIRCLE);
   context.translate(-WHEEL.CENTER, -WHEEL.CENTER);
   drawWheel({ sectors, context, colors });
   context.restore();
@@ -142,11 +190,11 @@ function WheelModule(): WheelType {
 
   let colors: string[] = [];
 
-  let sectors: number[] = [];
+  let sectors: SectorsData[] = [];
 
   return {
     canvas,
-    drawWheel: (newSectors: number[]): void => {
+    drawWheel: (newSectors: SectorsData[]): void => {
       sectors = newSectors;
       colors = getColors(sectors);
       drawWheel({ sectors, context, colors });

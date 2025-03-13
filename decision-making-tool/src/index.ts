@@ -7,7 +7,7 @@ replaceCssClass(document.body, [], ['bg-fuchsia-100']);
 
 globalThis.addEventListener('DOMContentLoaded', () => {
   if (store.useSelector(selectors.hasDataForStart)) {
-    return Router.navigate('#/decision-picker');
+    return Router.navigate('#/');
   }
   Router.navigate('#/');
 });

@@ -33,9 +33,6 @@ function createPickerModel(): PickerModelType {
       audio.muted = !mewSoundState;
     },
     rotateWheel: (duration: number): void => {
-      const sectors = store.useSelector(selectors.getSectors);
-
-      console.log(sectors);
       wheel.rotateWheel(randomFunction(ROTATION.MIN, ROTATION.MAX), duration);
     },
     comeBack: (): void => {
