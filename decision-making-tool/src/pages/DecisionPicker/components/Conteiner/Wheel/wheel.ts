@@ -165,7 +165,7 @@ function easeInOutExpo(progress: number): number {
   );
 }
 
-function rotateWheel(rotationProperties: RotationProperties): void {
+function rotateWheel(rotationProperties: RotationProperties, callback: () => void): void {
   const { angle, duration, context, sectors, colors } = rotationProperties;
 
   const start = performance.now();
@@ -181,6 +181,8 @@ function rotateWheel(rotationProperties: RotationProperties): void {
 
     if (progress < ANIMATION.MAX_PROGRESS) {
       requestAnimationFrame(animate);
+    } else {
+      callback();
     }
   }
 
@@ -213,8 +215,8 @@ function WheelModule(): WheelType {
       colors = getColors(sectors);
       drawWheel({ sectors, context, colors });
     },
-    rotateWheel: (angle: number, duration: number): void => {
-      rotateWheel({ angle, duration, context, sectors, colors });
+    rotateWheel: (angle: number, duration: number, callback: () => void): void => {
+      rotateWheel({ angle, duration, context, sectors, colors }, callback);
     },
   };
 }

@@ -17,7 +17,7 @@ export type SectorsData = [string, number];
 export type WheelType = {
   canvas: HTMLCanvasElement;
   drawWheel: (sectors: SectorsData[]) => void;
-  rotateWheel: (angle: number, duration: number) => void;
+  rotateWheel: (angle: number, duration: number, callback: () => Promise<void>) => void;
 };
 
 export type CentralElementProperties = {
