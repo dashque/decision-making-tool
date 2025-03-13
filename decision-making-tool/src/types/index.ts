@@ -20,6 +20,12 @@ export type WheelType = {
   rotateWheel: (angle: number, duration: number) => void;
 };
 
+export type CentralElementProperties = {
+  context: CanvasRenderingContext2D;
+  centralX: number;
+  centralY: number;
+};
+
 export type SectorProperties = {
   startAngle: number;
   sectorAngle: number;

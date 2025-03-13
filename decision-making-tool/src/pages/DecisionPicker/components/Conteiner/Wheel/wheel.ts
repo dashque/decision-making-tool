@@ -2,6 +2,7 @@ import { randomFunction, shuffleArray } from '~/utils/random-function.ts';
 import { createElement } from '~/utils/create-element.ts';
 import { assertIsNonNullable } from '~/utils/helpers.ts';
 import type {
+  CentralElementProperties,
   ClearAndDrawProperties,
   RotationProperties,
   SectorProperties,
@@ -70,20 +71,31 @@ function drawSector(sectorProperties: SectorProperties): void {
   context.stroke();
 }
 
+function drawCentralElement(centralElementProperties: CentralElementProperties): void {
+  const { context, centralX, centralY } = centralElementProperties;
+
+  const sasa = '🥸';
+
+  const fontSize = 60;
+
+  context.font = `${fontSize}px Arial`;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillText(sasa, centralX, centralY);
+}
+
 function drawWheel(wheelProperties: WheelProperties): void {
   const { sectors, context, colors } = wheelProperties;
 
-  const randomizedSectors = shuffleArray(sectors);
+  const sum = sectors.reduce((acc, element) => acc + element[1], INITIAL_VALUE);
 
-  const sum = randomizedSectors.reduce((acc, element) => acc + element[1], INITIAL_VALUE);
-
-  const sectorsAngles = randomizedSectors.map((element) => (element[1] / sum) * CIRCLE.FULL);
+  const sectorsAngles = sectors.map((element) => (element[1] / sum) * CIRCLE.FULL);
 
   let startAngle = 0;
 
   sectorsAngles.forEach((angle, index) => {
     drawSector({ startAngle, sectorAngle: angle, context, color: colors[index] });
-    drawTitle({ startAngle, angle, sectors: randomizedSectors, index, context });
+    drawTitle({ startAngle, angle, sectors, index, context });
 
     context.shadowColor = 'transparent';
     context.shadowBlur = 0;
@@ -92,6 +104,8 @@ function drawWheel(wheelProperties: WheelProperties): void {
 
     startAngle += angle;
   });
+
+  drawCentralElement({ context, centralX: WHEEL.CENTER, centralY: WHEEL.CENTER });
 }
 
 function drawTitle(titleProperties: TitleProperties): void {
@@ -118,7 +132,7 @@ function drawTitle(titleProperties: TitleProperties): void {
   context.fillStyle = 'rgb(255,255,255)';
   context.strokeStyle = 'rgba(255,131,172,0.19)';
   context.lineWidth = 1;
-  context.font = ' bold 16px monospace';
+  context.font = 'bold 16px monospace';
   context.textAlign = 'center';
   context.textBaseline = 'top';
   context.fillText(title, 0, 0);
@@ -195,7 +209,7 @@ function WheelModule(): WheelType {
   return {
     canvas,
     drawWheel: (newSectors: SectorsData[]): void => {
-      sectors = newSectors;
+      sectors = shuffleArray(newSectors);
       colors = getColors(sectors);
       drawWheel({ sectors, context, colors });
     },
