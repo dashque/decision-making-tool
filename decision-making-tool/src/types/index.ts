@@ -124,4 +124,5 @@ export type PickerModelType = {
   rotateWheel: (duration: number) => void;
   comeBack: () => void;
   getCanvas: () => HTMLCanvasElement;
+  getSoundState: () => boolean;
 };

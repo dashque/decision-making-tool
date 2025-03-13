@@ -1,6 +1,5 @@
-import type { PickerActionKey } from '~/types';
+import type { PickerActionKey, StoreDataType } from '~/types';
 import {
-  assertIsNonNullable,
   getClosestByDataAttribute,
   getDataAttributeValue,
   getEventTarget,
@@ -14,6 +13,7 @@ import { modelPickerPage } from '~/pages/DecisionPicker/components/Conteiner/con
 import { DURATION, ERROR, MS } from '~/pages/DecisionPicker/constants.ts';
 import { Maybe } from '~/utils/maybe.ts';
 import { flow } from '~/utils/flow.ts';
+import { store } from '~/store/store.ts';
 
 const actions: Record<PickerActionKey, () => void> = {
   rotateWheel: (): void => {
@@ -21,8 +21,6 @@ const actions: Record<PickerActionKey, () => void> = {
   },
   switchSound: () => {
     modelPickerPage.toggleSound();
-    assertIsNonNullable(soundButton.textContent);
-    soundButton.textContent = soundButton.textContent.includes('On') ? 'Sound: Off' : 'Sound: On';
   },
   comeBack: (): void => {
     modelPickerPage.comeBack();
@@ -54,5 +52,17 @@ function setupWheelContainerEventListeners(signal: AbortSignal, container: HTMLD
     { signal },
   );
 }
+
+function updateSoundButton(isSoundOn: boolean): void {
+  soundButton.textContent = isSoundOn ? 'Sound: On' : 'Sound: Off';
+}
+
+updateSoundButton(modelPickerPage.getSoundState());
+
+store.on('update', (newData: StoreDataType) => {
+  const isSoundOn = newData.isSoundOn;
+
+  updateSoundButton(isSoundOn);
+});
 
 export { setupWheelContainerEventListeners };

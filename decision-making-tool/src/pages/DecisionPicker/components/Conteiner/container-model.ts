@@ -50,10 +50,10 @@ function createPickerModel(): PickerModelType {
     },
     comeBack: (): void => {
       //historyResolver('main', '#/');
-
       history.back();
     },
     getCanvas: (): HTMLCanvasElement => wheel.canvas,
+    getSoundState: (): boolean => store.getData().isSoundOn,
   };
 }
 
