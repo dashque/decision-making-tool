@@ -7,7 +7,12 @@ const selectors = {
       (option) => !Number.isNaN(Number(option.weight)) && Number(option.weight) > 0 && option.title,
     ).length > 1,
   getSectors: (s: StoreDataType): SectorsData[] =>
-    s.optionList.list.map((option) => [option.title, Number(option.weight)]),
+    s.optionList.list
+      .filter(
+        (option) =>
+          option.title && !Number.isNaN(Number(option.weight)) && Number(option.weight) > 0,
+      )
+      .map((option) => [option.title, Number(option.weight)]),
   isDataEmpty: (s: StoreDataType): boolean => s.optionList.list.length === 0,
 };
 

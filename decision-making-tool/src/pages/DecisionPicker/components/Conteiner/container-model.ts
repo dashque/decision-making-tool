@@ -3,7 +3,7 @@ import { store } from '~/store/store.ts';
 import { WheelModule } from '~/pages/DecisionPicker/components/Conteiner/Wheel/wheel.ts';
 import { ERROR, ROTATION } from '~/pages/DecisionPicker/constants.ts';
 import { randomFunction } from '~/utils/random-function.ts';
-import type { PickerModelType } from '~/types';
+import type { PickerModelType, StoreDataType } from '~/types';
 import { selectors } from '~/store/selectors.ts';
 
 function createPickerModel(): PickerModelType {
@@ -19,8 +19,13 @@ function createPickerModel(): PickerModelType {
 
   drawWheel();
 
-  store.on('update', () => {
-    drawWheel();
+  let previousData: StoreDataType = store.getData();
+
+  store.on('update', (newData: StoreDataType) => {
+    if (newData.optionList.list !== previousData.optionList.list) {
+      drawWheel();
+    }
+    previousData = newData;
   });
 
   return {

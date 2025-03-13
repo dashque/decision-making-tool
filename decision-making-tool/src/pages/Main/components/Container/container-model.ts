@@ -23,15 +23,17 @@ function createOptionModel(): MainModelType {
     },
   };
 
+  if (store.useSelector(selectors.isDataEmpty)) {
+    store.update(initialData);
+  }
+
   store.on('update', (data) => {
     options.replaceChildren();
     data.optionList.list.forEach((option) => {
       drawOption(options, option, removeOption);
     });
   });
-  if (store.useSelector(selectors.isDataEmpty)) {
-    store.update(initialData);
-  }
+
   store.getData().optionList.list.forEach((option) => {
     drawOption(options, option, removeOption);
   });
@@ -47,7 +49,7 @@ function createOptionModel(): MainModelType {
       }));
 
       const newOption = {
-        id: `#${String(data.optionList.lastID++)}`,
+        id: `#${String(data.optionList.lastID)}`,
         title: '',
         weight: '',
       };
@@ -55,7 +57,7 @@ function createOptionModel(): MainModelType {
       store.update({
         ...data,
         optionList: {
-          lastID: data.optionList.lastID,
+          lastID: ++data.optionList.lastID,
           list: [...currentOptions, newOption],
         },
       });
@@ -79,7 +81,7 @@ function createOptionModel(): MainModelType {
       data.forEach((option) => {
         const newOption = {
           ...option,
-          id: `#${store.getData().optionList.lastID++}`,
+          id: `#${store.getData().optionList.lastID}`,
         };
 
         store.update({

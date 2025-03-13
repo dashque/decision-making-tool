@@ -1,7 +1,7 @@
 import type { StoreDataType } from '~/types';
 import { isStoredData } from '~/store/local-storage/index.ts';
 
-const PREFIX = 'zagorky: decision-making-tool';
+const PREFIX = 'zagorky:';
 
 function setDataToLS(data: StoreDataType): void {
   localStorage.setItem(`${PREFIX}`, JSON.stringify(data));
