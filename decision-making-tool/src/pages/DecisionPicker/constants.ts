@@ -22,7 +22,7 @@ export const ROTATION = {
   MAX: 4000,
 };
 
-export const STROKE_COLOR = '#f542b3';
+export const STROKE_COLOR = '#ffffff';
 
 export const CIRCLE = {
   QUARTER: 90,
