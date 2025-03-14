@@ -22,9 +22,7 @@ import {
 
 function getColors(sectors: SectorsData[]): string[] {
   const min = 0;
-
   const max = 170;
-
   return sectors.map(
     () =>
       `rgb(${randomFunction(min, max)},${randomFunction(min, max)},${randomFunction(min, max)})`,
@@ -39,28 +37,20 @@ function createCanvas(): {
     tag: 'canvas',
     attributes: { height: `${WHEEL.SIZE}`, width: `${WHEEL.SIZE}` },
   });
-
   const context = canvas.getContext('2d');
-
   assertIsNonNullable(context);
-
   return { canvas, context };
 }
 
 function drawSector(sectorProperties: SectorProperties): void {
   const { startAngle, sectorAngle, context, color } = sectorProperties;
-
   const anticlockwise = false;
-
   const startAngleRad = (startAngle * Math.PI) / CIRCLE.SEMICIRCLE;
-
   const endAngleRad = ((startAngle + sectorAngle) * Math.PI) / CIRCLE.SEMICIRCLE;
-
   context.shadowColor = 'rgba(0,0,0,0.68)';
   context.shadowBlur = 1;
   context.shadowOffsetX = 0;
   context.shadowOffsetY = 0;
-
   context.beginPath();
   context.arc(WHEEL.CENTER, WHEEL.CENTER, WHEEL.RADIUS, startAngleRad, endAngleRad, anticlockwise);
   context.lineTo(WHEEL.CENTER, WHEEL.CENTER);
@@ -73,11 +63,8 @@ function drawSector(sectorProperties: SectorProperties): void {
 
 function drawCentralElement(centralElementProperties: CentralElementProperties): void {
   const { context, centralX, centralY } = centralElementProperties;
-
   const sasa = '🥸';
-
   const fontSize = 60;
-
   context.font = `${fontSize}px Arial`;
   context.textAlign = 'center';
   context.textBaseline = 'middle';
@@ -86,46 +73,32 @@ function drawCentralElement(centralElementProperties: CentralElementProperties):
 
 function drawWheel(wheelProperties: WheelProperties): void {
   const { sectors, context, colors } = wheelProperties;
-
   const sum = sectors.reduce((acc, element) => acc + element[1], INITIAL_VALUE);
-
   const sectorsAngles = sectors.map((element) => (element[1] / sum) * CIRCLE.FULL);
-
   let startAngle = 0;
-
   sectorsAngles.forEach((angle, index) => {
     drawSector({ startAngle, sectorAngle: angle, context, color: colors[index] });
     drawTitle({ startAngle, angle, sectors, index, context });
-
     context.shadowColor = 'transparent';
     context.shadowBlur = 0;
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
-
     startAngle += angle;
   });
-
   drawCentralElement({ context, centralX: WHEEL.CENTER, centralY: WHEEL.CENTER });
 }
 
 function drawTitle(titleProperties: TitleProperties): void {
   const { startAngle, angle, sectors, index, context } = titleProperties;
-
   const sectorsMiddleAngle = startAngle + angle / DIVIDER;
-
   const sectorsMiddleRad = (sectorsMiddleAngle * Math.PI) / CIRCLE.SEMICIRCLE;
-
   const title = sectors[index][0];
-
   const titleX = WHEEL.CENTER + Math.cos(sectorsMiddleRad) * (WHEEL.RADIUS / DIVIDER);
-
   const titleY = WHEEL.CENTER + Math.sin(sectorsMiddleRad) * (WHEEL.RADIUS / DIVIDER);
-
   const rotation =
     sectorsMiddleAngle > CIRCLE.QUARTER && sectorsMiddleAngle < CIRCLE.THREE_QUARTERS
       ? sectorsMiddleRad + Math.PI
       : sectorsMiddleRad;
-
   context.save();
   context.translate(titleX, titleY);
   context.rotate(rotation);
@@ -167,18 +140,13 @@ function easeInOutExpo(progress: number): number {
 
 function rotateWheel(rotationProperties: RotationProperties, callback: () => void): void {
   const { angle, duration, context, sectors, colors } = rotationProperties;
-
   const start = performance.now();
 
   function animate(currentTime: number): void {
     const progress = (currentTime - start) / duration;
-
     const easedProgress = easeInOutExpo(progress);
-
     const currentRotation = angle * easedProgress;
-
     clearAndDrawWheel({ context, rotation: currentRotation, sectors, colors });
-
     if (progress < ANIMATION.MAX_PROGRESS) {
       requestAnimationFrame(animate);
     } else {
@@ -191,7 +159,6 @@ function rotateWheel(rotationProperties: RotationProperties, callback: () => voi
 
 function clearAndDrawWheel(clearAndDrawProperties: ClearAndDrawProperties): void {
   const { context, rotation, sectors, colors } = clearAndDrawProperties;
-
   context.clearRect(INITIAL_VALUE, INITIAL_VALUE, WHEEL.SIZE, WHEEL.SIZE);
   context.save();
   context.translate(WHEEL.CENTER, WHEEL.CENTER);
@@ -203,11 +170,8 @@ function clearAndDrawWheel(clearAndDrawProperties: ClearAndDrawProperties): void
 
 function WheelModule(): WheelType {
   const { canvas, context } = createCanvas();
-
   let colors: string[] = [];
-
   let sectors: SectorsData[] = [];
-
   return {
     canvas,
     drawWheel: (newSectors: SectorsData[]): void => {

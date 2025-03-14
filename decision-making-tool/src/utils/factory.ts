@@ -92,7 +92,6 @@ const Link = (children: Children, url: string): HTMLAnchorElement =>
 const Dialog = (children: Children): HTMLDialogElement =>
   createElement({
     tag: 'dialog',
-
     children,
   });
 

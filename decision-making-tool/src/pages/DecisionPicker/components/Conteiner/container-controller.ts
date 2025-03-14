@@ -29,11 +29,9 @@ const actions: Record<PickerActionKey, () => void> = {
 
 function getDuration(): number {
   const duration = Number.parseInt(input.value, 10);
-
   if (Number.isNaN(duration || duration < DURATION.MIN || duration > DURATION.MAX)) {
     throw new TypeError(ERROR.INVALID_DURATION);
   }
-
   return duration * MS;
 }
 

@@ -9,5 +9,6 @@ globalThis.addEventListener('DOMContentLoaded', () => {
   if (store.useSelector(selectors.hasDataForStart)) {
     return Router.navigate('#/');
   }
+
   Router.navigate('#/');
 });
