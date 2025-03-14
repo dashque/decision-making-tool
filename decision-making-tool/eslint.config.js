@@ -83,6 +83,8 @@ export default [
           prev: ['function', 'const', 'let'],
           next: '*',
         },
+        { blankLine: 'always', prev: '*', next: 'expression' },
+        { blankLine: 'always', prev: 'expression', next: '*' },
       ],
       '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],
       '@typescript-eslint/consistent-type-imports': 'error',
