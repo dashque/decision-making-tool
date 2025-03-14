@@ -1,9 +1,9 @@
 import { randomFunction, shuffleArray } from '~/utils/random-function.ts';
 import { createElement } from '~/utils/create-element.ts';
-import { assertIsNonNullable } from '~/utils/helpers.ts';
 import type {
   CentralElementProperties,
   ClearAndDrawProperties,
+  CursorProperties,
   RotationProperties,
   SectorProperties,
   SectorsData,
@@ -19,6 +19,7 @@ import {
   STROKE_COLOR,
   WHEEL,
 } from '../../../constants.ts';
+import { assertIsNonNullable } from '~/utils/helpers.ts';
 
 function getColors(sectors: SectorsData[]): string[] {
   const min = 0;
@@ -35,10 +36,13 @@ function createCanvas(): {
 } {
   const canvas = createElement({
     tag: 'canvas',
-    attributes: { height: `${WHEEL.SIZE}`, width: `${WHEEL.SIZE}` },
+    attributes: { height: '450', width: '450' },
+    cssClasses: ['mx-auto'],
   });
+
   const context = canvas.getContext('2d');
   assertIsNonNullable(context);
+  context.translate(WHEEL.OFFSET, WHEEL.OFFSET);
   return { canvas, context };
 }
 
@@ -56,9 +60,20 @@ function drawSector(sectorProperties: SectorProperties): void {
   context.lineTo(WHEEL.CENTER, WHEEL.CENTER);
   context.closePath();
   context.fillStyle = color;
-  context.fill();
   context.strokeStyle = STROKE_COLOR;
+  context.fill();
   context.stroke();
+}
+
+function drawCursor(cursorProperties: CursorProperties): void {
+  const { context, center, radius } = cursorProperties;
+  const top = center - radius;
+  const cursor = '👇';
+  const fontSize = 45;
+  context.font = `${fontSize}px Arial`;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillText(cursor, center, top);
 }
 
 function drawCentralElement(centralElementProperties: CentralElementProperties): void {
@@ -79,10 +94,6 @@ function drawWheel(wheelProperties: WheelProperties): void {
   sectorsAngles.forEach((angle, index) => {
     drawSector({ startAngle, sectorAngle: angle, context, color: colors[index] });
     drawTitle({ startAngle, angle, sectors, index, context });
-    context.shadowColor = 'transparent';
-    context.shadowBlur = 0;
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
     startAngle += angle;
   });
   drawCentralElement({ context, centralX: WHEEL.CENTER, centralY: WHEEL.CENTER });
@@ -90,26 +101,45 @@ function drawWheel(wheelProperties: WheelProperties): void {
 
 function drawTitle(titleProperties: TitleProperties): void {
   const { startAngle, angle, sectors, index, context } = titleProperties;
+  const minAngle = 15;
+  const maxTitleLength = 7;
+  const maxTextWidth = 100;
+  if (angle < minAngle) {
+    return;
+  }
   const sectorsMiddleAngle = startAngle + angle / DIVIDER;
   const sectorsMiddleRad = (sectorsMiddleAngle * Math.PI) / CIRCLE.SEMICIRCLE;
   const title = sectors[index][0];
   const titleX = WHEEL.CENTER + Math.cos(sectorsMiddleRad) * (WHEEL.RADIUS / DIVIDER);
   const titleY = WHEEL.CENTER + Math.sin(sectorsMiddleRad) * (WHEEL.RADIUS / DIVIDER);
+
   const rotation =
     sectorsMiddleAngle > CIRCLE.QUARTER && sectorsMiddleAngle < CIRCLE.THREE_QUARTERS
       ? sectorsMiddleRad + Math.PI
       : sectorsMiddleRad;
+
   context.save();
   context.translate(titleX, titleY);
   context.rotate(rotation);
   context.fillStyle = 'rgb(255,255,255)';
-  context.strokeStyle = 'rgba(255,131,172,0.19)';
-  context.lineWidth = 1;
-  context.font = 'bold 16px monospace';
+  context.strokeStyle = 'rgb(255,255,255)';
+  context.lineWidth = 0.1;
+  context.font = 'bold 18px Arial';
   context.textAlign = 'center';
-  context.textBaseline = 'top';
-  context.fillText(title, 0, 0);
-  context.strokeText(title, 0, 0);
+  context.textBaseline = 'middle';
+  let preparedTitle = title;
+
+  while (context.measureText(preparedTitle).width > maxTextWidth) {
+    preparedTitle = preparedTitle.slice(0, -1);
+    if (preparedTitle.length <= maxTitleLength) break;
+  }
+
+  if (preparedTitle.length < title.length) {
+    preparedTitle = preparedTitle.trim() + '...';
+  }
+
+  context.fillText(preparedTitle, 0, 0);
+  context.strokeText(preparedTitle, 0, 0);
   context.restore();
 }
 
@@ -166,6 +196,7 @@ function clearAndDrawWheel(clearAndDrawProperties: ClearAndDrawProperties): void
   context.translate(-WHEEL.CENTER, -WHEEL.CENTER);
   drawWheel({ sectors, context, colors });
   context.restore();
+  drawCursor({ context, center: WHEEL.CENTER, radius: WHEEL.RADIUS });
 }
 
 function WheelModule(): WheelType {
@@ -177,7 +208,8 @@ function WheelModule(): WheelType {
     drawWheel: (newSectors: SectorsData[]): void => {
       sectors = shuffleArray(newSectors);
       colors = getColors(sectors);
-      drawWheel({ sectors, context, colors });
+      clearAndDrawWheel({ context, rotation: 0, sectors, colors });
+      // drawWheel({ sectors, context, colors });
     },
     rotateWheel: (angle: number, duration: number, callback: () => void): void => {
       rotateWheel({ angle, duration, context, sectors, colors }, callback);

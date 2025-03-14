@@ -6,6 +6,8 @@ export const WHEEL = {
   get RADIUS(): number {
     return (this.SIZE - 1) / DIVIDER;
   },
+  TOP: 0,
+  OFFSET: 25,
 };
 
 export const DURATION = {

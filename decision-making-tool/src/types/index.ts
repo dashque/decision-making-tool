@@ -26,6 +26,12 @@ export type CentralElementProperties = {
   centralY: number;
 };
 
+export type CursorProperties = {
+  context: CanvasRenderingContext2D;
+  center: number;
+  radius: number;
+};
+
 export type SectorProperties = {
   startAngle: number;
   sectorAngle: number;
