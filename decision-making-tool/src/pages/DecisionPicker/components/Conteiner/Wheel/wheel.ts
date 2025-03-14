@@ -20,10 +20,12 @@ import {
   WHEEL,
 } from '../../../constants.ts';
 import { assertIsNonNullable } from '~/utils/helpers.ts';
+import { picker } from '~/pages/DecisionPicker/components/Conteiner/container-view.ts';
+import { easeInOutExpo } from '~/utils/ease-in-out-expo.ts';
 
 function getColors(sectors: SectorsData[]): string[] {
   const min = 0;
-  const max = 170;
+  const max = 160;
   return sectors.map(
     () =>
       `rgb(${randomFunction(min, max)},${randomFunction(min, max)},${randomFunction(min, max)})`,
@@ -36,13 +38,20 @@ function createCanvas(): {
 } {
   const canvas = createElement({
     tag: 'canvas',
-    attributes: { height: '450', width: '450' },
     cssClasses: ['mx-auto'],
   });
 
+  const ratio = window.devicePixelRatio || 1;
+  canvas.width = WHEEL.SIZE * ratio;
+  canvas.height = WHEEL.SIZE * ratio;
+
+  canvas.style.width = WHEEL.SIZE + 'px';
+  canvas.style.height = WHEEL.SIZE + 'px';
+
   const context = canvas.getContext('2d');
   assertIsNonNullable(context);
-  context.translate(WHEEL.OFFSET, WHEEL.OFFSET);
+  context.scale(ratio, ratio);
+
   return { canvas, context };
 }
 
@@ -51,10 +60,6 @@ function drawSector(sectorProperties: SectorProperties): void {
   const anticlockwise = false;
   const startAngleRad = (startAngle * Math.PI) / CIRCLE.SEMICIRCLE;
   const endAngleRad = ((startAngle + sectorAngle) * Math.PI) / CIRCLE.SEMICIRCLE;
-  context.shadowColor = 'rgba(0,0,0,0.68)';
-  context.shadowBlur = 1;
-  context.shadowOffsetX = 0;
-  context.shadowOffsetY = 0;
   context.beginPath();
   context.arc(WHEEL.CENTER, WHEEL.CENTER, WHEEL.RADIUS, startAngleRad, endAngleRad, anticlockwise);
   context.lineTo(WHEEL.CENTER, WHEEL.CENTER);
@@ -65,10 +70,16 @@ function drawSector(sectorProperties: SectorProperties): void {
   context.stroke();
 }
 
+function getCurrentSector(currentAngle: number, sectorsLength: number): number {
+  const anglePerSector = CIRCLE.FULL / sectorsLength;
+  const normalizedAngle = ((currentAngle % CIRCLE.FULL) + CIRCLE.FULL) % CIRCLE.FULL;
+  return Math.round(normalizedAngle / anglePerSector) % sectorsLength;
+}
+
 function drawCursor(cursorProperties: CursorProperties): void {
   const { context, center, radius } = cursorProperties;
   const top = center - radius;
-  const cursor = '👇';
+  const cursor = WHEEL.CURSOR;
   const fontSize = 45;
   context.font = `${fontSize}px Arial`;
   context.textAlign = 'center';
@@ -78,12 +89,12 @@ function drawCursor(cursorProperties: CursorProperties): void {
 
 function drawCentralElement(centralElementProperties: CentralElementProperties): void {
   const { context, centralX, centralY } = centralElementProperties;
-  const sasa = '🥸';
+  const centralElement = WHEEL.CENTRAL_ELEMENT;
   const fontSize = 60;
   context.font = `${fontSize}px Arial`;
   context.textAlign = 'center';
   context.textBaseline = 'middle';
-  context.fillText(sasa, centralX, centralY);
+  context.fillText(centralElement, centralX, centralY);
 }
 
 function drawWheel(wheelProperties: WheelProperties): void {
@@ -143,40 +154,23 @@ function drawTitle(titleProperties: TitleProperties): void {
   context.restore();
 }
 
-function easeInOutExpo(progress: number): number {
-  if (progress === ANIMATION.MIN_PROGRESS) {
-    return ANIMATION.MIN_PROGRESS;
-  }
-  if (progress === ANIMATION.MAX_PROGRESS) {
-    return ANIMATION.MAX_PROGRESS;
-  }
-  if (progress < ANIMATION.MIDPOINT) {
-    return (
-      Math.pow(
-        ANIMATION.BASE_POWER,
-        ANIMATION.EXPONENTIAL_FACTOR * progress - ANIMATION.EXPONENTIAL_OFFSET,
-      ) / DIVIDER
-    );
-  }
-  return (
-    (ANIMATION.BASE_POWER -
-      Math.pow(
-        ANIMATION.BASE_POWER,
-        -ANIMATION.EXPONENTIAL_FACTOR * progress + ANIMATION.EXPONENTIAL_OFFSET,
-      )) /
-    DIVIDER
-  );
-}
-
 function rotateWheel(rotationProperties: RotationProperties, callback: () => void): void {
   const { angle, duration, context, sectors, colors } = rotationProperties;
   const start = performance.now();
+  let previousSector = -1;
 
   function animate(currentTime: number): void {
     const progress = (currentTime - start) / duration;
     const easedProgress = easeInOutExpo(progress);
     const currentRotation = angle * easedProgress;
+    const activeSector = getCurrentSector(currentRotation, sectors.length);
+
+    if (activeSector !== previousSector) {
+      picker.textContent = sectors[activeSector][0];
+      previousSector = activeSector;
+    }
     clearAndDrawWheel({ context, rotation: currentRotation, sectors, colors });
+
     if (progress < ANIMATION.MAX_PROGRESS) {
       requestAnimationFrame(animate);
     } else {
