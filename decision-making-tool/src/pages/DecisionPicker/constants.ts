@@ -1,16 +1,15 @@
-export const WHEEL = {
-  SIZE: 400,
-  get CENTER(): number {
-    return this.SIZE / DIVIDER;
+export const Wheel = {
+  Size: 400,
+  get Center(): number {
+    return this.Size / DIVIDER;
   },
-  get RADIUS(): number {
-    return this.SIZE / DIVIDER;
+  get Radius(): number {
+    return this.Size / DIVIDER;
   },
-  TOP: 0,
-  OFFSET: 25,
-  CENTRAL_ELEMENT: '🥸',
-  // CURSOR: '👇',
-  CURSOR: '🔻',
+  Top: 0,
+  Offset: 10,
+  CentralElement: '🥸',
+  Cursor: '🔻',
 };
 
 export const DURATION = {

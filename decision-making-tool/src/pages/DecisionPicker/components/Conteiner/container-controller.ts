@@ -59,7 +59,6 @@ updateSoundButton(modelPickerPage.getSoundState());
 
 store.on('update', (newData: StoreDataType) => {
   const isSoundOn = newData.isSoundOn;
-
   updateSoundButton(isSoundOn);
 });
 

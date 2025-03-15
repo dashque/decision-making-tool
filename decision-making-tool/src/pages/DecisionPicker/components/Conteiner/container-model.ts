@@ -13,9 +13,7 @@ function createPickerModel(): PickerModelType {
 
   function drawWheel(): void {
     const sectors = store.useSelector(selectors.getSectors);
-    console.log(sectors);
     const shuffledSectors = [...sectors];
-    console.log(shuffledSectors);
     wheel.drawWheel(shuffleArray(shuffledSectors));
   }
 
@@ -32,7 +30,6 @@ function createPickerModel(): PickerModelType {
 
   return {
     drawWheel: () => drawWheel(),
-
     toggleSound: (): void => {
       const currentSoundState = store.getData().isSoundOn;
       const mewSoundState = !currentSoundState;
@@ -40,26 +37,29 @@ function createPickerModel(): PickerModelType {
       audio.muted = !mewSoundState;
     },
     rotateWheel: (duration: number): void => {
-      wheel.rotateWheel(randomFunction(ROTATION.MIN, ROTATION.MAX), duration, async () => {
-        if (!audio.muted) {
-          try {
-            await audio.play();
-          } catch {
-            console.error();
-          }
-        }
-      });
+      wheel.rotateWheel(randomFunction(ROTATION.MIN, ROTATION.MAX), duration);
     },
     comeBack: (): void => {
       history.back();
     },
     getCanvas: (): HTMLCanvasElement => wheel.canvas,
     getSoundState: (): boolean => store.getData().isSoundOn,
+    getAudio: () => audio,
   };
 }
 
 globalThis.addEventListener('popstate', () => {
   modelPickerPage.drawWheel();
+});
+
+document.addEventListener('animationEnded', () => {
+  if (modelPickerPage.getSoundState()) {
+    modelPickerPage
+      .getAudio()
+      .play()
+      .then()
+      .catch((error) => console.error(error));
+  }
 });
 
 const modelPickerPage = createPickerModel();

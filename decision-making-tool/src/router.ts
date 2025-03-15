@@ -27,7 +27,6 @@ const handleRouteChange = (url: string): void => {
   document.body.replaceChildren();
 
   const formattedHash = url.startsWith('#') ? url : '#/';
-  console.log(formattedHash, 'formattedHash');
 
   switch (formattedHash) {
     case '#/': {

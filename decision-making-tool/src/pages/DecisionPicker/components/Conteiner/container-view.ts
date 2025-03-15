@@ -3,11 +3,23 @@ import { replaceCssClass } from '~/utils/helpers.ts';
 import { modelPickerPage } from '~/pages/DecisionPicker/components/Conteiner/container-model.ts';
 
 const comeBackButton = Button('Back to main');
-replaceCssClass(comeBackButton, ['w-108'], ['w-32']);
+replaceCssClass(
+  comeBackButton,
+  ['w-108'],
+  ['w-32', 'disabled:opacity-75', 'disabled:pointer-events-none'],
+);
 const rotationButton = Button('Pick');
-replaceCssClass(rotationButton, ['w-108'], ['w-32']);
+replaceCssClass(
+  rotationButton,
+  ['w-108'],
+  ['w-32', 'disabled:opacity-75', 'disabled:pointer-events-none'],
+);
 const soundButton = Button('Sound: On');
-replaceCssClass(soundButton, ['w-108'], ['w-32']);
+replaceCssClass(
+  soundButton,
+  ['w-108'],
+  ['w-32', 'disabled:opacity-75', 'disabled:pointer-events-none'],
+);
 
 const timerAttributes = {
   type: 'number',
@@ -54,12 +66,4 @@ wheelContainer.addEventListener('animationEnded', () => {
   input.disabled = false;
 });
 
-export {
-  soundButton,
-  wheelContainer,
-  rotationButton,
-  comeBackButton,
-  input,
-  picker,
-  toggleButtons,
-};
+export { soundButton, wheelContainer, input, picker, toggleButtons };

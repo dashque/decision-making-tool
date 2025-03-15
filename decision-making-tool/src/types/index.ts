@@ -17,7 +17,7 @@ export type SectorsData = [string, number];
 export type WheelType = {
   canvas: HTMLCanvasElement;
   drawWheel: (sectors: SectorsData[]) => void;
-  rotateWheel: (angle: number, duration: number, callback: () => Promise<void>) => void;
+  rotateWheel: (angle: number, duration: number) => void;
 };
 
 export type CentralElementProperties = {
@@ -133,4 +133,5 @@ export type PickerModelType = {
   getCanvas: () => HTMLCanvasElement;
   getSoundState: () => boolean;
   drawWheel: () => void;
+  getAudio: () => HTMLAudioElement;
 };

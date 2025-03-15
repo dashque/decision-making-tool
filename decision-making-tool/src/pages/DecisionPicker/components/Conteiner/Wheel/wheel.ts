@@ -17,7 +17,7 @@ import {
   DIVIDER,
   INITIAL_VALUE,
   STROKE_COLOR,
-  WHEEL,
+  Wheel,
 } from '../../../constants.ts';
 import { assertIsNonNullable } from '~/utils/helpers.ts';
 import { picker } from '~/pages/DecisionPicker/components/Conteiner/container-view.ts';
@@ -42,11 +42,11 @@ function createCanvas(): {
   });
 
   const ratio = window.devicePixelRatio || 1;
-  canvas.width = WHEEL.SIZE * ratio;
-  canvas.height = WHEEL.SIZE * ratio;
+  canvas.width = Wheel.Size * ratio;
+  canvas.height = Wheel.Size * ratio;
 
-  canvas.style.width = WHEEL.SIZE + 'px';
-  canvas.style.height = WHEEL.SIZE + 'px';
+  canvas.style.width = Wheel.Size + 'px';
+  canvas.style.height = Wheel.Size + 'px';
 
   const context = canvas.getContext('2d');
   assertIsNonNullable(context);
@@ -61,8 +61,8 @@ function drawSector(sectorProperties: SectorProperties): void {
   const startAngleRad = (startAngle * Math.PI) / CIRCLE.SEMICIRCLE;
   const endAngleRad = ((startAngle + sectorAngle) * Math.PI) / CIRCLE.SEMICIRCLE;
   context.beginPath();
-  context.arc(WHEEL.CENTER, WHEEL.CENTER, WHEEL.RADIUS, startAngleRad, endAngleRad, anticlockwise);
-  context.lineTo(WHEEL.CENTER, WHEEL.CENTER);
+  context.arc(Wheel.Center, Wheel.Center, Wheel.Radius, startAngleRad, endAngleRad, anticlockwise);
+  context.lineTo(Wheel.Center, Wheel.Center);
   context.closePath();
   context.fillStyle = color;
   context.strokeStyle = STROKE_COLOR;
@@ -82,17 +82,17 @@ function getCurrentSector(currentAngle: number, sectorsLength: number): number {
 function drawCursor(cursorProperties: CursorProperties): void {
   const { context, center, radius } = cursorProperties;
   const top = center - radius;
-  const cursor = WHEEL.CURSOR;
+  const cursor = Wheel.Cursor;
   const fontSize = 45;
   context.font = `${fontSize}px Arial`;
   context.textAlign = 'center';
   context.textBaseline = 'middle';
-  context.fillText(cursor, center, top);
+  context.fillText(cursor, center, top + Wheel.Offset);
 }
 
 function drawCentralElement(centralElementProperties: CentralElementProperties): void {
   const { context, centralX, centralY } = centralElementProperties;
-  const centralElement = WHEEL.CENTRAL_ELEMENT;
+  const centralElement = Wheel.CentralElement;
   const fontSize = 60;
   context.font = `${fontSize}px Arial`;
   context.textAlign = 'center';
@@ -110,7 +110,7 @@ function drawWheel(wheelProperties: WheelProperties): void {
     drawTitle({ startAngle, angle, sectors, index, context });
     startAngle += angle;
   });
-  drawCentralElement({ context, centralX: WHEEL.CENTER, centralY: WHEEL.CENTER });
+  drawCentralElement({ context, centralX: Wheel.Center, centralY: Wheel.Center });
 }
 
 function drawTitle(titleProperties: TitleProperties): void {
@@ -124,8 +124,8 @@ function drawTitle(titleProperties: TitleProperties): void {
   const sectorsMiddleAngle = startAngle + angle / DIVIDER;
   const sectorsMiddleRad = (sectorsMiddleAngle * Math.PI) / CIRCLE.SEMICIRCLE;
   const title = sectors[index][0];
-  const titleX = WHEEL.CENTER + Math.cos(sectorsMiddleRad) * (WHEEL.RADIUS / DIVIDER);
-  const titleY = WHEEL.CENTER + Math.sin(sectorsMiddleRad) * (WHEEL.RADIUS / DIVIDER);
+  const titleX = Wheel.Center + Math.cos(sectorsMiddleRad) * (Wheel.Radius / DIVIDER);
+  const titleY = Wheel.Center + Math.sin(sectorsMiddleRad) * (Wheel.Radius / DIVIDER);
 
   const rotation =
     sectorsMiddleAngle > CIRCLE.QUARTER && sectorsMiddleAngle < CIRCLE.THREE_QUARTERS
@@ -157,7 +157,7 @@ function drawTitle(titleProperties: TitleProperties): void {
   context.restore();
 }
 
-function rotateWheel(rotationProperties: RotationProperties, callback: () => void): void {
+function rotateWheel(rotationProperties: RotationProperties): void {
   const { angle, duration, context, sectors, colors, canvas } = rotationProperties;
   const start = performance.now();
   let previousSector = -1;
@@ -180,7 +180,6 @@ function rotateWheel(rotationProperties: RotationProperties, callback: () => voi
       requestAnimationFrame(animate);
     } else {
       canvas.dispatchEvent(new CustomEvent('animationEnded', { bubbles: true }));
-      callback();
     }
   }
 
@@ -189,14 +188,14 @@ function rotateWheel(rotationProperties: RotationProperties, callback: () => voi
 
 function clearAndDrawWheel(clearAndDrawProperties: ClearAndDrawProperties): void {
   const { context, rotation, sectors, colors } = clearAndDrawProperties;
-  context.clearRect(INITIAL_VALUE, INITIAL_VALUE, WHEEL.SIZE, WHEEL.SIZE);
+  context.clearRect(INITIAL_VALUE, INITIAL_VALUE, Wheel.Size, Wheel.Size);
   context.save();
-  context.translate(WHEEL.CENTER, WHEEL.CENTER);
+  context.translate(Wheel.Center, Wheel.Center);
   context.rotate((rotation * Math.PI) / CIRCLE.SEMICIRCLE);
-  context.translate(-WHEEL.CENTER, -WHEEL.CENTER);
+  context.translate(-Wheel.Center, -Wheel.Center);
   drawWheel({ sectors, context, colors });
   context.restore();
-  drawCursor({ context, center: WHEEL.CENTER, radius: WHEEL.RADIUS });
+  drawCursor({ context, center: Wheel.Center, radius: Wheel.Radius });
 }
 
 function WheelModule(): WheelType {
@@ -209,10 +208,9 @@ function WheelModule(): WheelType {
       sectors = shuffleArray(newSectors);
       colors = getColors(sectors);
       clearAndDrawWheel({ context, rotation: 0, sectors, colors });
-      // drawWheel({ sectors, context, colors });
     },
-    rotateWheel: (angle: number, duration: number, callback: () => void): void => {
-      rotateWheel({ angle, duration, context, sectors, colors, canvas }, callback);
+    rotateWheel: (angle: number, duration: number): void => {
+      rotateWheel({ angle, duration, context, sectors, colors, canvas });
     },
   };
 }
