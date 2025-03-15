@@ -74,6 +74,7 @@ input.addEventListener('input', () => {
       ['focus:ring-blue-500', 'focus:border-blue-500'],
     );
     input.setCustomValidity(`Значение не может быть меньше ${input.min}.`);
+    input.value = input.min;
   } else if (input.validity.rangeOverflow) {
     replaceCssClass(
       input,
@@ -82,6 +83,7 @@ input.addEventListener('input', () => {
     );
 
     input.setCustomValidity(`Значение не может быть больше ${input.max}.`);
+    input.value = input.max;
   } else {
     input.style.border = 'insert';
     replaceCssClass(
