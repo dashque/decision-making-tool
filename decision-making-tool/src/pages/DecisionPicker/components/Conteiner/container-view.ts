@@ -26,7 +26,7 @@ const timerAttributes = {
   min: '5',
   max: '30',
   step: '1',
-  value: '10',
+  value: '5',
 };
 
 const input = Input('Timer', timerAttributes);
@@ -64,6 +64,34 @@ wheelContainer.addEventListener('animationEnded', () => {
   rotationButton.disabled = false;
   soundButton.disabled = false;
   input.disabled = false;
+});
+
+input.addEventListener('input', () => {
+  if (input.validity.rangeUnderflow) {
+    replaceCssClass(
+      input,
+      ['focus:ring-pink-500', 'focus:border-pink-500'],
+      ['focus:ring-blue-500', 'focus:border-blue-500'],
+    );
+    input.setCustomValidity(`Значение не может быть меньше ${input.min}.`);
+  } else if (input.validity.rangeOverflow) {
+    replaceCssClass(
+      input,
+      ['focus:ring-pink-500', 'focus:border-pink-500'],
+      ['focus:ring-blue-500', 'focus:border-blue-500'],
+    );
+
+    input.setCustomValidity(`Значение не может быть больше ${input.max}.`);
+  } else {
+    input.style.border = 'insert';
+    replaceCssClass(
+      input,
+      ['focus:ring-blue-500', 'focus:border-blue-500'],
+      ['focus:ring-pink-500', 'focus:border-pink-500'],
+    );
+    input.setCustomValidity('');
+  }
+  input.reportValidity();
 });
 
 export { soundButton, wheelContainer, input, picker, toggleButtons };
