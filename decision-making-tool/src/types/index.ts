@@ -131,4 +131,5 @@ export type PickerModelType = {
   comeBack: () => void;
   getCanvas: () => HTMLCanvasElement;
   getSoundState: () => boolean;
+  drawWheel: () => void;
 };

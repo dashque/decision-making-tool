@@ -1,6 +1,8 @@
 import { mainPage } from '~/pages/Main/main.ts';
 import { decisionPickerPage } from '~/pages/DecisionPicker/decision-picker.ts';
 import { errorPage } from '~/pages/Error/error.ts';
+import { store } from '~/store/store.ts';
+import { selectors } from '~/store/selectors.ts';
 
 let abortController: AbortController | null = null;
 
@@ -16,6 +18,7 @@ const historyResolver = (url: string): void => {
 
 //TODO add config and rewrite func
 const handleRouteChange = (url: string): void => {
+  // console.log(url);
   if (abortController) {
     abortController.abort();
   }
@@ -25,6 +28,7 @@ const handleRouteChange = (url: string): void => {
   document.body.replaceChildren();
 
   const formattedHash = url.startsWith('#') ? url : '#/';
+  console.log(formattedHash, 'formattedHash');
 
   switch (formattedHash) {
     case '#/': {
@@ -32,6 +36,7 @@ const handleRouteChange = (url: string): void => {
       break;
     }
     case '#/decision-picker': {
+      // debugger;
       document.body.append(decisionPickerPage(signal));
       break;
     }
@@ -43,7 +48,11 @@ const handleRouteChange = (url: string): void => {
 };
 
 globalThis.addEventListener('popstate', () => {
-  handleRouteChange(globalThis.location.hash || '#/');
+  const currentHash: string = globalThis.location.hash || '#/';
+  if (!store.useSelector(selectors.hasDataForStart)) {
+    Router.navigate('#/');
+  }
+  Router.navigate(currentHash);
 });
 
 const Router = {

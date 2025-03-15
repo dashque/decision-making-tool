@@ -106,7 +106,6 @@ function createOptionModel(): MainModelType {
         Router.navigate('#/decision-picker');
       } else {
         const modal = createStartModal();
-
         document.body.append(modal);
         modal.showModal();
       }
@@ -116,9 +115,7 @@ function createOptionModel(): MainModelType {
 
 function save(data: StoreDataType): void {
   const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-
   const link = Link('', URL.createObjectURL(blob));
-
   link.download = 'option-list.json';
   link.click();
   URL.revokeObjectURL(link.href);
@@ -129,25 +126,18 @@ function paste(text: string): Omit<Option, 'id'>[] {
     .split('\n')
     .map((element) => {
       element = element.trim();
-
       if (!element) {
         return null;
       }
-
       const lastComma = element.lastIndexOf(',');
-
       if (lastComma === -1) {
         return null;
       }
-
       const title = element.slice(0, lastComma).trim();
-
       const weight = Number(element.slice(lastComma + 1).trim());
-
       if (!title || Number.isNaN(weight) || Number(weight) < 0) {
         return null;
       }
-
       return {
         title: title,
         weight: String(weight),
@@ -158,7 +148,6 @@ function paste(text: string): Omit<Option, 'id'>[] {
 
 function removeOption(id: string): void {
   const data = store.getData();
-
   store.update({
     ...data,
     optionList: {

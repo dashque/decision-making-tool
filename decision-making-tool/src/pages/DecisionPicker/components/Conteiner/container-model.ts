@@ -2,7 +2,7 @@ import { createAudio } from '~/pages/DecisionPicker/components/Audio/audio.ts';
 import { store } from '~/store/store.ts';
 import { WheelModule } from '~/pages/DecisionPicker/components/Conteiner/Wheel/wheel.ts';
 import { ERROR, ROTATION } from '~/pages/DecisionPicker/constants.ts';
-import { randomFunction } from '~/utils/random-function.ts';
+import { randomFunction, shuffleArray } from '~/utils/random-function.ts';
 import type { PickerModelType, StoreDataType } from '~/types';
 import { selectors } from '~/store/selectors.ts';
 
@@ -13,8 +13,10 @@ function createPickerModel(): PickerModelType {
 
   function drawWheel(): void {
     const sectors = store.useSelector(selectors.getSectors);
-
-    wheel.drawWheel(sectors);
+    console.log(sectors);
+    const shuffledSectors = [...sectors];
+    console.log(shuffledSectors);
+    wheel.drawWheel(shuffleArray(shuffledSectors));
   }
 
   drawWheel();
@@ -29,11 +31,11 @@ function createPickerModel(): PickerModelType {
   });
 
   return {
+    drawWheel: () => drawWheel(),
+
     toggleSound: (): void => {
       const currentSoundState = store.getData().isSoundOn;
-
       const mewSoundState = !currentSoundState;
-
       store.update({ isSoundOn: mewSoundState });
       audio.muted = !mewSoundState;
     },
@@ -49,13 +51,16 @@ function createPickerModel(): PickerModelType {
       });
     },
     comeBack: (): void => {
-      //historyResolver('main', '#/');
       history.back();
     },
     getCanvas: (): HTMLCanvasElement => wheel.canvas,
     getSoundState: (): boolean => store.getData().isSoundOn,
   };
 }
+
+globalThis.addEventListener('popstate', () => {
+  modelPickerPage.drawWheel();
+});
 
 const modelPickerPage = createPickerModel();
 
