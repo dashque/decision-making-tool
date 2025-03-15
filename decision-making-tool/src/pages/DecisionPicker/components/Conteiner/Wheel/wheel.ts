@@ -72,8 +72,11 @@ function drawSector(sectorProperties: SectorProperties): void {
 
 function getCurrentSector(currentAngle: number, sectorsLength: number): number {
   const anglePerSector = CIRCLE.FULL / sectorsLength;
-  const normalizedAngle = ((currentAngle % CIRCLE.FULL) + CIRCLE.FULL) % CIRCLE.FULL;
-  return Math.round(normalizedAngle / anglePerSector) % sectorsLength;
+
+  const normalizedAngle =
+    (((currentAngle % CIRCLE.FULL) + CIRCLE.FULL) % CIRCLE.FULL) + CIRCLE.THREE_QUARTERS;
+
+  return Math.floor(normalizedAngle / anglePerSector) % sectorsLength;
 }
 
 function drawCursor(cursorProperties: CursorProperties): void {
@@ -163,6 +166,7 @@ function rotateWheel(rotationProperties: RotationProperties, callback: () => voi
     const progress = (currentTime - start) / duration;
     const easedProgress = easeInOutExpo(progress);
     const currentRotation = angle * easedProgress;
+
     const activeSector = getCurrentSector(currentRotation, sectors.length);
 
     if (activeSector !== previousSector) {

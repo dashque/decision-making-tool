@@ -9,7 +9,8 @@ export const WHEEL = {
   TOP: 0,
   OFFSET: 25,
   CENTRAL_ELEMENT: '🥸',
-  CURSOR: '👇',
+  // CURSOR: '👇',
+  CURSOR: '🔻',
 };
 
 export const DURATION = {
