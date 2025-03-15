@@ -158,9 +158,10 @@ function drawTitle(titleProperties: TitleProperties): void {
 }
 
 function rotateWheel(rotationProperties: RotationProperties, callback: () => void): void {
-  const { angle, duration, context, sectors, colors } = rotationProperties;
+  const { angle, duration, context, sectors, colors, canvas } = rotationProperties;
   const start = performance.now();
   let previousSector = -1;
+  canvas.dispatchEvent(new CustomEvent('animationStarted', { bubbles: true }));
 
   function animate(currentTime: number): void {
     const progress = (currentTime - start) / duration;
@@ -178,6 +179,7 @@ function rotateWheel(rotationProperties: RotationProperties, callback: () => voi
     if (progress < ANIMATION.MAX_PROGRESS) {
       requestAnimationFrame(animate);
     } else {
+      canvas.dispatchEvent(new CustomEvent('animationEnded', { bubbles: true }));
       callback();
     }
   }
@@ -210,7 +212,7 @@ function WheelModule(): WheelType {
       // drawWheel({ sectors, context, colors });
     },
     rotateWheel: (angle: number, duration: number, callback: () => void): void => {
-      rotateWheel({ angle, duration, context, sectors, colors }, callback);
+      rotateWheel({ angle, duration, context, sectors, colors, canvas }, callback);
     },
   };
 }

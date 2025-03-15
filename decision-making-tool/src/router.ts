@@ -18,7 +18,6 @@ const historyResolver = (url: string): void => {
 
 //TODO add config and rewrite func
 const handleRouteChange = (url: string): void => {
-  // console.log(url);
   if (abortController) {
     abortController.abort();
   }
@@ -36,7 +35,6 @@ const handleRouteChange = (url: string): void => {
       break;
     }
     case '#/decision-picker': {
-      // debugger;
       document.body.append(decisionPickerPage(signal));
       break;
     }
@@ -50,7 +48,7 @@ const handleRouteChange = (url: string): void => {
 globalThis.addEventListener('popstate', () => {
   const currentHash: string = globalThis.location.hash || '#/';
   if (!store.useSelector(selectors.hasDataForStart)) {
-    Router.navigate('#/');
+    return Router.navigate('#/');
   }
   Router.navigate(currentHash);
 });

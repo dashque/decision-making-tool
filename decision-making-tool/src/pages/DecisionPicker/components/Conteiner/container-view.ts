@@ -24,13 +24,7 @@ const inputContainer = Div([label, input]);
 const picker = Div('PRESS PICK BUTTON');
 const wheelCanvas = modelPickerPage.getCanvas();
 
-const controllerContainer = Div([
-  comeBackButton,
-  rotationButton,
-  soundButton,
-  inputContainer,
-  wheelCanvas,
-]);
+const controllerContainer = Div([comeBackButton, rotationButton, soundButton, inputContainer]);
 
 replaceCssClass(controllerContainer, ['flex', 'flex-col'], ['grid', 'grid-cols-3']);
 comeBackButton.dataset.action = 'comeBack';
@@ -40,4 +34,32 @@ input.dataset.action = 'setTimer';
 
 const wheelContainer = Div([controllerContainer, inputContainer, picker, wheelCanvas]);
 
-export { soundButton, wheelContainer, rotationButton, comeBackButton, input, picker };
+function toggleButtons(buttons: HTMLButtonElement[], flag: boolean): void {
+  buttons.forEach((button) => {
+    button.disabled = !flag;
+  });
+}
+
+wheelContainer.addEventListener('animationStarted', () => {
+  comeBackButton.disabled = true;
+  rotationButton.disabled = true;
+  soundButton.disabled = true;
+  input.disabled = true;
+});
+
+wheelContainer.addEventListener('animationEnded', () => {
+  comeBackButton.disabled = false;
+  rotationButton.disabled = false;
+  soundButton.disabled = false;
+  input.disabled = false;
+});
+
+export {
+  soundButton,
+  wheelContainer,
+  rotationButton,
+  comeBackButton,
+  input,
+  picker,
+  toggleButtons,
+};

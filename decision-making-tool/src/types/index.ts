@@ -59,6 +59,7 @@ export type RotationProperties = {
   context: CanvasRenderingContext2D;
   sectors: SectorsData[];
   colors: string[];
+  canvas: HTMLCanvasElement;
 };
 
 export type ClearAndDrawProperties = {

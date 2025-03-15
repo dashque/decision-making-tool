@@ -1,7 +1,7 @@
 import { createAudio } from '~/pages/DecisionPicker/components/Audio/audio.ts';
 import { store } from '~/store/store.ts';
 import { WheelModule } from '~/pages/DecisionPicker/components/Conteiner/Wheel/wheel.ts';
-import { ERROR, ROTATION } from '~/pages/DecisionPicker/constants.ts';
+import { ROTATION } from '~/pages/DecisionPicker/constants.ts';
 import { randomFunction, shuffleArray } from '~/utils/random-function.ts';
 import type { PickerModelType, StoreDataType } from '~/types';
 import { selectors } from '~/store/selectors.ts';
@@ -45,7 +45,7 @@ function createPickerModel(): PickerModelType {
           try {
             await audio.play();
           } catch {
-            throw new Error(ERROR.TRY_CATCH);
+            console.error();
           }
         }
       });
