@@ -14,15 +14,21 @@ function createOption(list: Option): {
 
   const forId = `option-${dataId}`;
 
-  const titleInput = Input(list.title, { id: forId, type: 'text' });
+  const titleInput = Input(list.title, { id: forId, type: 'text', placeholder: 'Title' });
 
-  const weightInput = Input(list.weight, { id: forId, type: 'number', min: '0', step: '1' });
+  const weightInput = Input(list.weight, {
+    id: forId,
+    type: 'number',
+    min: '0',
+    step: '1',
+    placeholder: 'Weight',
+  });
 
   const idContainer = Span(Label(dataId, forId));
 
-  replaceCssClass(titleInput, ['w-108'], ['w-54']);
-  replaceCssClass(weightInput, ['w-108'], ['w-20']);
-  replaceCssClass(idContainer, ['w-108'], ['w-10']);
+  replaceCssClass(titleInput, ['w-112'], ['w-54']);
+  replaceCssClass(weightInput, ['w-112'], ['w-26']);
+  replaceCssClass(idContainer, ['w-112'], ['w-10']);
 
   return { idContainer, titleInput, weightInput, dataId };
 }
@@ -42,7 +48,7 @@ function drawOption(
 
   const deleteButton = Button('Delete');
 
-  replaceCssClass(deleteButton, ['w-108'], ['w-20']);
+  replaceCssClass(deleteButton, ['w-114'], ['w-20']);
   deleteButton.addEventListener('click', () => {
     onDelete(option.id);
   });

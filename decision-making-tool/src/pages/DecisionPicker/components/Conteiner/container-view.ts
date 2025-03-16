@@ -5,19 +5,19 @@ import { modelPickerPage } from '~/pages/DecisionPicker/components/Conteiner/con
 const comeBackButton = Button('Back to main');
 replaceCssClass(
   comeBackButton,
-  ['w-108'],
+  ['w-114'],
   ['w-32', 'disabled:opacity-75', 'disabled:pointer-events-none'],
 );
 const rotationButton = Button('Pick');
 replaceCssClass(
   rotationButton,
-  ['w-108'],
+  ['w-114'],
   ['w-32', 'disabled:opacity-75', 'disabled:pointer-events-none'],
 );
 const soundButton = Button('Sound: On');
 replaceCssClass(
   soundButton,
-  ['w-108'],
+  ['w-114'],
   ['w-32', 'disabled:opacity-75', 'disabled:pointer-events-none'],
 );
 
@@ -27,6 +27,7 @@ const timerAttributes = {
   max: '30',
   step: '1',
   value: '5',
+  placeholder: 'Timer',
 };
 
 const input = Input('Timer', timerAttributes);

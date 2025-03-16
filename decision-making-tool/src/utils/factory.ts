@@ -33,7 +33,7 @@ const Button = (children: Children): HTMLButtonElement => {
   return createElement({
     tag: 'button',
     cssClasses: [
-      'w-108',
+      'w-114',
       'px-4',
       'py-2',
       'border',
