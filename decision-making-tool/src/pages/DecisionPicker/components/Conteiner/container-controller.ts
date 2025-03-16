@@ -8,7 +8,11 @@ import {
   noop,
   preventDefault,
 } from '~/utils/helpers.ts';
-import { input, soundButton } from '~/pages/DecisionPicker/components/Conteiner/container-view.ts';
+import {
+  input,
+  picker,
+  soundButton,
+} from '~/pages/DecisionPicker/components/Conteiner/container-view.ts';
 import { modelPickerPage } from '~/pages/DecisionPicker/components/Conteiner/container-model.ts';
 import { DURATION, ERROR, MS } from '~/pages/DecisionPicker/constants.ts';
 import { Maybe } from '~/utils/maybe.ts';
@@ -60,6 +64,21 @@ updateSoundButton(modelPickerPage.getSoundState());
 store.on('update', (newData: StoreDataType) => {
   const isSoundOn = newData.isSoundOn;
   updateSoundButton(isSoundOn);
+});
+
+globalThis.addEventListener('popstate', () => {
+  modelPickerPage.drawWheel();
+  picker.textContent = 'PRESS PICK BUTTON';
+});
+
+document.addEventListener('animationEnded', () => {
+  if (modelPickerPage.getSoundState()) {
+    modelPickerPage
+      .getAudio()
+      .play()
+      .then()
+      .catch((error) => console.error(error));
+  }
 });
 
 export { setupWheelContainerEventListeners };

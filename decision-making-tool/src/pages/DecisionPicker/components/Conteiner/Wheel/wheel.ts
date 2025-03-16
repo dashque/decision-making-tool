@@ -142,16 +142,13 @@ function drawTitle(titleProperties: TitleProperties): void {
   context.textAlign = 'center';
   context.textBaseline = 'middle';
   let preparedTitle = title;
-
   while (context.measureText(preparedTitle).width > maxTextWidth) {
     preparedTitle = preparedTitle.slice(0, -1);
     if (preparedTitle.length <= maxTitleLength) break;
   }
-
   if (preparedTitle.length < title.length) {
     preparedTitle = preparedTitle.trim() + '...';
   }
-
   context.fillText(preparedTitle, 0, 0);
   context.strokeText(preparedTitle, 0, 0);
   context.restore();

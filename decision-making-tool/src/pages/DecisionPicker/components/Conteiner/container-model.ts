@@ -5,11 +5,9 @@ import { ROTATION } from '~/pages/DecisionPicker/constants.ts';
 import { randomFunction, shuffleArray } from '~/utils/random-function.ts';
 import type { PickerModelType, StoreDataType } from '~/types';
 import { selectors } from '~/store/selectors.ts';
-import { picker } from '~/pages/DecisionPicker/components/Conteiner/container-view.ts';
 
 function createPickerModel(): PickerModelType {
   const audio = createAudio();
-
   const wheel = WheelModule();
 
   function drawWheel(): void {
@@ -19,9 +17,7 @@ function createPickerModel(): PickerModelType {
   }
 
   drawWheel();
-
   let previousData: StoreDataType = store.getData();
-
   store.on('update', (newData: StoreDataType) => {
     if (newData.optionList.list !== previousData.optionList.list) {
       drawWheel();
@@ -48,21 +44,6 @@ function createPickerModel(): PickerModelType {
     getAudio: () => audio,
   };
 }
-
-globalThis.addEventListener('popstate', () => {
-  modelPickerPage.drawWheel();
-  picker.textContent = 'PRESS PICK BUTTON';
-});
-
-document.addEventListener('animationEnded', () => {
-  if (modelPickerPage.getSoundState()) {
-    modelPickerPage
-      .getAudio()
-      .play()
-      .then()
-      .catch((error) => console.error(error));
-  }
-});
 
 const modelPickerPage = createPickerModel();
 

@@ -38,7 +38,7 @@ export default [
     rules: {
       'unicorn/better-regex': 'warn',
       semi: ['error', 'always'],
-      // 'max-lines-per-function': ['error', 70],
+      'max-lines-per-function': ['error', 50],
     },
   },
   pluginJs.configs.recommended,
@@ -68,7 +68,7 @@ export default [
         },
       ],
       'no-magic-numbers': [
-        'warn',
+        'error',
         {
           ignoreArrayIndexes: true,
           ignore: [1, -1, 0],
@@ -93,8 +93,9 @@ export default [
         { blankLine: 'always', prev: 'function', next: '*' },
         { blankLine: 'always', prev: '*', next: 'function' },
       ],
-      '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/consistent-type-imports': 'error',
+
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
       '@typescript-eslint/explicit-member-accessibility': [
@@ -102,6 +103,7 @@ export default [
         { accessibility: 'explicit', overrides: { constructors: 'off' } },
       ],
       '@typescript-eslint/member-ordering': 'error',
+      'class-methods-use-this': 'error',
     },
   },
   eslintConfigPrettier,

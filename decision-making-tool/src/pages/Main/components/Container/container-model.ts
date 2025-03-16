@@ -10,18 +10,7 @@ import { selectors } from '~/store/selectors';
 function createOptionModel(): MainModelType {
   const options = createOptionList([]);
 
-  const initialData = {
-    optionList: {
-      list: [
-        {
-          id: '#1',
-          title: '',
-          weight: '',
-        },
-      ],
-      lastID: 2,
-    },
-  };
+  const initialData = getInitialData();
 
   if (store.useSelector(selectors.isDataEmpty)) {
     store.update(initialData);
@@ -39,77 +28,22 @@ function createOptionModel(): MainModelType {
   });
 
   return {
-    addOption: (): void => {
-      const data = store.getData();
-
-      const currentOptions = data.optionList.list.map((option) => ({
-        ...option,
-        title: option.title,
-        weight: option.weight,
-      }));
-
-      const newOption = {
-        id: `#${String(data.optionList.lastID)}`,
-        title: '',
-        weight: '',
-      };
-
-      store.update({
-        ...data,
-        optionList: {
-          lastID: ++data.optionList.lastID,
-          list: [...currentOptions, newOption],
-        },
-      });
-    },
-
+    addOption: () => addOption(),
     clearOptions: (): void =>
       store.update({ ...store.getData(), optionList: { list: [], lastID: 1 } }),
-
     getOptions: () => options,
-
     saveToFile: (): void => save(getDataFromLS()),
-
     loadFromFile: (data: StoreDataType): void => {
       model.clearOptions();
       store.update(data);
     },
-
-    pasteOptions: (text: string): void => {
-      const data = paste(text);
-
-      data.forEach((option) => {
-        const newOption = {
-          ...option,
-          id: `#${store.getData().optionList.lastID}`,
-        };
-
-        store.update({
-          ...store.getData(),
-          optionList: {
-            lastID: ++store.getData().optionList.lastID,
-            list: [...store.getData().optionList.list, newOption],
-          },
-        });
-      });
-    },
-
+    pasteOptions: (text: string) => pasteOptions(text),
     openPasteModal: (): void => {
       const modal: HTMLDialogElement = createPasteModal(model.pasteOptions);
-
       document.body.append(modal);
       modal.showModal();
     },
-
-    redirectToWheel: (): void => {
-      if (store.useSelector(selectors.hasDataForStart)) {
-        Router.navigate('#/decision-picker');
-      } else {
-        const modal = createStartModal();
-        document.body.append(modal);
-        modal.showModal();
-      }
-    },
+    redirectToWheel: (): void => redirectToWheel(),
   };
 }
 
@@ -146,6 +80,35 @@ function paste(text: string): Omit<Option, 'id'>[] {
     .filter((element) => element !== null);
 }
 
+function pasteOptions(text: string): void {
+  const data = paste(text);
+
+  data.forEach((option) => {
+    const newOption = {
+      ...option,
+      id: `#${store.getData().optionList.lastID}`,
+    };
+
+    store.update({
+      ...store.getData(),
+      optionList: {
+        lastID: ++store.getData().optionList.lastID,
+        list: [...store.getData().optionList.list, newOption],
+      },
+    });
+  });
+}
+
+function redirectToWheel(): void {
+  if (store.useSelector(selectors.hasDataForStart)) {
+    Router.navigate('#/decision-picker');
+  } else {
+    const modal = createStartModal();
+    document.body.append(modal);
+    modal.showModal();
+  }
+}
+
 function removeOption(id: string): void {
   const data = store.getData();
   store.update({
@@ -155,6 +118,45 @@ function removeOption(id: string): void {
       list: data.optionList.list.filter((option) => option.id !== id),
     },
   });
+}
+
+function addOption(): void {
+  const data = store.getData();
+
+  const currentOptions = data.optionList.list.map((option) => ({
+    ...option,
+    title: option.title,
+    weight: option.weight,
+  }));
+
+  const newOption = {
+    id: `#${String(data.optionList.lastID)}`,
+    title: '',
+    weight: '',
+  };
+
+  store.update({
+    ...data,
+    optionList: {
+      lastID: ++data.optionList.lastID,
+      list: [...currentOptions, newOption],
+    },
+  });
+}
+
+function getInitialData(): Pick<StoreDataType, 'optionList'> {
+  return {
+    optionList: {
+      list: [
+        {
+          id: '#1',
+          title: '',
+          weight: '',
+        },
+      ],
+      lastID: 2,
+    },
+  };
 }
 
 const model = createOptionModel();

@@ -35,8 +35,22 @@ const label = Label('Timer', 'timer');
 const inputContainer = Div([label, input]);
 const picker = Div('PRESS PICK BUTTON');
 const wheelCanvas = modelPickerPage.getCanvas();
-
 const controllerContainer = Div([comeBackButton, rotationButton, soundButton, inputContainer]);
+replaceCssClass(
+  picker,
+  [],
+  [
+    'border',
+    'border-gray-300',
+    'rounded-md',
+    'px-4',
+    'py-2',
+    'm-1',
+    'shadow-sm',
+    'ring-2',
+    'ring-gray-300',
+  ],
+);
 
 replaceCssClass(controllerContainer, ['flex', 'flex-col'], ['grid', 'grid-cols-3']);
 comeBackButton.dataset.action = 'comeBack';
@@ -57,6 +71,11 @@ wheelContainer.addEventListener('animationStarted', () => {
   rotationButton.disabled = true;
   soundButton.disabled = true;
   input.disabled = true;
+  replaceCssClass(
+    picker,
+    ['border-pink-500', 'ring-pink-500'],
+    ['border-gray-300', 'ring-gray-300'],
+  );
 });
 
 wheelContainer.addEventListener('animationEnded', () => {
@@ -64,6 +83,11 @@ wheelContainer.addEventListener('animationEnded', () => {
   rotationButton.disabled = false;
   soundButton.disabled = false;
   input.disabled = false;
+  replaceCssClass(
+    picker,
+    ['border-gray-300', 'ring-gray-300'],
+    ['border-pink-500', 'ring-pink-500'],
+  );
 });
 
 input.addEventListener('input', () => {
