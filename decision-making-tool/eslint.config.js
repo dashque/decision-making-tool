@@ -1,8 +1,10 @@
 import globals from 'globals';
 import pluginJs from '@eslint/js';
+import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import importPlugin from 'eslint-plugin-import';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -11,6 +13,31 @@ export default [
     linterOptions: {
       noInlineConfig: true,
       reportUnusedDisableDirectives: true,
+    },
+    settings: {
+      'import/resolver': {
+        alias: {
+          extensions: ['.js', '.ts', '.tsx'],
+          map: [['~', './src']],
+        },
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
+      },
+    },
+  },
+
+  js.configs.recommended,
+  importPlugin.flatConfigs.recommended,
+  {
+    files: ['**/*.{js,mjs,cjs, ts}'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    },
+    rules: {
+      'import/no-cycle': ['error', { maxDepth: Infinity }],
     },
   },
   ...tseslint.configs.recommendedTypeChecked,

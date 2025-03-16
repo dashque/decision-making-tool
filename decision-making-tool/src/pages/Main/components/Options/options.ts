@@ -1,7 +1,6 @@
-import { Input, Label, Span, Ul } from '~/utils/factory.ts';
+import { Input, Label, Span, Ul, Button, Li } from '~/utils/factory.ts';
 import type { Option } from '~/types';
 import { replaceCssClass } from '~/utils/helpers.ts';
-import { Button, Li } from '~/utils/factory';
 import { store } from '~/store/store';
 
 function createOption(list: Option): {
