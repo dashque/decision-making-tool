@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --open --force",
-    "deploy": "npm run build && gh-pages -d dist -e decision-making-tool-no",
+    "deploy": "npm run build && gh-pages -d dist -e decision-making-tool",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "format": "prettier --write .",
