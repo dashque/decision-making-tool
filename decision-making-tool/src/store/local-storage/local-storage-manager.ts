@@ -4,7 +4,7 @@ import { isStoredData } from '~/store/local-storage/index.ts';
 const PREFIX = 'zagorky:';
 
 function setDataToLS(data: StoreDataType): void {
-  localStorage.setItem(`${PREFIX}`, JSON.stringify(data));
+  sessionStorage.setItem(`${PREFIX}`, JSON.stringify(data));
 }
 
 function getDataFromLS(): StoreDataType {
@@ -14,7 +14,7 @@ function getDataFromLS(): StoreDataType {
   };
 
   try {
-    const dataFromLS = localStorage.getItem(`${PREFIX}`);
+    const dataFromLS = sessionStorage.getItem(`${PREFIX}`);
 
     if (!dataFromLS) {
       return defaultData;

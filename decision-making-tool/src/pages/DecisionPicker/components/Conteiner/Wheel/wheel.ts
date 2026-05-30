@@ -20,7 +20,6 @@ import {
   Wheel,
 } from '../../../constants.ts';
 import { assertIsNonNullable } from '~/utils/helpers.ts';
-import { picker } from '~/pages/DecisionPicker/components/Conteiner/container-view.ts';
 import { easeInOutExpo } from '~/utils/ease-in-out-expo.ts';
 
 function getColors(sectors: SectorsData[]): string[] {
@@ -168,7 +167,6 @@ function rotateWheel(rotationProperties: RotationProperties): void {
     const activeSector = getCurrentSector(currentRotation, sectors.length);
 
     if (activeSector !== previousSector) {
-      picker.textContent = sectors[activeSector][0];
       previousSector = activeSector;
     }
     clearAndDrawWheel({ context, rotation: currentRotation, sectors, colors });
