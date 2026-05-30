@@ -1,11 +1,13 @@
 import { AudioElement } from '~/utils/factory.ts';
 
 const audioConfig = {
-  win: './audio/win.mp3',
+  spin: './audio/pole-chudes-sounds.mp3',
 };
 
 function createAudio(): HTMLAudioElement {
-  return AudioElement(audioConfig.win);
+  const audio = AudioElement(audioConfig.spin);
+  audio.loop = true;
+  return audio;
 }
 
 export { createAudio };

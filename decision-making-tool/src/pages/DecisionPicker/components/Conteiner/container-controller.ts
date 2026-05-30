@@ -62,18 +62,27 @@ store.on('update', (newData: StoreDataType) => {
   updateSoundButton(isSoundOn);
 });
 
+function playWheelSound(): void {
+  if (!modelPickerPage.getSoundState()) {
+    return;
+  }
+
+  const audio = modelPickerPage.getAudio();
+  audio.currentTime = 0;
+  audio.play().catch((error: unknown) => console.error(error));
+}
+
+function stopWheelSound(): void {
+  const audio = modelPickerPage.getAudio();
+  audio.pause();
+  audio.currentTime = 0;
+}
+
 globalThis.addEventListener('popstate', () => {
   modelPickerPage.drawWheel();
 });
 
-document.addEventListener('animationEnded', () => {
-  if (modelPickerPage.getSoundState()) {
-    modelPickerPage
-      .getAudio()
-      .play()
-      .then()
-      .catch((error) => console.error(error));
-  }
-});
+document.addEventListener('animationStarted', playWheelSound);
+document.addEventListener('animationEnded', stopWheelSound);
 
 export { setupWheelContainerEventListeners };
