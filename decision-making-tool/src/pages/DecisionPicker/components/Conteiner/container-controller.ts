@@ -8,7 +8,11 @@ import {
   noop,
   preventDefault,
 } from '~/utils/helpers.ts';
-import { input, soundButton } from '~/pages/DecisionPicker/components/Conteiner/container-view.ts';
+import {
+  countdownSoundButton,
+  input,
+  soundButton,
+} from '~/pages/DecisionPicker/components/Conteiner/container-view.ts';
 import { modelPickerPage } from '~/pages/DecisionPicker/components/Conteiner/container-model.ts';
 import { DURATION, ERROR, MS } from '~/pages/DecisionPicker/constants.ts';
 import { Maybe } from '~/utils/maybe.ts';
@@ -21,6 +25,9 @@ const actions: Record<PickerActionKey, () => void> = {
   },
   switchSound: () => {
     modelPickerPage.toggleSound();
+  },
+  toggleCountdownSound: () => {
+    toggleCountdownSound();
   },
   comeBack: (): void => {
     modelPickerPage.comeBack();
@@ -55,6 +62,10 @@ function updateSoundButton(isSoundOn: boolean): void {
   soundButton.textContent = isSoundOn ? 'Sound: On' : 'Sound: Off';
 }
 
+function updateCountdownSoundButton(isPlaying: boolean): void {
+  countdownSoundButton.textContent = isPlaying ? 'Stop 60 Sec' : '60 Seconds';
+}
+
 updateSoundButton(modelPickerPage.getSoundState());
 
 store.on('update', (newData: StoreDataType) => {
@@ -78,11 +89,41 @@ function stopWheelSound(): void {
   audio.currentTime = 0;
 }
 
+function stopCountdownSound(): void {
+  const audio = modelPickerPage.getCountdownAudio();
+  audio.pause();
+  audio.currentTime = 0;
+  updateCountdownSoundButton(false);
+}
+
+function playCountdownSound(): void {
+  const audio = modelPickerPage.getCountdownAudio();
+  audio.currentTime = 0;
+  audio.play().catch((error: unknown) => {
+    updateCountdownSoundButton(false);
+    console.error(error);
+  });
+  updateCountdownSoundButton(true);
+}
+
+function toggleCountdownSound(): void {
+  const audio = modelPickerPage.getCountdownAudio();
+
+  if (audio.paused) {
+    playCountdownSound();
+  } else {
+    stopCountdownSound();
+  }
+}
+
 globalThis.addEventListener('popstate', () => {
   modelPickerPage.drawWheel();
 });
 
 document.addEventListener('animationStarted', playWheelSound);
 document.addEventListener('animationEnded', stopWheelSound);
+modelPickerPage
+  .getCountdownAudio()
+  .addEventListener('ended', () => updateCountdownSoundButton(false));
 
 export { setupWheelContainerEventListeners };

@@ -20,6 +20,12 @@ replaceCssClass(
   ['w-114'],
   ['w-32', 'disabled:opacity-75', 'disabled:pointer-events-none'],
 );
+const countdownSoundButton = Button('60 Seconds');
+replaceCssClass(
+  countdownSoundButton,
+  ['w-114'],
+  ['w-32', 'disabled:opacity-75', 'disabled:pointer-events-none'],
+);
 
 const timerAttributes = {
   type: 'number',
@@ -35,12 +41,20 @@ input.classList.add('w-32');
 const label = Label('Timer', 'timer');
 const inputContainer = Div([label, input]);
 const wheelCanvas = modelPickerPage.getCanvas();
-const controllerContainer = Div([comeBackButton, rotationButton, soundButton, inputContainer]);
 
-replaceCssClass(controllerContainer, ['flex', 'flex-col'], ['grid', 'grid-cols-3']);
+const controllerContainer = Div([
+  comeBackButton,
+  rotationButton,
+  soundButton,
+  countdownSoundButton,
+  inputContainer,
+]);
+
+replaceCssClass(controllerContainer, ['flex', 'flex-col'], ['grid', 'grid-cols-4']);
 comeBackButton.dataset.action = 'comeBack';
 rotationButton.dataset.action = 'rotateWheel';
 soundButton.dataset.action = 'switchSound';
+countdownSoundButton.dataset.action = 'toggleCountdownSound';
 input.dataset.action = 'setTimer';
 
 const wheelContainer = Div([controllerContainer, inputContainer, wheelCanvas]);
@@ -49,6 +63,7 @@ wheelContainer.addEventListener('animationStarted', () => {
   comeBackButton.disabled = true;
   rotationButton.disabled = true;
   soundButton.disabled = true;
+  countdownSoundButton.disabled = true;
   input.disabled = true;
 });
 
@@ -56,6 +71,7 @@ wheelContainer.addEventListener('animationEnded', () => {
   comeBackButton.disabled = false;
   rotationButton.disabled = false;
   soundButton.disabled = false;
+  countdownSoundButton.disabled = false;
   input.disabled = false;
 });
 
@@ -80,4 +96,4 @@ input.addEventListener('input', () => {
   input.reportValidity();
 });
 
-export { soundButton, wheelContainer, input };
+export { soundButton, countdownSoundButton, wheelContainer, input };

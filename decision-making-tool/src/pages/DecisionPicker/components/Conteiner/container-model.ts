@@ -1,4 +1,7 @@
-import { createAudio } from '~/pages/DecisionPicker/components/Audio/audio.ts';
+import {
+  createCountdownAudio,
+  createSpinAudio,
+} from '~/pages/DecisionPicker/components/Audio/audio.ts';
 import { store } from '~/store/store.ts';
 import { WheelModule } from '~/pages/DecisionPicker/components/Conteiner/Wheel/wheel.ts';
 import { ROTATION } from '~/pages/DecisionPicker/constants.ts';
@@ -7,7 +10,8 @@ import type { PickerModelType, StoreDataType } from '~/types';
 import { selectors } from '~/store/selectors.ts';
 
 function createPickerModel(): PickerModelType {
-  const audio = createAudio();
+  const audio = createSpinAudio();
+  const countdownAudio = createCountdownAudio();
   const wheel = WheelModule();
 
   function drawWheel(): void {
@@ -32,6 +36,7 @@ function createPickerModel(): PickerModelType {
       const mewSoundState = !currentSoundState;
       store.update({ isSoundOn: mewSoundState });
       audio.muted = !mewSoundState;
+      countdownAudio.muted = !mewSoundState;
     },
     rotateWheel: (duration: number): void => {
       wheel.rotateWheel(randomFunction(ROTATION.MIN, ROTATION.MAX), duration);
@@ -42,6 +47,7 @@ function createPickerModel(): PickerModelType {
     getCanvas: (): HTMLCanvasElement => wheel.canvas,
     getSoundState: (): boolean => store.getData().isSoundOn,
     getAudio: () => audio,
+    getCountdownAudio: () => countdownAudio,
   };
 }
 

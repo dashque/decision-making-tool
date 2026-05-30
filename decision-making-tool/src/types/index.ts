@@ -113,7 +113,7 @@ export type MainActionKey =
   | 'openPasteModal'
   | 'loadList';
 
-export type PickerActionKey = 'comeBack' | 'switchSound' | 'rotateWheel';
+export type PickerActionKey = 'comeBack' | 'switchSound' | 'rotateWheel' | 'toggleCountdownSound';
 
 export type MainModelType = {
   addOption: () => void;
@@ -134,4 +134,5 @@ export type PickerModelType = {
   getSoundState: () => boolean;
   drawWheel: () => void;
   getAudio: () => HTMLAudioElement;
+  getCountdownAudio: () => HTMLAudioElement;
 };
