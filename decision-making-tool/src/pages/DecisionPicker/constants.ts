@@ -1,5 +1,5 @@
 export const Wheel = {
-  Size: 400,
+  Size: 600,
   get Center(): number {
     return this.Size / DIVIDER;
   },
@@ -8,7 +8,7 @@ export const Wheel = {
   },
   Top: 0,
   Offset: 10,
-  CentralElement: '🥸',
+  CentralElement: '🤡',
   Cursor: '🔻',
 };
 

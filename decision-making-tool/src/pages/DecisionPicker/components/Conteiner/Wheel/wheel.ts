@@ -114,7 +114,7 @@ function drawWheel(wheelProperties: WheelProperties): void {
 
 function drawTitle(titleProperties: TitleProperties): void {
   const { startAngle, angle, sectors, index, context } = titleProperties;
-  const minAngle = 15;
+  const minAngle = 10;
   const maxTitleLength = 7;
   const maxTextWidth = 100;
   if (angle < minAngle) {
@@ -137,7 +137,7 @@ function drawTitle(titleProperties: TitleProperties): void {
   context.fillStyle = 'rgb(255,255,255)';
   context.strokeStyle = 'rgb(255,255,255)';
   context.lineWidth = 0.1;
-  context.font = 'bold 18px Arial';
+  context.font = 'bold 16px Arial';
   context.textAlign = 'center';
   context.textBaseline = 'middle';
   let preparedTitle = title;
